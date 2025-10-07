@@ -20,7 +20,6 @@ public class Usuario {
         this.rol = rol;
     }
     //getters
-
     public String getNombre() { return nombre;}
     public String getApellido() { return apellido;}
     public String getRut() { return rut;}
