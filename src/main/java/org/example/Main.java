@@ -17,9 +17,15 @@ public class Main {
 
         Conexion conn = new Conexion();
 
+
+
+
         //ingresar el objeto creado anteriormente a DAO, para poder ingresarlo a la BD
         UsuarioDAO dao = new UsuarioDAO(conn);
 //        dao.insertarUsuario(user);
-        dao.mostrarUsuarios();
+//        dao.mostrarUsuarios();
+         Usuario u= dao.buscarUsuario(14, "carlos");
+         System.out.println(u.getNombre());
+
     }
 }

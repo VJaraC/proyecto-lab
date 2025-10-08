@@ -34,7 +34,7 @@ public class UsuarioDAO{
         }
     }
 
-    public void mostrarUsuarios() throws SQLException{
+    public void mostrarUsuarios() throws SQLException{ //Función para mostrar los usuarios habilitados en la base de datos.
         try(Connection c = conexion.getConnection();
             Statement stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM usuario WHERE estado ='habilitado'")){
@@ -48,6 +48,29 @@ public class UsuarioDAO{
         }catch(SQLException e){
             System.out.println("Error al mostrar usuario" + e.getMessage());
         }
+    }
+
+    public Usuario buscarUsuario(int id, String nombre) throws SQLException{
+        Usuario usuario = null;
+        String sql = "SELECT * FROM usuario WHERE id = ? AND nombre = ? AND estado = 'habilitado'";
+        try(PreparedStatement ps = conexion.getConnection().prepareStatement(sql)){
+            ps.setInt(1, id);
+            ps.setString(2, nombre);
+            try(ResultSet rs = ps.executeQuery()){
+                if (rs.next()){
+                    int id2 = rs.getInt("id");
+                    String nombre2 = rs.getString("nombre");
+                    String estado2 = rs.getString("estado");
+                    String contrasena2 = rs.getString("contrasena");
+                    usuario = new Usuario(id2,nombre2,estado2,contrasena2);
+                }
+            } catch(SQLException e){
+                System.out.println("Error al buscar usuario" + e.getMessage());
+            }
+        } catch(SQLException e){
+            System.out.println("Error al buscar usuario" + e.getMessage());
+        }
+        return usuario;
     }
 
 }
