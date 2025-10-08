@@ -13,14 +13,20 @@ public class UsuarioDAO{
         this.conexion = c;
     }
 
+    public Usuario obtenerUsuarios(){
+        String sql = "SELECT * FROM usuarios";
+        return null;
+    }
+
     public void insertarUsuario(Usuario user) throws SQLException { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
-        String sql = "INSERT INTO usuario(ID, nombre, contrasena) VALUES (?,?,?)";
+        String sql = "INSERT INTO usuario(ID, nombre, estado, contrasena) VALUES (?,?,?,?)";
         Connection conn = null;
         try{conn = conexion.getTxConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, user.getID());
             ps.setString(2, user.getNombre());
-            ps.setString(3, user.getPassword());
+            ps.setString(3, user.getEstado());
+            ps.setString(4, user.getPassword());
 
             conn.commit();
         }

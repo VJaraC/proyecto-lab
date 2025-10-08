@@ -6,8 +6,14 @@ import java.sql.SQLException;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws SQLException {
+
+        int ID = 14;
+        String nombre = "carlos";
+        String estado = "activo";
+        String password = "1234";
+
         //crear un objeto con datos (totalmente aislado de la logica de la base de datos)
-        Usuario user = new Usuario(13, "carlos", "1234");
+        Usuario user = new Usuario(ID, nombre, estado, password);
 
         Conexion conn = new Conexion();
 
