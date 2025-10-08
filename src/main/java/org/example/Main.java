@@ -24,8 +24,10 @@ public class Main {
         UsuarioDAO dao = new UsuarioDAO(conn);
 //        dao.insertarUsuario(user);
 //        dao.mostrarUsuarios();
-         Usuario u= dao.buscarUsuario(14, "carlos");
+         Usuario u= dao.buscarUsuario(2,"carlos");
          System.out.println(u.getNombre());
+         System.out.println(u.getID());
+         System.out.println(u.getPassword());
 
     }
 }

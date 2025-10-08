@@ -50,12 +50,19 @@ public class UsuarioDAO{
         }
     }
 
-    public Usuario buscarUsuario(int id, String nombre) throws SQLException{
+    public Usuario buscarUsuario(int parametro_id, Object valor) throws SQLException{
         Usuario usuario = null;
-        String sql = "SELECT * FROM usuario WHERE id = ? AND nombre = ? AND estado = 'habilitado'";
+        String sql = null;
+        switch(parametro_id){ // cuando es 1, se busca por id -- Cuando sea 2, se busca por nombre
+            case 1:
+                sql ="SELECT * FROM usuario WHERE id = ?";
+                break;
+            case 2:
+                sql ="SELECT * FROM usuario WHERE nombre = ?";
+                break;
+        }
         try(PreparedStatement ps = conexion.getConnection().prepareStatement(sql)){
-            ps.setInt(1, id);
-            ps.setString(2, nombre);
+            ps.setObject(1, valor);
             try(ResultSet rs = ps.executeQuery()){
                 if (rs.next()){
                     int id2 = rs.getInt("id");
