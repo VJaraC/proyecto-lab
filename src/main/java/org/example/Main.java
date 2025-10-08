@@ -26,6 +26,8 @@ public class Main {
 //        dao.mostrarUsuarios();
          Usuario u= dao.buscarUsuario(2, "carlos");
          System.out.println(u.getNombre());
+         System.out.println(u.getID());
+         System.out.println(u.getPassword());
 
          dao.ActualizarUsuario(u, 1, "juanita");
             dao.buscarUsuario(2, "juanita");
