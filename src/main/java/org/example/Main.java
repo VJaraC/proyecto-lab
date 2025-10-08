@@ -19,6 +19,7 @@ public class Main {
 
         //ingresar el objeto creado anteriormente a DAO, para poder ingresarlo a la BD
         UsuarioDAO dao = new UsuarioDAO(conn);
-        dao.insertarUsuario(user);
+//        dao.insertarUsuario(user);
+        dao.mostrarUsuarios();
     }
 }
