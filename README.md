@@ -24,6 +24,7 @@ Permite gestionar y consultar usuarios, registrar estados y realizar operaciones
 
 @dani-pp
 
+@GCasanueva
 ## ⚙️ Configuración del proyecto
 
 ### 1️⃣ Clonar el repositorio
