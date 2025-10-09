@@ -1,5 +1,8 @@
-package org.example;
+package proyecto.lab.server.dao;
+import proyecto.lab.server.config.Conexion;
+import proyecto.lab.server.models.Usuario;
 
+import java.sql.SQLException;
 import java.sql.*;
 
 
@@ -7,16 +10,12 @@ import java.sql.*;
 public class UsuarioDAO {
     private final Conexion conexion;
 
-    public UsuarioDAO(Conexion c) {
-        this.conexion = c;
+    public UsuarioDAO() {
+        this.conexion = new Conexion();
     }
 
-//    public Usuario obtenerUsuarios(){
-//        String sql = "SELECT * FROM usuarios";
-//        return null;
-//    }
 
-    public void insertarUsuario(Usuario user) throws SQLException { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
+    public void insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
         String sql = "INSERT INTO usuario(ID, nombre, estado, contrasena) VALUES (?,?,?,?)";
         Connection conn = null;
         try {
@@ -64,7 +63,7 @@ public class UsuarioDAO {
         try (PreparedStatement ps = conexion.getConnection().prepareStatement(sql)) {
             ps.setObject(1, valor);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                if (rs.next()) { //rs.next(), pide la siguiente fila al servidor, hay que manejar esto para cuando existan varios resultados.
                     int id2 = rs.getInt("id");
                     String nombre2 = rs.getString("nombre");
                     String estado2 = rs.getString("estado");
@@ -94,6 +93,9 @@ public class UsuarioDAO {
             ps.setObject(1, valor);
             ps.setInt(2, user.getID());
             ps.executeUpdate();
+
+            //implementar que el objeto se actualice al igual que se actualizó en la BD.
+
             return true;
         }
         catch (SQLException e) {

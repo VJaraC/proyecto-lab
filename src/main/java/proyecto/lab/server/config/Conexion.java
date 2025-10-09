@@ -1,4 +1,4 @@
-package org.example;
+package proyecto.lab.server.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

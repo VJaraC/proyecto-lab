@@ -1,4 +1,7 @@
-package org.example;
+package proyecto.lab;
+
+import proyecto.lab.server.dao.UsuarioDAO;
+import proyecto.lab.server.models.Usuario;
 
 import java.sql.SQLException;
 
@@ -6,6 +9,7 @@ import java.sql.SQLException;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     public static void main(String[] args) throws SQLException {
+        //Conexion conn = new Conexion();
 
         int ID = 14;
         String nombre = "carlos";
@@ -15,22 +19,18 @@ public class Main {
         //crear un objeto con datos (totalmente aislado de la logica de la base de datos)
         Usuario user = new Usuario(ID, nombre, estado, password);
 
-        Conexion conn = new Conexion();
-
-
-
-
         //ingresar el objeto creado anteriormente a DAO, para poder ingresarlo a la BD
-        UsuarioDAO dao = new UsuarioDAO(conn);
-//        dao.insertarUsuario(user);
-//        dao.mostrarUsuarios();
-         Usuario u= dao.buscarUsuario(2, "carlos");
-         System.out.println(u.getNombre());
-         System.out.println(u.getID());
-         System.out.println(u.getPassword());
+        UsuarioDAO dao = new UsuarioDAO();
+        Usuario u= dao.buscarUsuario(2, "vito");
+        System.out.println(u.getNombre());
+        System.out.println(u.getID());
+        System.out.println(u.getPassword());
 
-         dao.ActualizarUsuario(u, 1, "juanita");
-            dao.buscarUsuario(2, "juanita");
-         System.out.println(u.getNombre());
+
+        if(dao.ActualizarUsuario(u, 1, "coni")){
+            /* forma 1  u = dao.buscarUsuario(2, "alonso"); */
+            /* forma 2 u.setNombre("coni");*/
+            System.out.println(u.getNombre());
+        }
     }
 }
