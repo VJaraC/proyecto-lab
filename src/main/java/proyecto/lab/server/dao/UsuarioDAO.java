@@ -45,61 +45,67 @@ public class UsuarioDAO {
         }
     }
 
-    public Usuario buscarUsuario(int parametro_id, Object valor) throws SQLException {
+    public Usuario buscarUsuarioPorID(int id) throws SQLException {
         Usuario usuario = null;
-        String sql = null;
-        switch (parametro_id) { // cuando es 1, se busca por id -- Cuando sea 2, se busca por nombre
-            case 1:
-                sql = "SELECT * FROM usuario WHERE id = ?";
-                break;
-            case 2:
-                sql = "SELECT * FROM usuario WHERE nombre = ?";
-                break;
-        }
+        String sql = "SELECT * FROM usuario WHERE id = ?";
         try (Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setObject(1, valor);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) { //rs.next(), pide la siguiente fila al servidor, hay que manejar esto para cuando existan varios resultados.
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
                     int id2 = rs.getInt("id");
-                    String nombre2 = rs.getString("nombre");
-                    String estado2 = rs.getString("estado");
-                    String contrasena2 = rs.getString("contrasena");
-                    usuario = new Usuario(id2, nombre2, estado2, contrasena2);
+                    String nombre = rs.getString("nombre");
+                    String estado = rs.getString("estado");
+                    String contrasena = rs.getString("contrasena");
+                    usuario = new Usuario(id2, nombre, estado, contrasena);
                 }
             } catch (SQLException e) {
                 System.out.println("Error al buscar usuario" + e.getMessage());
             }
-        } catch (SQLException e) {
+        }catch (SQLException e){
             System.out.println("Error al buscar usuario" + e.getMessage());
         }
         return usuario;
     }
 
-    public boolean ActualizarUsuario(Usuario user, int parametro_id, Object valor) throws SQLException {
-        String sql = null;
-        switch (parametro_id) {
-            case 1: //nombre
-                sql = "UPDATE usuario SET nombre = ? WHERE id=?";
-                break;
-            case 2: //contrasena
-                sql = "UPDATE usuario SET contrasena = ? WHERE id=?";
-                break;
-        }
-        try (PreparedStatement ps = conexion.getConnection().prepareStatement(sql)) {
-            ps.setObject(1, valor);
+    public boolean actualizarNombre(Usuario user, String nombre) throws SQLException {  //Función para actualizar el nombre de un usuario.
+        String sql = "UPDATE usuario SET nombre = ? WHERE id = ?";
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, nombre);
             ps.setInt(2, user.getID());
+
             int rows = ps.executeUpdate();
-            if (rows == 1) {
-                if (parametro_id == 1) user.setNombre((String) valor);
-                else if (parametro_id == 2) user.setPassword((String) valor);
+
+            if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
+                user.setNombre(nombre);
                 return true;
             }
-            return true;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Error al actualizar usuario" + e.getMessage());
             return false;
         }
+        return false;
     }
+
+    public boolean cambiarEstadoUsuario(Usuario user, String nuevoEstado) throws SQLException {  //Función para deshabilitar un usuario.
+        String sql = "UPDATE usuario SET estado = ? WHERE id = ?";
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+
+            ps.setString(1, nuevoEstado);
+            ps.setInt(2, user.getID());
+
+            int rows = ps.executeUpdate();
+            if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
+                user.setEstado(nuevoEstado);
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar estado de usuario: " + e.getMessage());
+            return false;
+        }
+        return false;
+    }
+
 }
