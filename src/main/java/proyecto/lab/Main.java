@@ -21,7 +21,7 @@ public class Main {
 
         //ingresar el objeto creado anteriormente a DAO, para poder ingresarlo a la BD
         UsuarioDAO dao = new UsuarioDAO();
-        Usuario u= dao.buscarUsuario(2, "vito");
+        Usuario u = dao.buscarUsuario(2, "vito");
         System.out.println(u.getNombre());
         System.out.println(u.getID());
         System.out.println(u.getPassword());
