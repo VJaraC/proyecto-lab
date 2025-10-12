@@ -2,11 +2,13 @@ package proyecto.lab.server.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class Conexion {
-/    private static final String URL = "jdbc:postgresql://localhost:5432/prueba";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "Zh0ngl11tt0";
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String URL = dotenv.get("DB_URL");
+    private static final String USER = dotenv.get("DB_USER");
+    private static final String PASSWORD = dotenv.get("DB_PASSWORD");
 
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD); //en caso de dar error lanza un SQLException
