@@ -14,8 +14,8 @@ public class Main {
         UsuarioService usuarioservice = new UsuarioService();
         Usuario u = new Usuario(1,"lagosh","habilitado","danilago123");
 
-//        usuarioservice.crearUsuario(u);
-        usuarioservice.actualizarNombreUsuario(u,"dani");
+          usuarioservice.crearUsuario(u);
+//        usuarioservice.actualizarNombreUsuario(u,"dani");
 //        usuarioservice.habilitarUsuario(u);
 
 

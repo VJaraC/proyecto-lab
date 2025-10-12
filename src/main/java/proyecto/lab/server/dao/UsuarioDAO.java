@@ -21,7 +21,7 @@ public class UsuarioDAO {
             ps.setInt(1, user.getID());
             ps.setString(2, user.getNombre());
             ps.setString(3, user.getEstado());
-            ps.setString(4, user.getPassword());
+            ps.setString(4, user.getContrasena());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error al insertar usuario" + e.getMessage());
@@ -95,7 +95,6 @@ public class UsuarioDAO {
 
             ps.setString(1, nuevoEstado);
             ps.setInt(2, user.getID());
-
             int rows = ps.executeUpdate();
             if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
                 user.setEstado(nuevoEstado);

@@ -5,14 +5,14 @@ public class Usuario {
     private int ID;
     private String nombre;
     private String estado;
-    private String password;
+    private String contrasena;
 
     //constructor
-    public Usuario(int ID, String nombre, String estado, String password) {
+    public Usuario(int ID, String nombre, String estado, String contrasena) {
         this.ID = ID;
         this.nombre = nombre;
         this.estado = estado;
-        this.password = password;
+        this.contrasena = contrasena;
     }
 
     //setters
@@ -28,8 +28,8 @@ public class Usuario {
         this.estado = estado;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     //getters
@@ -45,8 +45,8 @@ public class Usuario {
         return estado;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContrasena() {
+        return contrasena;
     }
 
 }

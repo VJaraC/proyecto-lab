@@ -2,7 +2,7 @@ package proyecto.lab.server.service;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.models.Usuario;
 import java.sql.SQLException;
-import java.util.Objects;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioService {
     private final UsuarioDAO usuariodao;
@@ -15,7 +15,7 @@ public class UsuarioService {
         if(user.getNombre()==null || user.getNombre().isEmpty()){
             throw new SQLException("El nombre no puede estar vacío."); // validaciones
         }
-        if(user.getPassword()==null || user.getPassword().isEmpty() || user.getPassword().length() < 4){
+        if(user.getContrasena()==null || user.getContrasena().isEmpty() || user.getContrasena().length() < 4){
             throw new SQLException("La contraseña debe tener al menos 4 caracteres."); // validaciones
         }
 
@@ -24,6 +24,9 @@ public class UsuarioService {
         if(existente != null){
             throw new SQLException("El usuario ya existe en el sistema."); // Es una validación de ejemplo, esto ya sería por ID, etc.
         }
+
+        String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt());
+        user.setContrasena(hash);
         usuariodao.insertarUsuario(user);
         return true;
     }
@@ -32,7 +35,7 @@ public class UsuarioService {
         if(nombre == null || nombre.isEmpty()){
             throw new SQLException("El valor del nombre no puede estar vacio.");
         }
-        if(user.getNombre()== nombre){
+        if(user.getNombre() == nombre){
             throw new SQLException("El usuario ya posee este nombre en el sistema");
         }
 
@@ -45,7 +48,7 @@ public class UsuarioService {
     }
 
     public boolean deshabilitarUsuario(Usuario user) throws SQLException {
-        if(user.getEstado()== "deshabilitado"){ throw new SQLException("El usuario ya está deshabilitado");}
+        if(user.getEstado() == "deshabilitado"){ throw new SQLException("El usuario ya está deshabilitado");}
         return usuariodao.cambiarEstadoUsuario(user, "deshabilitado");
     }
 
