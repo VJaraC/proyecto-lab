@@ -32,6 +32,9 @@ public class UsuarioService {
         if(nombre == null || nombre.isEmpty()){
             throw new SQLException("El valor del nombre no puede estar vacio.");
         }
+        if(user.getNombre()== nombre){
+            throw new SQLException("El usuario ya posee este nombre en el sistema");
+        }
 
         Usuario existente= usuariodao.buscarUsuarioPorID(user.getID());
         if(existente == null){
@@ -42,10 +45,12 @@ public class UsuarioService {
     }
 
     public boolean deshabilitarUsuario(Usuario user) throws SQLException {
+        if(user.getEstado()== "deshabilitado"){ throw new SQLException("El usuario ya está deshabilitado");}
         return usuariodao.cambiarEstadoUsuario(user, "deshabilitado");
     }
 
     public boolean habilitarUsuario(Usuario user) throws SQLException {
+        if(user.getEstado() == "habilitado"){throw new SQLException("El usuario ya está habilitado");}
         return usuariodao.cambiarEstadoUsuario(user, "habilitado");
     }
 
