@@ -15,6 +15,11 @@ public class UsuarioDTO implements Serializable {
         this.estado = estado;
     }
 
+    public UsuarioDTO( String nombre, String estado) {
+        this.nombre = nombre;
+        this.estado = estado;
+    }
+
     //getters
     public int getID() {
         return ID;
