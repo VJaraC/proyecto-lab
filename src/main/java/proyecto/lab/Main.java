@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         //Conexion conn = new Conexion();
         UsuarioService usuarioservice = new UsuarioService();
-        Usuario u = new Usuario(1,"lagosh","habilitado","danilago123");
+        Usuario u = new Usuario(5,"tobi","habilitado","tobi123");
 
           usuarioservice.crearUsuario(u);
 //        usuarioservice.actualizarNombreUsuario(u,"dani");
