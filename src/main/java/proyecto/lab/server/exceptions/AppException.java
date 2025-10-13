@@ -1,4 +1,4 @@
-package proyecto.lab.server.common;
+package proyecto.lab.server.exceptions;
 
 /**
  * Excepción personalizada para manejar errores de aplicación.

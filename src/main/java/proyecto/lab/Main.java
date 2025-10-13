@@ -18,11 +18,11 @@ public class Main {
         UsuarioService usuarioService = new UsuarioService(usuarioDAO);
         AdminController adminController = new AdminController(usuarioService);
 
-        UsuarioLoginDTO nuevoUsuario = new UsuarioLoginDTO("vito","12345");
+        UsuarioLoginDTO nuevoUsuario = new UsuarioLoginDTO("danilagosh","12345");
 
         UsuarioDTO resultado = adminController.crearUsuario(nuevoUsuario);
         }catch(Exception e){
-            System.out.println("Error al crear usuario" + e.getMessage());
+            System.out.println("Error al crear usuario: " + e.getMessage());
         }
 
     }

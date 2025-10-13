@@ -1,5 +1,5 @@
 package proyecto.lab.server.service;
-import proyecto.lab.server.common.AppException;
+import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
@@ -25,13 +25,11 @@ public class UsuarioService {
         }
 
         try {
-
             Usuario existente = usuariodao.buscarUsuarioPorNombre(user.getNombre()); // Buscar al usuario con el nombre
 
             if (existente != null) {
                 throw AppException.conflict("El usuario ya existe en el sistema.");// Es una validación de ejemplo, esto ya sería por ID, etc.
             }
-
 
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt());
             Usuario nuevo = new Usuario(user.getNombre(), "habilitado", hash);
@@ -42,6 +40,7 @@ public class UsuarioService {
                     guardado.getNombre(),
                     guardado.getEstado()
             );
+
         } catch (SQLException e) {
             throw AppException.internal("Error al acceder a la base de datos.");
         }
