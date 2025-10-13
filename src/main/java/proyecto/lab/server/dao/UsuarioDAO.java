@@ -14,19 +14,19 @@ public class UsuarioDAO {
     }
 
 
-    public void insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
-        String sql = "INSERT INTO usuario(ID, nombre, estado, contrasena) VALUES (?,?,?,?)";
+    public Usuario insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
+        String sql = "INSERT INTO usuario(nombre, estado, contrasena) VALUES (?,?,?)";
         try (Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, user.getID());
-            ps.setString(2, user.getNombre());
-            ps.setString(3, user.getEstado());
-            ps.setString(4, user.getContrasena());
+            ps.setString(1, user.getNombre());
+            ps.setString(2, user.getEstado());
+            ps.setString(3, user.getContrasena());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error al insertar usuario" + e.getMessage());
 
         }
+        return user;
     }
 
     public void mostrarUsuarios() throws SQLException { //Función para mostrar los usuarios habilitados en la base de datos.
@@ -51,6 +51,29 @@ public class UsuarioDAO {
         try (Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()){
+                if (rs.next()) {
+                    int id2 = rs.getInt("id");
+                    String nombre = rs.getString("nombre");
+                    String estado = rs.getString("estado");
+                    String contrasena = rs.getString("contrasena");
+                    usuario = new Usuario(id2, nombre, estado, contrasena);
+                }
+            } catch (SQLException e) {
+                System.out.println("Error al buscar usuario" + e.getMessage());
+            }
+        }catch (SQLException e){
+            System.out.println("Error al buscar usuario" + e.getMessage());
+        }
+        return usuario;
+    }
+
+    public Usuario buscarUsuarioPorNombre(String n) throws SQLException {
+        Usuario usuario = null;
+        String sql = "SELECT * FROM usuario WHERE nombre = ?";
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, n);
             try (ResultSet rs = ps.executeQuery()){
                 if (rs.next()) {
                     int id2 = rs.getInt("id");

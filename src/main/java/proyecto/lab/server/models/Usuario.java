@@ -15,6 +15,13 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
+    public Usuario(String nombre, String estado, String contrasena) {
+        this.nombre = nombre;
+        this.estado = estado;
+        this.contrasena = contrasena;
+    }
+
+
     //setters
     public void setID(int ID) {
         this.ID = ID;
