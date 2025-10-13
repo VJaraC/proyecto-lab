@@ -2,6 +2,8 @@ package proyecto.lab.server.service;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.models.Usuario;
 import java.sql.SQLException;
+import java.util.Objects;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioService {
@@ -11,7 +13,7 @@ public class UsuarioService {
         this.usuariodao = new UsuarioDAO();
     }
 
-    public boolean crearUsuario(Usuario user) throws SQLException{
+    public void crearUsuario(Usuario user) throws SQLException{
         if(user.getNombre()==null || user.getNombre().isEmpty()){
             throw new SQLException("El nombre no puede estar vacío."); // validaciones
         }
@@ -28,14 +30,13 @@ public class UsuarioService {
         String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt());
         user.setContrasena(hash);
         usuariodao.insertarUsuario(user);
-        return true;
     }
 
     public boolean actualizarNombreUsuario(Usuario user, String nombre) throws SQLException{
         if(nombre == null || nombre.isEmpty()){
             throw new SQLException("El valor del nombre no puede estar vacio.");
         }
-        if(user.getNombre() == nombre){
+        if(Objects.equals(user.getNombre(), nombre)){
             throw new SQLException("El usuario ya posee este nombre en el sistema");
         }
 
@@ -48,12 +49,12 @@ public class UsuarioService {
     }
 
     public boolean deshabilitarUsuario(Usuario user) throws SQLException {
-        if(user.getEstado() == "deshabilitado"){ throw new SQLException("El usuario ya está deshabilitado");}
+        if(Objects.equals(user.getEstado(), "deshabilitado")){ throw new SQLException("El usuario ya está deshabilitado");}
         return usuariodao.cambiarEstadoUsuario(user, "deshabilitado");
     }
 
     public boolean habilitarUsuario(Usuario user) throws SQLException {
-        if(user.getEstado() == "habilitado"){throw new SQLException("El usuario ya está habilitado");}
+        if(Objects.equals(user.getEstado(), "habilitado")){throw new SQLException("El usuario ya está habilitado");}
         return usuariodao.cambiarEstadoUsuario(user, "habilitado");
     }
 
