@@ -3,7 +3,7 @@ import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.service.UsuarioService;
-
+import java.util.List;
 import java.util.Objects;
 
 public class AdminController {
@@ -43,6 +43,10 @@ public class AdminController {
         dto.setId(in.getId());
         dto.setEstado("habilitado");
         return usuarioService.actualizarUsuario(dto);
+    }
+
+    public List<UsuarioDTO> listarUsuarios(){
+        return usuarioService.listarUsuarios();
     }
 
     public UsuarioDTO deshabilitarUsuario(UsuarioUpdateDTO in){

@@ -1,8 +1,11 @@
 package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
+import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.models.Usuario;
 import java.sql.SQLException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 //DATA ACCESS OBJECT, se usa para comunicarse directamente con el servidor.
@@ -48,20 +51,25 @@ public class UsuarioDAO {
         return false;
     }
 
-    public void mostrarUsuarios() throws SQLException { //Función para mostrar los usuarios habilitados en la base de datos.
+    public List<Usuario> mostrarUsuarios() throws SQLException { //Función para mostrar los usuarios habilitados en la base de datos.
+
+        List<Usuario> usuarios = new ArrayList<>();
+
         try (Connection c = conexion.getConnection();
              Statement stmt = c.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT * FROM usuario WHERE estado ='habilitado'")) {
+             ResultSet rs = stmt.executeQuery("SELECT id ,nombre,estado FROM usuario WHERE estado ='habilitado'")) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
                 String estado = rs.getString("estado");
-                String contrasena = rs.getString("contrasena");
-                System.out.println(id + " " + nombre + " " + estado + " " + contrasena);
+
+                Usuario user = new Usuario(id, nombre, estado);
+                usuarios.add(user);
             }
         } catch (SQLException e) {
-            System.out.println("Error al mostrar usuario" + e.getMessage());
+            System.out.println("Error al listar usuarios" + e.getMessage());
         }
+        return usuarios;
     }
 
     public Usuario buscarUsuarioPorID(int id){
