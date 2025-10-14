@@ -29,6 +29,25 @@ public class UsuarioDAO {
         return user;
     }
 
+    public boolean actualizarUsuario(Usuario user) throws SQLException {  //Función para actualizar el nombre de un usuario.
+        String sql = "UPDATE usuario SET nombre = ?, estado = ? WHERE id = ?";
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, user.getNombre());
+            ps.setString(2, user.getEstado());
+            ps.setInt(3, user.getID());
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar usuario" + e.getMessage());
+            return false;
+        }
+        return false;
+    }
+
     public void mostrarUsuarios() throws SQLException { //Función para mostrar los usuarios habilitados en la base de datos.
         try (Connection c = conexion.getConnection();
              Statement stmt = c.createStatement();
@@ -45,7 +64,7 @@ public class UsuarioDAO {
         }
     }
 
-    public Usuario buscarUsuarioPorID(int id) throws SQLException {
+    public Usuario buscarUsuarioPorID(int id){
         Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE id = ?";
         try (Connection conn = conexion.getConnection();
@@ -91,25 +110,7 @@ public class UsuarioDAO {
         return usuario;
     }
 
-    public boolean actualizarNombre(Usuario user, String nombre) throws SQLException {  //Función para actualizar el nombre de un usuario.
-        String sql = "UPDATE usuario SET nombre = ? WHERE id = ?";
-        try(Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setString(1, nombre);
-            ps.setInt(2, user.getID());
 
-            int rows = ps.executeUpdate();
-
-            if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
-                user.setNombre(nombre);
-                return true;
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar usuario" + e.getMessage());
-            return false;
-        }
-        return false;
-    }
 
     public boolean cambiarEstadoUsuario(Usuario user, String nuevoEstado) throws SQLException {  //Función para deshabilitar un usuario.
         String sql = "UPDATE usuario SET estado = ? WHERE id = ?";
