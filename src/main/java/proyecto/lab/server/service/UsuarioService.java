@@ -1,11 +1,12 @@
 package proyecto.lab.server.service;
+import proyecto.lab.client.application.App;
+import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.models.Usuario;
 import java.sql.SQLException;
-import java.util.Objects;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -46,31 +47,47 @@ public class UsuarioService {
         }
 
     }
+    public UsuarioDTO actualizarUsuario(UsuarioUpdateDTO dto) {
+        try {
+            Usuario existente = usuariodao.buscarUsuarioPorID(dto.getId()); // Verificar si el usuario a cambiar existe
+            if (existente == null) {
+                throw AppException.notFound("Usuario no encontrado");
+            }
 
-    public boolean actualizarNombreUsuario(Usuario user, String nombre) throws SQLException{
-        if(nombre == null || nombre.isEmpty()){
-            throw new SQLException("El valor del nombre no puede estar vacio.");
+            boolean cambios = false;
+
+            if (dto.getNombre() != null) { // Si hubo un cambio en el nombre, se actualiza
+                String nuevoNombre = dto.getNombre().trim();
+                if (nuevoNombre.isEmpty()) throw AppException.badRequest("El nombre no puede estar vacío"); // Verifica si el nombre entregado es vacío
+
+                if (nuevoNombre.equals(existente.getNombre())){  // Verifica si el nombre entregado es igual al de la BD.
+                    throw AppException.conflict("El nombre existe en el sistema.");
+                }
+                existente.setNombre(nuevoNombre);
+                cambios = true;
+            }
+            if (dto.getEstado() != null){ // Si hubo cambio en el estado, se actualiza
+                String nuevoEstado = dto.getEstado().trim();
+                if (nuevoEstado.isEmpty()) {throw AppException.badRequest("El estado no puede estar vacío");} // Verifica si el estado entregado es vacío
+
+                if (nuevoEstado.equals(existente.getEstado())){ // Verifica si el estado entregado es igual al de la BD.
+                    throw AppException.conflict("El estado ya está asignado en el sistema");
+                }
+
+                existente.setEstado(nuevoEstado);
+                cambios=true;
+            }
+
+            if(!cambios) {
+                throw AppException.badRequest("No hay cambios para aplicar");
+            }
+            boolean ok = usuariodao.actualizarUsuario(existente);
+            if(!ok) throw AppException.internal("Error al actualizar usuario");
+
+            return new UsuarioDTO(existente.getID(),existente.getNombre(), existente.getEstado());
+        } catch (SQLException e){
+            throw AppException.internal("Error al actualizar usuario: " + e.getMessage());
         }
-        if(Objects.equals(user.getNombre(), nombre)){
-            throw new SQLException("El usuario ya posee este nombre en el sistema");
-        }
-
-        Usuario existente= usuariodao.buscarUsuarioPorID(user.getID());
-        if(existente == null){
-            throw new SQLException("El usuario no existe en el sistema.");
-        }
-
-        return usuariodao.actualizarNombre(user, nombre);
-    }
-
-    public boolean deshabilitarUsuario(Usuario user) throws SQLException {
-        if(Objects.equals(user.getEstado(), "deshabilitado")){ throw new SQLException("El usuario ya está deshabilitado");}
-        return usuariodao.cambiarEstadoUsuario(user, "deshabilitado");
-    }
-
-    public boolean habilitarUsuario(Usuario user) throws SQLException {
-        if(Objects.equals(user.getEstado(), "habilitado")){throw new SQLException("El usuario ya está habilitado");}
-        return usuariodao.cambiarEstadoUsuario(user, "habilitado");
     }
 
 

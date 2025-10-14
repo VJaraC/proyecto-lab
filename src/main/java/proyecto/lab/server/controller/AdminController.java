@@ -1,9 +1,10 @@
 package proyecto.lab.server.controller;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
+import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.service.UsuarioService;
 
-import java.util.List;
+import java.util.Objects;
 
 public class AdminController {
 
@@ -23,10 +24,44 @@ public class AdminController {
         return usuarioService.crearUsuario(in);
     }
 
+    public UsuarioDTO modificarNombreUsuario(UsuarioUpdateDTO in , String nuevonombre){
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(nuevonombre, "Debes ingresar un nombre");
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+        dto.setId(in.getId());
+        dto.setNombre(nuevonombre);
+
+        return usuarioService.actualizarUsuario(dto);
+    }
+
+    public UsuarioDTO habilitarUsuario(UsuarioUpdateDTO in){
+        validarNoNulo(in, "Datos requeridos");
+        validarPositivo(in.getId(),"ID invalido");
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+        dto.setId(in.getId());
+        dto.setEstado("habilitado");
+        return usuarioService.actualizarUsuario(dto);
+    }
+
+    public UsuarioDTO deshabilitarUsuario(UsuarioUpdateDTO in){
+        validarNoNulo(in, "Datos requeridos");
+        validarPositivo(in.getId(),"ID invalido");
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+        dto.setId(in.getId());
+        dto.setEstado("deshabilitado");
+        return usuarioService.actualizarUsuario(dto);
+    }
+
     private static void validarNoNulo(Object o, String msg){
         if(o == null) throw new IllegalArgumentException(msg);
     }
 
+    private static void validarEstado(String o, String msg){
+        if (!Objects.equals(o, "habilitado") && !Objects.equals(o, "deshabilitado")) throw new IllegalArgumentException(msg);
+    }
     private static void validarTexto(String s, String msg){
         if(s == null || s.trim().isEmpty()) throw new IllegalArgumentException(msg);
     }

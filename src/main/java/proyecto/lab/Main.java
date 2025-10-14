@@ -2,9 +2,7 @@ package proyecto.lab;
 
 import proyecto.lab.server.controller.AdminController;
 import proyecto.lab.server.dao.UsuarioDAO;
-import proyecto.lab.server.dto.UsuarioDTO;
-import proyecto.lab.server.dto.UsuarioLoginDTO;
-import proyecto.lab.server.models.Usuario;
+import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.service.UsuarioService;
 
 import java.sql.SQLException;
@@ -18,9 +16,13 @@ public class Main {
         UsuarioService usuarioService = new UsuarioService(usuarioDAO);
         AdminController adminController = new AdminController(usuarioService);
 
-        UsuarioLoginDTO nuevoUsuario = new UsuarioLoginDTO("danilagosh","12345");
+//        UsuarioLoginDTO nuevoUsuario = new UsuarioLoginDTO("danilagosh","12345");
 
-        UsuarioDTO resultado = adminController.crearUsuario(nuevoUsuario);
+//        UsuarioDTO resultado = adminController.crearUsuario(nuevoUsuario);
+
+          UsuarioUpdateDTO usuarioprueba = new UsuarioUpdateDTO(2, "vito" , "habilitado");
+          adminController.modificarNombreUsuario(usuarioprueba,"tobisss");
+          adminController.habilitarUsuario(usuarioprueba);
         }catch(Exception e){
             System.out.println("Error al crear usuario: " + e.getMessage());
         }
