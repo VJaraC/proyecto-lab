@@ -1,5 +1,4 @@
 package proyecto.lab.server.service;
-import proyecto.lab.client.application.App;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.dao.UsuarioDAO;
@@ -7,6 +6,8 @@ import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.models.Usuario;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -47,6 +48,25 @@ public class UsuarioService {
         }
 
     }
+    public List<UsuarioDTO> listarUsuarios() {
+           try{
+               List<Usuario> usuarios = usuariodao.mostrarUsuarios();
+               List<UsuarioDTO> listaUsuarios = new ArrayList<>();
+
+               for (Usuario u : usuarios) {
+                   listaUsuarios.add(new UsuarioDTO(u.getID(), u.getNombre(), u.getEstado()));
+               }
+
+               return listaUsuarios;
+              } catch (SQLException e){
+                throw AppException.internal("Error al listar usuarios" + e.getMessage());
+           }
+    }
+
+
+
+
+
     public UsuarioDTO actualizarUsuario(UsuarioUpdateDTO dto) {
         try {
             Usuario existente = usuariodao.buscarUsuarioPorID(dto.getId()); // Verificar si el usuario a cambiar existe

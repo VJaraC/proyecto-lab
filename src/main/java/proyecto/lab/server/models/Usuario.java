@@ -21,6 +21,12 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
+    public Usuario(int ID ,String nombre, String estado) {
+        this.ID = ID;
+        this.nombre = nombre;
+        this.estado = estado;
+    }
+
 
     //setters
     public void setID(int ID) {
