@@ -1,0 +1,42 @@
+/* language=JavaFX CSS */
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat Bold";
+    src: url("../fonts/Montserrat-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Core Mellow";
+    src: url("../fonts/Core-Mellow-Regular.otf");
+}
+
+@font-face {
+    font-family: "Core Mellow Bold";
+    src: url("../fonts/Core-Mellow-Bold.otf");
+}
+
+@font-face {
+    font-family: "Product Sans";
+    src: url("../fonts/Product-Sans-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Product Sans Bold";
+    src: url("../fonts/Product-Sans-Bold.ttf");
+}
+
+.BotonCrearUsuario{
+    -fx-background-color: #4b87f6;
+    -fx-text-fill: white;
+    -fx-border-radius: 20;
+}
+
+.BotonCrearUsuario:hover{
+    -fx-background-color: #84abfc;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}

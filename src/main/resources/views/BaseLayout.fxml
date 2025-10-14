@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox stylesheets="@../css/BaseLayout.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.BaseLayoutController">
+
+   <children>
+      <VBox prefHeight="650.0" prefWidth="270.0">
+         <children>
+            <AnchorPane fx:id="anchorLateral" prefHeight="650.0" prefWidth="275.0" styleClass="anchorLateral" stylesheets="@../css/BaseLayout.css">
+               <children>
+                  <Pane id="FondoLogoUnap" layoutX="24.0" layoutY="23.0" prefHeight="164.0" prefWidth="222.0" styleClass="FondoLogoUnap" stylesheets="@../css/BaseLayout.css">
+                     <children>
+                        <ImageView fitHeight="195.0" fitWidth="238.0" layoutX="14.0" layoutY="-15.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/unap_negativo.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Button id="BotonInicio" fx:id="BotonInicio" layoutX="2.0" layoutY="290.0" mnemonicParsing="false" onAction="#GoInicio" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Inicio" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button id="BotonLab" fx:id="BotonLaboratorios" layoutX="2.0" layoutY="339.0" mnemonicParsing="false" onAction="#GoLaboratorios" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Laboratorios" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button id="BotonEquipo" fx:id="BotonEquipos" layoutX="2.0" layoutY="388.0" mnemonicParsing="false" onAction="#GoEquipos" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Equipos" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button id="BotonUsuarios" fx:id="BotonUsuarios" layoutX="1.0" layoutY="438.0" mnemonicParsing="false" onAction="#GoUsuarios" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Usuarios" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans" size="18.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="104.0" layoutY="237.0" text="Menú" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Button id="BotonReportes" fx:id="BotonReportes" layoutX="1.0" layoutY="487.0" mnemonicParsing="false" onAction="#GoReportes" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Reportes" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <StackPane fx:id="ContentArea" prefHeight="650.0" prefWidth="1004.0" HBox.hgrow="ALWAYS" />
+   </children>
+</HBox>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewUsuariosController">
+   <children>
+      <AnchorPane prefHeight="637.0" prefWidth="858.0">
+         <children>
+            <AnchorPane prefHeight="74.0" prefWidth="846.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="7.0" text="Usuarios" textFill="#062040">
+                     <font>
+                        <Font name="CoreMellow-Bold" size="36.0" />
+                     </font>
+                  </Label>
+                  <AnchorPane id="PanelCredencial" layoutX="556.0" layoutY="14.0" prefHeight="20.0" prefWidth="275.0" styleClass="PanelCredencial" stylesheets="@../css/BaseLayout.css">
+                     <children>
+                        <Button id="BotonCerrarSesion" layoutX="160.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="114.0" styleClass="BotonCerrarSesion" stylesheets="@../css/BaseLayout.css" text="Cerrar Sesión">
+                           <font>
+                              <Font name="Product Sans" size="14.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <TableView layoutX="6.0" layoutY="196.0" prefHeight="415.0" prefWidth="834.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="ID" />
+                <TableColumn prefWidth="127.9999771118164" text="Nombre" />
+                  <TableColumn prefWidth="140.0" text="Estado" />
+              </columns>
+            </TableView>
+            <TextField layoutX="14.0" layoutY="80.0" prefHeight="26.0" prefWidth="316.0" promptText="Buscar...">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+            </TextField>
+            <Button layoutX="353.0" layoutY="80.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Buscar" />
+            <Button id="BotonCrearUsuario" layoutX="14.0" layoutY="141.0" mnemonicParsing="false" onAction="#AbrirFormularioCrearUsuario" prefHeight="36.0" prefWidth="126.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Crear Usuario">
+               <font>
+                  <Font name="Product Sans Bold" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>
