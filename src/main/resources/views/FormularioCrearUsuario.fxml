@@ -18,14 +18,14 @@
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="26.0" layoutY="132.0" prefHeight="26.0" prefWidth="463.0" />
+      <TextField fx:id="txtNombre" layoutX="26.0" layoutY="132.0" prefHeight="26.0" prefWidth="463.0" />
       <Label layoutX="26.0" layoutY="174.0" text="Contraseña">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField layoutX="26.0" layoutY="208.0" prefHeight="26.0" prefWidth="463.0" />
-      <Button id="BotonGuardarUsuario" layoutX="207.0" layoutY="281.0" mnemonicParsing="false" onAction="#GuardarUsuario" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Guardar">
+      <TextField fx:id="txtContrasena" layoutX="26.0" layoutY="208.0" prefHeight="26.0" prefWidth="463.0" />
+      <Button id="BotonGuardarUsuario" fx:id="BotonGuardarUsuario" layoutX="207.0" layoutY="281.0" mnemonicParsing="false" onAction="#GuardarUsuario" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Guardar">
          <font>
             <Font name="Product Sans Bold" size="18.0" />
          </font>

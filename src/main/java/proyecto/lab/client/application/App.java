@@ -1,7 +1,9 @@
 package proyecto.lab.client.application;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
+import proyecto.lab.server.controller.AdminController;
+import proyecto.lab.server.dao.UsuarioDAO;
+import proyecto.lab.server.service.UsuarioService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,6 +13,12 @@ import javafx.scene.Parent;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        UsuarioDAO usuarioDao = new UsuarioDAO();         // tu impl real
+        UsuarioService usuarioService = new UsuarioService(usuarioDao);
+        AdminController admin = new AdminController(usuarioService);
+
+        AppContext.setAdmin(admin);
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/BaseLayout.fxml"));
         Parent root = loader.load();
         stage.setTitle("Sistema de Monitoreo - UNAP");
