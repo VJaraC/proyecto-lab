@@ -51,6 +51,7 @@ public class FormularioCrearUsuarioController {
     private void cerrar(ActionEvent e) {
         Stage st = (Stage) ((Node) e.getSource()).getScene().getWindow();
         st.close();
+
     }
 
     private void alert(Alert.AlertType type, String msg) {
