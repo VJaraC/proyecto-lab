@@ -20,12 +20,6 @@ public class FormularioCrearUsuarioController {
     void GuardarUsuario(ActionEvent e) {
         String nombre = txtNombre.getText();
         String contr  = txtContrasena.getText();
-
-        if (nombre == null || nombre.isBlank() || contr == null || contr.isBlank()) {
-            alert(Alert.AlertType.WARNING, "Completa todos los campos");
-            return;
-        }
-
         try {
             UsuarioLoginDTO in = new UsuarioLoginDTO(nombre, contr);
             UsuarioDTO creado = AppContext.admin().crearUsuario(in);  // 💾 BD a través del server

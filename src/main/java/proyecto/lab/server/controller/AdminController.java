@@ -20,7 +20,7 @@ public class AdminController {
     public UsuarioDTO crearUsuario(UsuarioLoginDTO in){
         validarNoNulo(in, "Datos requeridos");
         validarTexto(in.getNombre(), "El nombre es obligatorio");
-        validarMinLen(in.getContrasena(), 4, "La contrasena debe tener al menos 4 caracteres");
+        validarMinLen(in.getContrasena(), 4, "La contraseña debe tener al menos 4 caracteres");
         return usuarioService.crearUsuario(in);
     }
 

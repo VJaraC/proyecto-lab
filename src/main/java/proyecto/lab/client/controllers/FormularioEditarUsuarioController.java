@@ -32,10 +32,6 @@ public class FormularioEditarUsuarioController {
     void GuardarActualizar(ActionEvent event) {
         String nombre = txtNombre.getText();
 
-        if (nombre == null || nombre.isBlank()) {
-            alert(Alert.AlertType.WARNING, "Completa todos los campos");
-            return;
-        }
         try{
             UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombre(),usuario.getEstado());
             usuario = AppContext.admin().modificarNombreUsuario(usuarioUpdateDTO,nombre);
