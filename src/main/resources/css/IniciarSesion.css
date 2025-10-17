@@ -29,14 +29,32 @@
     src: url("../fonts/Product-Sans-Bold.ttf");
 }
 
-.BotonCrearUsuario{
-    -fx-background-color: #007c96;
+
+.panelLateral{
+    -fx-background-color: white;
+
+}
+
+.field {
+    -fx-background-color: #f2f4f5;
+    -fx-border-color: #f7f9fa;
+    -fx-border-radius: 5;
+}
+
+.field:focused {
+    -fx-border-color: #85cef3;
+}
+
+
+.IniciarSesionBtn {
+    -fx-background-color: linear-gradient(to left, #026ab1, #037fad, #018ea9,#009aa6);
+
     -fx-text-fill: white;
     -fx-border-radius: 40px;
 }
 
-.BotonCrearUsuario:hover{
-    -fx-background-color: #01999e;
+.IniciarSesionBtn:hover{
+    -fx-background-color: #41bec7;
     -fx-text-fill: white;
     -fx-cursor: hand;
 }
