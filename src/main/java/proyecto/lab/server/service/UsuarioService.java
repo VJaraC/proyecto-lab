@@ -1,4 +1,5 @@
 package proyecto.lab.server.service;
+import proyecto.lab.client.application.App;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.dao.UsuarioDAO;
@@ -8,6 +9,7 @@ import proyecto.lab.server.models.Usuario;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -33,7 +35,7 @@ public class UsuarioService {
                 throw AppException.conflict("El usuario ya existe en el sistema.");// Es una validación de ejemplo, esto ya sería por ID, etc.
             }
 
-            String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt());
+            String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
             Usuario nuevo = new Usuario(user.getNombre(), "habilitado", hash);
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
 
@@ -48,6 +50,38 @@ public class UsuarioService {
         }
 
     }
+    public UsuarioDTO iniciarSesion(UsuarioLoginDTO user) {
+        final String nombre = user.getNombre().trim();
+        final String contrasena = user.getContrasena();
+
+        try{
+            Usuario existente = usuariodao.buscarUsuarioPorNombre(nombre);
+
+            if (existente == null || existente.getContrasena() == null) {
+                throw AppException.unauthorized("Credenciales inválidas.");
+            }
+            if (Objects.equals(existente.getEstado(), "deshabilitado")) {
+                throw AppException.forbidden("El usuario está deshabilitado del sistema.");
+            }
+
+            String hashedPassword = existente.getContrasena();
+
+            if(BCrypt.checkpw(contrasena, hashedPassword)) {
+                return new UsuarioDTO(
+                        existente.getID(),
+                        existente.getNombre(),
+                        existente.getEstado()
+                );
+            }else{
+                throw AppException.unauthorized("Las credenciales ingresadas son incorrectas.");
+            }
+        } catch (SQLException e) {
+            throw AppException.internal("Error al acceder a la base de datos.");
+        }
+
+    }
+
+
     public List<UsuarioDTO> listarUsuarios() {
            try{
                List<Usuario> usuarios = usuariodao.mostrarUsuarios();

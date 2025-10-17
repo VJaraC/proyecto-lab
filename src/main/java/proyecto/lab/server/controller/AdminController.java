@@ -24,6 +24,13 @@ public class AdminController {
         return usuarioService.crearUsuario(in);
     }
 
+    public UsuarioDTO iniciarSesion(UsuarioLoginDTO in){
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(in.getNombre(), "El nombre es obligatorio");
+        validarTexto(in.getContrasena(), "La contraseña es obligatoria");
+        return usuarioService.iniciarSesion(in);
+    }
+
     public UsuarioDTO modificarNombreUsuario(UsuarioUpdateDTO in , String nuevonombre){
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevonombre, "Debes ingresar un nombre");
