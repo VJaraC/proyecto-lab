@@ -57,7 +57,7 @@ public class UsuarioDAO {
 
         try (Connection c = conexion.getConnection();
              Statement stmt = c.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id ,nombre,estado FROM usuario WHERE estado ='habilitado'")) {
+             ResultSet rs = stmt.executeQuery("SELECT id ,nombre,estado FROM usuario")) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
