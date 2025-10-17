@@ -10,6 +10,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -99,28 +100,62 @@ public class ViewUsuariosController {
         AccionTablaEstudiantes.setCellFactory(col -> {
             return new TableCell<UsuarioDTO, Void>() {
                 private final Button btn = new Button("Editar");
+                private final Button btnDeshabilitar = new Button("Deshabilitar");
+                private final Button btnHabilitar = new Button("Habilitar");
+                private final HBox box = new HBox(6, btn);
 
                 {
                     btn.setOnAction(event -> {
                         UsuarioDTO usuario = getTableView().getItems().get(getIndex());
                         AbrirFormularioEditarUsuario(usuario);
                     });
+
+                    btnDeshabilitar.setOnAction(event -> {
+                        UsuarioDTO usuarioDeshabilitar = getTableView().getItems().get(getIndex());
+                        UsuarioUpdateDTO usuarioUpdateDTO = crearUpdateDTO(usuarioDeshabilitar);
+                        AppContext.admin().deshabilitarUsuario(usuarioUpdateDTO);
+                        ActualizarTablaEstudiantes();
+
+                    });
+
+                    btnHabilitar.setOnAction(event -> {
+                        UsuarioDTO usuario = getTableView().getItems().get(getIndex());
+                        UsuarioUpdateDTO usuarioUpdateDTO = crearUpdateDTO(usuario);
+                        AppContext.admin().habilitarUsuario(usuarioUpdateDTO);
+                        ActualizarTablaEstudiantes();
+                    });
+
                 }
 
                 @Override
                 protected void updateItem(Void item, boolean empty) {
                     super.updateItem(item, empty);
-                    if (empty) {
+                    if (empty || getIndex() < 0) {
                         setGraphic(null);
-                    } else {
-                        setGraphic(btn);
+                        return;
                     }
+                    UsuarioDTO usuario = getTableView().getItems().get(getIndex());
+
+                    if ("habilitado".equals(usuario.getEstado())) {
+                        box.getChildren().setAll(btn, btnDeshabilitar);
+                    } else {
+                        box.getChildren().setAll(btn, btnHabilitar);
+                    }
+                    setGraphic(box);
                 }
             };
         });
+
+
     }
 
-
+    private UsuarioUpdateDTO crearUpdateDTO(UsuarioDTO usuario) {
+        UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO();
+        usuarioUpdateDTO.setNombre(usuario.getNombre());
+        usuarioUpdateDTO.setEstado(usuario.getEstado());
+        usuarioUpdateDTO.setId(usuario.getID());
+        return usuarioUpdateDTO;
+    }
 
 }
 
