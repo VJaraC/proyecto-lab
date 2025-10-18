@@ -72,7 +72,7 @@ public class UsuarioDAO {
         return usuarios;
     }
 
-    public Usuario buscarUsuarioPorID(int id){
+    public Usuario buscarUsuarioPorID(int id) throws SQLException {
         Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE id = ?";
         try (Connection conn = conexion.getConnection();
@@ -95,28 +95,52 @@ public class UsuarioDAO {
         return usuario;
     }
 
-    public Usuario buscarUsuarioPorNombre(String n) throws SQLException {
-        Usuario usuario = null;
-        String sql = "SELECT * FROM usuario WHERE nombre = ?";
+    private List<Usuario> mapearUsuarios(ResultSet rs) throws SQLException {
+        List<Usuario> usuarios = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nombre = rs.getString("nombre");
+            String estado = rs.getString("estado");
+            String contrasena = rs.getString("contrasena");
+            usuarios.add(new Usuario(id, nombre, estado, contrasena));
+        }
+        return usuarios;
+    }
+
+    public List<Usuario> buscarUsuarioPorNombre(String n) throws SQLException {
+        String sql = "SELECT * FROM usuario WHERE nombre LIKE ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setString(1, n);
-            try (ResultSet rs = ps.executeQuery()){
-                if (rs.next()) {
-                    int id2 = rs.getInt("id");
-                    String nombre = rs.getString("nombre");
-                    String estado = rs.getString("estado");
-                    String contrasena = rs.getString("contrasena");
-                    usuario = new Usuario(id2, nombre, estado, contrasena);
-                }
-            } catch (SQLException e) {
-                System.out.println("Error al buscar usuario" + e.getMessage());
+
+            ps.setString(1, "%" + n + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return mapearUsuarios(rs);
             }
-        }catch (SQLException e){
+        }catch (SQLException e) {
             System.out.println("Error al buscar usuario" + e.getMessage());
-        }
-        return usuario;
+            throw e;
+            }
     }
+
+    public List<Usuario> buscarUsuarioPorEstado(String estado) throws SQLException {
+        String sql = "SELECT * FROM usuario WHERE estado = ?";
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, estado);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return mapearUsuarios(rs);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al buscar usuarios por estado: " + e.getMessage());
+            throw e;
+        }
+    }
+
+
 
 
 
