@@ -1,5 +1,6 @@
 package proyecto.lab.server.service;
 import proyecto.lab.client.application.App;
+import proyecto.lab.server.dto.UsuarioBusquedaDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.dao.UsuarioDAO;
@@ -28,13 +29,15 @@ public class UsuarioService {
             throw AppException.badRequest("La contraseña debe tener al menos 4 caracteres.");// validaciones
         }
 
+        final String nombre = user.getNombre().trim();
+
         try {
-            Usuario existente = usuariodao.buscarUsuarioPorNombre(user.getNombre()); // Buscar al usuario con el nombre
-
-            if (existente != null) {
-                throw AppException.conflict("El usuario ya existe en el sistema.");// Es una validación de ejemplo, esto ya sería por ID, etc.
-            }
-
+            List<Usuario> candidatos = usuariodao.buscarUsuarioPorNombre(nombre);
+            boolean existeExacto = candidatos.stream()
+                    .anyMatch(u -> nombre.equals(u.getNombre()));
+            if (existeExacto)
+                throw AppException.conflict("El usuario ya existe en el sistema.");
+//            Usuario existente = usuariodao.buscarUsuarioPorID(user.getNombre()); // Buscar al usuario con el nombre  //PARCHE TEMPORAL HASTA QUE EXISTA LA BD
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
             Usuario nuevo = new Usuario(user.getNombre(), "habilitado", hash);
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
@@ -55,7 +58,11 @@ public class UsuarioService {
         final String contrasena = user.getContrasena();
 
         try{
-            Usuario existente = usuariodao.buscarUsuarioPorNombre(nombre);
+            List<Usuario> candidatos = usuariodao.buscarUsuarioPorNombre(nombre);
+            Usuario existente = candidatos.stream()
+                    .filter(u -> nombre.equals(u.getNombre()))
+                    .findFirst()
+                    .orElse(null);
 
             if (existente == null || existente.getContrasena() == null) {
                 throw AppException.unauthorized("Credenciales inválidas.");
@@ -81,6 +88,62 @@ public class UsuarioService {
 
     }
 
+    public UsuarioDTO buscarUsuarioPorId(UsuarioBusquedaDTO in){
+        final Integer id = in.getId();
+        if(id == null || id <= 0 ){
+            throw AppException.badRequest("Debe proporcionar un ID válido. Si no tiene el ID, busque por otro filtro.");
+        }
+        try{
+            Usuario u = usuariodao.buscarUsuarioPorID(id);
+            if (u == null) {
+                throw AppException.notFound("Usuario no encontrado.");
+            }
+            return new UsuarioDTO(u.getID(), u.getNombre(), u.getEstado());
+        } catch (SQLException e){
+            throw AppException.internal("Error al acceder a la base de datos.");
+        }
+
+    }
+
+    public List<UsuarioDTO> buscarUsuarios(UsuarioBusquedaDTO in){
+        final String nombre = in.getNombre() != null ? in.getNombre().trim() : null;
+        final String estado = in.getEstado() != null ? in.getEstado().trim().toLowerCase() : null;
+
+        final boolean hasNombre = nombre != null && !nombre.isEmpty();
+        final boolean hasEstado = estado != null && !estado.isEmpty();
+
+        if(!hasNombre && !hasEstado){
+            throw AppException.badRequest("Debes ingresar un valor para realizar la búsqueda.");
+        }
+        try{
+            //Ambos filtros presentes - Prioriza nombre
+            if(hasNombre &&  hasEstado){
+                List<Usuario> lista = usuariodao.buscarUsuarioPorNombre(nombre);
+                return lista.stream()
+                        .map(u -> new UsuarioDTO(u.getID(),u.getNombre(),u.getEstado()))
+                        .toList();
+            }
+            // Solo nombre
+            if(hasNombre){
+                List<Usuario> lista = usuariodao.buscarUsuarioPorNombre(nombre);
+                return lista.stream()
+                        .map(u -> new UsuarioDTO(u.getID(),u.getNombre(),u.getEstado()))
+                        .toList();
+            }
+            // Solo estados con valor habilitado y deshabilitado
+            if (!"habilitado".equals(estado) && !"deshabilitado".equals(estado)) {
+                throw AppException.badRequest("El estado debe ser 'habilitado' o 'deshabilitado'");
+            }
+
+            List<Usuario> lista = usuariodao.buscarUsuarioPorEstado(estado);
+            return lista.stream()
+                    .map(u -> new UsuarioDTO(u.getID(),u.getNombre(), u.getEstado()))
+                    .toList();
+        } catch (SQLException e) {
+            throw AppException.internal("Error al acceder a la base de datos.");
+        }
+    }
+
 
     public List<UsuarioDTO> listarUsuarios() {
            try{
@@ -96,8 +159,6 @@ public class UsuarioService {
                 throw AppException.internal("Error al listar usuarios" + e.getMessage());
            }
     }
-
-
 
 
 
