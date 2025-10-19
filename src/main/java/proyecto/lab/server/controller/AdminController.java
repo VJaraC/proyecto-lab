@@ -5,6 +5,9 @@ import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.dto.UsuarioBusquedaDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.service.UsuarioService;
+import proyecto.lab.server.utils.RutUtils;
+import proyecto.lab.server.utils.EstadoUtils;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -21,16 +24,33 @@ public class AdminController {
 
     public UsuarioDTO crearUsuario(UsuarioLoginDTO in){
         validarNoNulo(in, "Datos requeridos");
-        validarTexto(in.getNombre(), "El nombre es obligatorio");
+        validarTexto(in.getRut(), "El RUT es obligatorio");
         validarMinLen(in.getContrasena(), 4, "La contraseña debe tener al menos 4 caracteres");
         return usuarioService.crearUsuario(in);
     }
 
     public UsuarioDTO iniciarSesion(UsuarioLoginDTO in){
         validarNoNulo(in, "Datos requeridos");
-        validarTexto(in.getNombre(), "El nombre es obligatorio");
+        validarTexto(in.getRut(), "El RUT es obligatorio");
         validarTexto(in.getContrasena(), "La contraseña es obligatoria");
         return usuarioService.iniciarSesion(in);
+    }
+
+    public UsuarioDTO buscarUsuarioPorRUT(String rut){
+        validarNoNulo(rut, "El nombre es obligatorio");
+
+        // Normalizar + Validar DV
+        final String rutnormalizado;
+        try{
+            rutnormalizado = RutUtils.normalizarRut(rut);
+        }catch(IllegalArgumentException e){
+            throw AppException.badRequest(e.getMessage());
+        }
+
+        UsuarioBusquedaDTO busqueda = new UsuarioBusquedaDTO();
+        busqueda.setRut(rutnormalizado);
+
+        return usuarioService.buscarUsuarioPorRut(busqueda);
     }
 
     public UsuarioDTO buscarUsuarioPorId(Integer id){
@@ -44,7 +64,6 @@ public class AdminController {
 
     public List<UsuarioDTO> buscarUsuarioPorNombre(String nombre){
         validarTexto(nombre, "El nombre es obligatorio");
-        validarNoNulo(nombre, "El nombre es obligatorio");
         UsuarioBusquedaDTO busqueda = new UsuarioBusquedaDTO();
         busqueda.setNombre(nombre);
         return usuarioService.buscarUsuarios(busqueda);
@@ -75,7 +94,7 @@ public class AdminController {
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
         dto.setId(in.getId());
-        dto.setEstado("habilitado");
+        dto.setEstado(EstadoUtils.HABILITADO);
         return usuarioService.actualizarUsuario(dto);
     }
 
@@ -89,7 +108,7 @@ public class AdminController {
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
         dto.setId(in.getId());
-        dto.setEstado("deshabilitado");
+        dto.setEstado(EstadoUtils.DESHABILITADO);
         return usuarioService.actualizarUsuario(dto);
     }
 
@@ -98,7 +117,7 @@ public class AdminController {
     }
 
     private static void validarEstado(String o, String msg){
-        if (!Objects.equals(o, "habilitado") && !Objects.equals(o, "deshabilitado")) throw AppException.badRequest(msg);
+        if (!EstadoUtils.esValido(o)) throw AppException.badRequest(msg);
     }
     private static void validarTexto(String s, String msg){
         if(s == null || s.trim().isEmpty()) throw AppException.badRequest(msg);
