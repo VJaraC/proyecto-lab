@@ -1,5 +1,4 @@
 package proyecto.lab.server.service;
-import proyecto.lab.client.application.App;
 import proyecto.lab.server.dto.UsuarioBusquedaDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
@@ -7,12 +6,11 @@ import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.models.Usuario;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import org.mindrot.jbcrypt.BCrypt;
+import proyecto.lab.server.utils.RutUtils;
+import proyecto.lab.server.utils.EstadoUtils;
 
 public class UsuarioService {
     private final UsuarioDAO usuariodao;
@@ -22,73 +20,108 @@ public class UsuarioService {
     }
 
     public UsuarioDTO crearUsuario(UsuarioLoginDTO user) {
-        if (user.getNombre() == null || user.getNombre().isEmpty()) {
-            throw AppException.badRequest("El nombre no puede estar vacío"); // validaciones
+        if (user.getRut() == null || user.getRut().isEmpty()) {
+            throw AppException.badRequest("El RUT no puede estar vacío"); // validaciones
+        }
+        if(user.getRut().length() >  12 ){
+            throw AppException.badRequest("El rut debe ser menor o igual a 12 caracteres");
+        }
+        if(user.getNombre() == null || user.getNombre().trim().isEmpty()) {
+            throw AppException.badRequest("El nombre es obligatorio");
+        }
+        if(user.getNombre().length() > 100) {
+            throw AppException.badRequest("El nombre no puede superar 100 caracteres");
         }
         if (user.getContrasena() == null || user.getContrasena().isEmpty() || user.getContrasena().length() < 4) {
             throw AppException.badRequest("La contraseña debe tener al menos 4 caracteres.");// validaciones
         }
+        if(user.getContrasena().length() > 255) {
+            throw AppException.badRequest("La contraseña es demasiado larga");
+        }
 
-        final String nombre = user.getNombre().trim();
+
+        final String rutNormalizado;
 
         try {
-            List<Usuario> candidatos = usuariodao.buscarUsuarioPorNombre(nombre);
-            boolean existeExacto = candidatos.stream()
-                    .anyMatch(u -> nombre.equals(u.getNombre()));
-            if (existeExacto)
-                throw AppException.conflict("El usuario ya existe en el sistema.");
-//            Usuario existente = usuariodao.buscarUsuarioPorID(user.getNombre()); // Buscar al usuario con el nombre  //PARCHE TEMPORAL HASTA QUE EXISTA LA BD
+            rutNormalizado= RutUtils.normalizarRut(user.getRut());
+            Usuario existente = usuariodao.buscarUsuarioPorRut(rutNormalizado);
+            if(existente != null){ throw AppException.badRequest("Ya existe un usuario registrado con ese RUT."); }
+            //hashear contraseña
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
-            Usuario nuevo = new Usuario(user.getNombre(), "habilitado", hash);
+
+            // crear nuevo usuario
+            Usuario nuevo = new Usuario(rutNormalizado ,user.getNombre(), EstadoUtils.HABILITADO, hash);
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
 
             return new UsuarioDTO(
                     guardado.getID(),
+                    guardado.getRut(),
                     guardado.getNombre(),
                     guardado.getEstado()
             );
 
-        } catch (SQLException e) {
-            throw AppException.internal("Error al acceder a la base de datos.");
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw AppException.internal("Error inesperado al crear usuario.");
         }
 
     }
+
     public UsuarioDTO iniciarSesion(UsuarioLoginDTO user) {
-        final String nombre = user.getNombre().trim();
+        if (user.getRut() == null || user.getRut().isEmpty()) {
+            throw AppException.badRequest("El RUT es obligatorio.");
+        }
+        if (user.getContrasena() == null || user.getContrasena().isEmpty()) {
+            throw AppException.badRequest("La contraseña es obligatoria.");
+        }
+
+        final String rutNormalizado;
+        try {
+            // Validar y normalizar el RUT al formato estándar (12.345.678-9)
+            rutNormalizado = RutUtils.normalizarRut(user.getRut());
+        } catch (IllegalArgumentException e) {
+            throw AppException.badRequest(e.getMessage());
+        }
+
         final String contrasena = user.getContrasena();
 
-        try{
-            List<Usuario> candidatos = usuariodao.buscarUsuarioPorNombre(nombre);
-            Usuario existente = candidatos.stream()
-                    .filter(u -> nombre.equals(u.getNombre()))
-                    .findFirst()
-                    .orElse(null);
+        try {
+            // ✅ Buscar usuario directamente por RUT (único)
+            Usuario existente = usuariodao.buscarUsuarioPorRut(rutNormalizado);
 
             if (existente == null || existente.getContrasena() == null) {
                 throw AppException.unauthorized("Credenciales inválidas.");
             }
-            if (Objects.equals(existente.getEstado(), "deshabilitado")) {
+
+            if (EstadoUtils.DESHABILITADO.equals(existente.getEstado())) {
                 throw AppException.forbidden("El usuario está deshabilitado del sistema.");
             }
 
-            String hashedPassword = existente.getContrasena();
-
-            if(BCrypt.checkpw(contrasena, hashedPassword)) {
+            //  Verificar contraseña
+            String hash = existente.getContrasena();
+            if (BCrypt.checkpw(contrasena, hash)) {
+                // Login correcto → devolver DTO
                 return new UsuarioDTO(
                         existente.getID(),
+                        existente.getRut(),
                         existente.getNombre(),
                         existente.getEstado()
                 );
-            }else{
+            } else {
                 throw AppException.unauthorized("Las credenciales ingresadas son incorrectas.");
             }
-        } catch (SQLException e) {
-            throw AppException.internal("Error al acceder a la base de datos.");
-        }
 
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw AppException.internal("Error inesperado al iniciar sesión.");
+        }
     }
 
+
     public UsuarioDTO buscarUsuarioPorId(UsuarioBusquedaDTO in){
+        if (in == null) { throw AppException.badRequest("Solicitud inválida.");}
         final Integer id = in.getId();
         if(id == null || id <= 0 ){
             throw AppException.badRequest("Debe proporcionar un ID válido. Si no tiene el ID, busque por otro filtro.");
@@ -98,14 +131,37 @@ public class UsuarioService {
             if (u == null) {
                 throw AppException.notFound("Usuario no encontrado.");
             }
-            return new UsuarioDTO(u.getID(), u.getNombre(), u.getEstado());
-        } catch (SQLException e){
-            throw AppException.internal("Error al acceder a la base de datos.");
+            return new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(), u.getEstado());
+        } catch (AppException e){
+            throw e;
+        } catch (Exception e) {
+            throw AppException.internal("Error inesperado al buscar por ID.");
+        }
+    }
+
+    public UsuarioDTO buscarUsuarioPorRut(UsuarioBusquedaDTO in){
+        if(in == null || in.getRut() == null){
+            throw AppException.badRequest("El RUT es obligatorio.");
         }
 
+        String rutNormalizado;
+        try{
+            rutNormalizado = RutUtils.normalizarRut(in.getRut());
+        }catch(IllegalArgumentException e){
+            throw AppException.badRequest(e.getMessage());
+        }
+
+        Usuario u = usuariodao.buscarUsuarioPorRut(rutNormalizado);
+
+        if (u == null) {
+            throw AppException.notFound("Usuario no encontrado.");
+        }
+
+        return new UsuarioDTO(u.getID(), u.getRut(), u.getNombre(), u.getEstado());
     }
 
     public List<UsuarioDTO> buscarUsuarios(UsuarioBusquedaDTO in){
+        if (in == null) { throw AppException.badRequest("Solicitud inválida.");}
         final String nombre = in.getNombre() != null ? in.getNombre().trim() : null;
         final String estado = in.getEstado() != null ? in.getEstado().trim().toLowerCase() : null;
 
@@ -120,27 +176,29 @@ public class UsuarioService {
             if(hasNombre &&  hasEstado){
                 List<Usuario> lista = usuariodao.buscarUsuarioPorNombre(nombre);
                 return lista.stream()
-                        .map(u -> new UsuarioDTO(u.getID(),u.getNombre(),u.getEstado()))
+                        .map(u -> new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(),u.getEstado()))
                         .toList();
             }
             // Solo nombre
             if(hasNombre){
                 List<Usuario> lista = usuariodao.buscarUsuarioPorNombre(nombre);
                 return lista.stream()
-                        .map(u -> new UsuarioDTO(u.getID(),u.getNombre(),u.getEstado()))
+                        .map(u -> new UsuarioDTO(u.getID(), u.getRut(), u.getNombre(),u.getEstado()))
                         .toList();
             }
             // Solo estados con valor habilitado y deshabilitado
-            if (!"habilitado".equals(estado) && !"deshabilitado".equals(estado)) {
+            if (!EstadoUtils.esValido(estado)) {
                 throw AppException.badRequest("El estado debe ser 'habilitado' o 'deshabilitado'");
             }
 
             List<Usuario> lista = usuariodao.buscarUsuarioPorEstado(estado);
             return lista.stream()
-                    .map(u -> new UsuarioDTO(u.getID(),u.getNombre(), u.getEstado()))
+                    .map(u -> new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(), u.getEstado()))
                     .toList();
-        } catch (SQLException e) {
-            throw AppException.internal("Error al acceder a la base de datos.");
+        } catch (AppException e) {
+            throw e;
+        } catch(Exception e) {
+            throw AppException.internal("Error inesperado al buscar usuarios.");
         }
     }
 
@@ -151,12 +209,14 @@ public class UsuarioService {
                List<UsuarioDTO> listaUsuarios = new ArrayList<>();
 
                for (Usuario u : usuarios) {
-                   listaUsuarios.add(new UsuarioDTO(u.getID(), u.getNombre(), u.getEstado()));
+                   listaUsuarios.add(new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(), u.getEstado()));
                }
 
                return listaUsuarios;
-              } catch (SQLException e){
-                throw AppException.internal("Error al listar usuarios" + e.getMessage());
+              } catch (AppException e){
+                throw e;
+           } catch(Exception e) {
+               throw AppException.internal("Error inesperado al listar usuarios.");
            }
     }
 
@@ -182,13 +242,17 @@ public class UsuarioService {
                 cambios = true;
             }
             if (dto.getEstado() != null){ // Si hubo cambio en el estado, se actualiza
-                String nuevoEstado = dto.getEstado().trim();
-                if (nuevoEstado.isEmpty()) {throw AppException.badRequest("El estado no puede estar vacío");} // Verifica si el estado entregado es vacío
+                String nuevoEstado = EstadoUtils.normalizar(dto.getEstado());
+                if (nuevoEstado == null || nuevoEstado.isEmpty()) {
+                    throw AppException.badRequest("El estado no puede estar vacío");} // Verifica si el estado entregado es vacío
 
-                if (nuevoEstado.equals(existente.getEstado())){ // Verifica si el estado entregado es igual al de la BD.
-                    throw AppException.conflict("El estado ya está asignado en el sistema");
+                if (!EstadoUtils.esValido(nuevoEstado)){ // Verifica si el estado entregado es igual al de la BD.
+                    throw AppException.badRequest("El estado ya está asignado en el sistema");
                 }
 
+                if (nuevoEstado.equalsIgnoreCase(existente.getEstado())){
+                    throw AppException.conflict("El estado ya está asignado en el sistema.");
+                }
                 existente.setEstado(nuevoEstado);
                 cambios=true;
             }
@@ -199,9 +263,11 @@ public class UsuarioService {
             boolean ok = usuariodao.actualizarUsuario(existente);
             if(!ok) throw AppException.internal("Error al actualizar usuario");
 
-            return new UsuarioDTO(existente.getID(),existente.getNombre(), existente.getEstado());
-        } catch (SQLException e){
-            throw AppException.internal("Error al actualizar usuario: " + e.getMessage());
+            return new UsuarioDTO(existente.getID(), existente.getRut(), existente.getNombre(), existente.getEstado());
+        } catch (AppException e){
+            throw e;
+        } catch(Exception e) {
+            throw AppException.internal("Error inesperado al actualizar usuarios.");
         }
     }
 

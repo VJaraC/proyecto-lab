@@ -3,29 +3,42 @@ import java.io.Serializable;
 
 
 public class UsuarioLoginDTO implements Serializable {
+    private String rut;
     private String nombre;
     private String contrasena;
 
     public UsuarioLoginDTO() {}
 
-    public UsuarioLoginDTO(String nombre, String contrasena) {
+    // Constructor para logear usuario
+    public UsuarioLoginDTO(String rut, String contrasena) {
+        this.rut = rut;
+        this.contrasena = contrasena;
+    }
+
+    // Constructor para registrar Usuario
+    public UsuarioLoginDTO(String rut, String nombre, String contrasena) {
+        this.rut = rut;
         this.nombre = nombre;
         this.contrasena = contrasena;
     }
 
     //getters
-    public String getNombre() {
-        return nombre;
+    public String getRut() {
+        return rut;
     }
+
+    public String getNombre() { return nombre;}
 
     public String getContrasena() {
         return contrasena;
     }
 
     // setters
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setRut(String rut) {
+        this.rut = rut;
     }
+
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
