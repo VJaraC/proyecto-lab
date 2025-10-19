@@ -25,11 +25,16 @@
                   </Label>
                   <AnchorPane id="PanelCredencial" layoutX="556.0" layoutY="14.0" prefHeight="20.0" prefWidth="275.0" styleClass="PanelCredencial" stylesheets="@../css/BaseLayout.css">
                      <children>
-                        <Button id="BotonCerrarSesion" layoutX="160.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="114.0" styleClass="BotonCerrarSesion" stylesheets="@../css/BaseLayout.css" text="Cerrar Sesión">
+                        <Button id="BotonCerrarSesion" fx:id="btnCerrarSesion" layoutX="160.0" mnemonicParsing="false" onAction="#btnCerrarSesion" prefHeight="28.0" prefWidth="114.0" styleClass="BotonCerrarSesion" stylesheets="@../css/BaseLayout.css" text="Cerrar Sesión">
                            <font>
                               <Font name="Product Sans" size="14.0" />
                            </font>
                         </Button>
+                        <Label fx:id="txtUsuarioSesion" layoutX="34.0" layoutY="7.0" prefHeight="15.0" prefWidth="126.0" text="Usuario">
+                           <font>
+                              <Font name="Product Sans Bold" size="12.0" />
+                           </font>
+                        </Label>
                      </children>
                   </AnchorPane>
                </children>

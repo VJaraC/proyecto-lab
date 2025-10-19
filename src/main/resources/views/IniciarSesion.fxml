@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="631.0" prefWidth="1015.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.IniciarSesionController">
    <children>
       <AnchorPane id="panelLateral" layoutX="599.0" prefHeight="670.0" prefWidth="442.0" styleClass="panelLateral" stylesheets="@../css/IniciarSesion.css">
@@ -19,7 +18,7 @@
                   <Font name="Product Sans Bold" size="18.0" />
                </font>
             </Button>
-            <Label layoutX="53.0" layoutY="224.0" prefHeight="18.0" prefWidth="63.0" text="Nombre">
+            <Label layoutX="53.0" layoutY="224.0" prefHeight="18.0" prefWidth="63.0" text="RUT">
                <font>
                   <Font name="Product Sans" size="14.0" />
                </font>
@@ -34,7 +33,7 @@
                   <Font name="Product Sans" size="10.0" />
                </font>
             </PasswordField>
-            <TextField id="field" fx:id="txtNombre" layoutX="53.0" layoutY="260.0" prefHeight="36.0" prefWidth="316.0" styleClass="field" stylesheets="@../css/ViewUsuarios.css">
+            <TextField id="field" fx:id="txtRUT" layoutX="53.0" layoutY="260.0" prefHeight="36.0" prefWidth="316.0" promptText="12.345.678-9" styleClass="field" stylesheets="@../css/ViewUsuarios.css">
                <font>
                   <Font name="Product Sans" size="12.0" />
                </font>
