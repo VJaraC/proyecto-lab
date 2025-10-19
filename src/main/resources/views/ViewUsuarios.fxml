@@ -3,6 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -40,17 +42,23 @@
                   <TableColumn fx:id="AccionTablaEstudiantes" prefWidth="265.0" text="Acción" />
               </columns>
             </TableView>
-            <TextField layoutX="14.0" layoutY="80.0" prefHeight="26.0" prefWidth="316.0" promptText="Buscar...">
+            <TextField fx:id="txtBuscar" layoutX="14.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar...">
                <padding>
                   <Insets left="30.0" />
                </padding>
             </TextField>
-            <Button layoutX="353.0" layoutY="80.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="96.0" text="Buscar" />
             <Button id="BotonCrearUsuario" layoutX="14.0" layoutY="141.0" mnemonicParsing="false" onAction="#AbrirFormularioCrearUsuario" prefHeight="36.0" prefWidth="126.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Crear Usuario">
                <font>
                   <Font name="Product Sans Bold" size="14.0" />
                </font>
             </Button>
+            <SplitMenuButton fx:id="Buscar" layoutX="314.0" layoutY="80.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" text="Escoge un filtro" textAlignment="CENTER">
+              <items>
+                  <MenuItem fx:id="FiltroID" mnemonicParsing="false" onAction="#FiltroID" text="Buscar por ID" />
+                <MenuItem fx:id="FiltroNombre" mnemonicParsing="false" onAction="#FiltroNombre" text="Buscar por Nombre" />
+                <MenuItem fx:id="FiltroEstado" mnemonicParsing="false" onAction="#FiltroEstado" text="Buscar por Estado" />
+              </items>
+            </SplitMenuButton>
          </children>
       </AnchorPane>
    </children>
