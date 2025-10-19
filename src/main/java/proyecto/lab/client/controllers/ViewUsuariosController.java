@@ -3,6 +3,7 @@ package proyecto.lab.client.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -54,6 +55,11 @@ public class ViewUsuariosController {
     @FXML
     private MenuItem FiltroID;
 
+    @FXML
+    private Label txtUsuarioSesion;
+
+    @FXML
+    private Button btnCerrarSesion;
 
     @FXML
     private MenuItem FiltroNombre;
@@ -90,8 +96,8 @@ public class ViewUsuariosController {
         EstadoTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("estado"));
         NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         configurarColumnaAccion();
-
         ActualizarTablaEstudiantes();
+        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombre()));
     }
 
     private void EditarUsuarios(ActionEvent event){
@@ -241,6 +247,26 @@ public class ViewUsuariosController {
     @FXML
     void txtBuscar(ActionEvent event) {
 
+    }
+
+
+    @FXML
+    void btnCerrarSesion(ActionEvent event) {
+            AppContext.LimpiarSesion();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IniciarSesion.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // 4. Reemplazar la escena actual con la de Login
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sistema de Monitoreo - UNAP");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void alert(Alert.AlertType type, String msg) {

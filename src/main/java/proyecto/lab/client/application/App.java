@@ -19,8 +19,7 @@ public class App extends Application {
 
         AppContext.setAdmin(admin);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/BaseLayout.fxml"));
-        Parent root = loader.load();
+        Parent root = FXMLLoader.load(getClass().getResource("/views/IniciarSesion.fxml"));
         stage.setTitle("Sistema de Monitoreo - UNAP");
         stage.setScene(new Scene(root));
         stage.show();
