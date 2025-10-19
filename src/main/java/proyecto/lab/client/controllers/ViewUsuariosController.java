@@ -5,10 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -47,6 +44,24 @@ public class ViewUsuariosController {
     private TableColumn<UsuarioDTO, Void> AccionTablaEstudiantes;
 
     @FXML
+    private SplitMenuButton Buscar;
+
+    private String FiltroSeleccionado;
+
+    @FXML
+    private MenuItem FiltroEstado;
+
+    @FXML
+    private MenuItem FiltroID;
+
+
+    @FXML
+    private MenuItem FiltroNombre;
+
+    @FXML
+    private TextField txtBuscar;
+
+    @FXML
     private TableColumn<UsuarioDTO, String> EstadoTablaEstudiantes;
 
     @FXML
@@ -64,6 +79,11 @@ public class ViewUsuariosController {
         TablaEstudiantes.refresh();
     }
 
+    private void LimpiarTablaEstudiantes(){
+        TablaEstudiantes.getItems().clear();
+        TablaEstudiantes.refresh();
+    }
+
     @FXML
     void initialize(){
         IdTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("ID"));
@@ -76,6 +96,7 @@ public class ViewUsuariosController {
 
     private void EditarUsuarios(ActionEvent event){
     }
+
 
     void AbrirFormularioEditarUsuario(UsuarioDTO usuarioSeleccionado) {
         try {
@@ -155,6 +176,75 @@ public class ViewUsuariosController {
         usuarioUpdateDTO.setEstado(usuario.getEstado());
         usuarioUpdateDTO.setId(usuario.getID());
         return usuarioUpdateDTO;
+    }
+
+
+    @FXML
+    void Buscar(ActionEvent event) {
+        String busqueda = txtBuscar.getText();
+        try{
+
+            if (FiltroSeleccionado == null) {
+                alert(Alert.AlertType.WARNING, "Por favor, selecciona un filtro antes de buscar.");
+                return;
+            }
+            switch (FiltroSeleccionado) {
+                    case "estado":
+                        LimpiarTablaEstudiantes();
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorEstado(busqueda));
+                        break;
+                    case "nombre":
+                        LimpiarTablaEstudiantes();
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorNombre(busqueda));
+                        break;
+                    case "ID":
+
+                        Integer id = null;
+                        if (busqueda != null && !busqueda.isBlank()) {
+                            id = Integer.valueOf(busqueda);
+                        }
+                        LimpiarTablaEstudiantes();
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorId(id));
+                        break;
+            }
+
+        } catch (RuntimeException ex) {// por validaciones de AdminController
+            ActualizarTablaEstudiantes();
+            alert(Alert.AlertType.ERROR, ex.getMessage());
+        } catch (Exception ex) {
+            alert(Alert.AlertType.ERROR, ex.getMessage());
+        }
+
+    }
+
+    @FXML
+    String FiltroEstado(ActionEvent event) {
+        FiltroSeleccionado = "estado";
+        Buscar.setText("Buscar por Estado");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroID(ActionEvent event) {
+        FiltroSeleccionado = "ID";
+        Buscar.setText("Buscar por ID");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroNombre(ActionEvent event) {
+        FiltroSeleccionado = "nombre";
+        Buscar.setText("Buscar por Nombre");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    void txtBuscar(ActionEvent event) {
+
+    }
+
+    private void alert(Alert.AlertType type, String msg) {
+        new Alert(type, msg).showAndWait();
     }
 
 }
