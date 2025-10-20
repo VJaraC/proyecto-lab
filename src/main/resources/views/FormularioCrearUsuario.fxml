@@ -6,29 +6,35 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioCrearUsuarioController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="482.0" prefWidth="533.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioCrearUsuarioController">
    <children>
       <Label layoutX="197.0" layoutY="31.0" text="Crear Usuario" textFill="#062040">
          <font>
             <Font name="CoreMellow-Bold" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="26.0" layoutY="103.0" text="Nombre Completo">
+      <Label layoutX="55.0" layoutY="85.0" text="Nombre">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtNombre" layoutX="26.0" layoutY="132.0" prefHeight="26.0" prefWidth="463.0" />
-      <Label layoutX="26.0" layoutY="174.0" text="Contraseña">
+      <TextField fx:id="txtRUT" layoutX="55.0" layoutY="200.0" prefHeight="26.0" prefWidth="376.0" />
+      <Label layoutX="55.0" layoutY="251.0" text="Contraseña">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtContrasena" layoutX="26.0" layoutY="208.0" prefHeight="26.0" prefWidth="463.0" />
-      <Button id="BotonGuardarUsuario" fx:id="BotonGuardarUsuario" layoutX="207.0" layoutY="281.0" mnemonicParsing="false" onAction="#GuardarUsuario" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Guardar">
+      <TextField fx:id="txtContrasena" layoutX="55.0" layoutY="282.0" prefHeight="26.0" prefWidth="376.0" />
+      <Button id="BotonGuardarUsuario" fx:id="BotonGuardarUsuario" layoutX="207.0" layoutY="376.0" mnemonicParsing="false" onAction="#GuardarUsuario" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Guardar">
          <font>
             <Font name="Product Sans Bold" size="18.0" />
          </font>
       </Button>
+      <TextField fx:id="txtNombre" layoutX="55.0" layoutY="122.0" prefHeight="26.0" prefWidth="376.0" />
+      <Label layoutX="55.0" layoutY="171.0" text="RUT">
+         <font>
+            <Font name="Product Sans" size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
