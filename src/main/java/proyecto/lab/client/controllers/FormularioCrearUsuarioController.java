@@ -13,15 +13,17 @@ import proyecto.lab.server.dto.UsuarioLoginDTO;
 
 public class FormularioCrearUsuarioController {
 
+    @FXML private TextField txtRUT;
     @FXML private TextField txtNombre;
     @FXML private TextField txtContrasena;
 
     @FXML
     void GuardarUsuario(ActionEvent e) {
+        String rut = txtRUT.getText();
         String nombre = txtNombre.getText();
         String contr  = txtContrasena.getText();
         try {
-            UsuarioLoginDTO in = new UsuarioLoginDTO(nombre, contr);
+            UsuarioLoginDTO in = new UsuarioLoginDTO(rut, nombre, contr);
             UsuarioDTO creado = AppContext.admin().crearUsuario(in);  // 💾 BD a través del server
 
             alert(Alert.AlertType.INFORMATION, "Usuario creado: " + creado.getNombre());
@@ -35,7 +37,7 @@ public class FormularioCrearUsuarioController {
     }
 
     @FXML
-    void txtNombre(ActionEvent event) {
+    void txtRUT(ActionEvent event) {
 
     }
 
