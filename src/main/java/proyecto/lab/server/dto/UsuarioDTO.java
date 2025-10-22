@@ -12,6 +12,7 @@ public class UsuarioDTO implements Serializable {
 
     public UsuarioDTO(int ID, String rut, String nombre, String estado) {
         this.ID = ID;
+        this.rut = rut;
         this.nombre = nombre;
         this.estado = estado;
     }

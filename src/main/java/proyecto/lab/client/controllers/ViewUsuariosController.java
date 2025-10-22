@@ -77,7 +77,12 @@ public class ViewUsuariosController {
     private TableColumn<UsuarioDTO, String> NombreTablaEstudiantes;
 
     @FXML
+    private TableColumn<UsuarioDTO, String> RUTTablaEstudiantes;
+
+    @FXML
     private TableView<UsuarioDTO> TablaEstudiantes;
+
+
 
     private void ActualizarTablaEstudiantes(){
         TablaEstudiantes.getItems().clear();
@@ -95,6 +100,7 @@ public class ViewUsuariosController {
         IdTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("ID"));
         EstadoTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("estado"));
         NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
         configurarColumnaAccion();
         ActualizarTablaEstudiantes();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombre()));

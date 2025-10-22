@@ -41,10 +41,11 @@
             </AnchorPane>
             <TableView fx:id="TablaEstudiantes" layoutX="6.0" layoutY="196.0" prefHeight="415.0" prefWidth="834.0">
               <columns>
-                <TableColumn fx:id="IdTablaEstudiantes" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="NombreTablaEstudiantes" prefWidth="127.9999771118164" text="Nombre" />
-                  <TableColumn fx:id="EstadoTablaEstudiantes" prefWidth="140.0" text="Estado" />
-                  <TableColumn fx:id="AccionTablaEstudiantes" prefWidth="265.0" text="Acción" />
+                <TableColumn fx:id="IdTablaEstudiantes" prefWidth="53.0" text="ID" />
+                  <TableColumn fx:id="RUTTablaEstudiantes" prefWidth="157.0" text="RUT" />
+                <TableColumn fx:id="NombreTablaEstudiantes" prefWidth="262.0" text="Nombre" />
+                  <TableColumn fx:id="EstadoTablaEstudiantes" minWidth="0.0" prefWidth="146.0" text="Estado" />
+                  <TableColumn fx:id="AccionTablaEstudiantes" prefWidth="214.0" text="Acción" />
               </columns>
             </TableView>
             <TextField fx:id="txtBuscar" layoutX="14.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar...">
