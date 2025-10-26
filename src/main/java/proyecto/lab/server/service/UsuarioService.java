@@ -52,7 +52,7 @@ public class UsuarioService {
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
 
             // crear nuevo usuario
-            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), user.getFecha_nacimiento(), user.getTelefono());
+            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), user.getFecha_nacimiento(), user.getTelefono(), user.getEmail());
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
 
             return new UsuarioDTO(

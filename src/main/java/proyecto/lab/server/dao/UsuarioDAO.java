@@ -79,7 +79,7 @@ public class UsuarioDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String rut = rs.getString("rut");
-                String nombres = rs.getString("nombre");
+                String nombres = rs.getString("nombres");
                 String apellidos = rs.getString("apellidos");
                 String estado = rs.getString("estado");
                 usuarios.add(new Usuario(id, rut, nombres, apellidos, estado));

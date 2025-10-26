@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/java/proyecto/lab/server/dao/EquipoDAO.java" dialect="GenericSQL" />
-    <file url="file://$PROJECT_DIR$/src/main/java/proyecto/lab/server/dao/UsuarioDAO.java" dialect="GenericSQL" />
-    <file url="file://$USER_HOME$/OneDrive - Universidad Arturo Prat/U/Semestres/8° Semestre/Taller de Ingenieria de Software/DDL_TIS.sql" dialect="PostgreSQL" />
+    <file url="file://$USER_HOME$/OneDrive - Universidad Arturo Prat/U/Semestres/8° Semestre/Taller de Ingenieria de Software/crebas.sql" dialect="PostgreSQL" />
   </component>
 </project>
