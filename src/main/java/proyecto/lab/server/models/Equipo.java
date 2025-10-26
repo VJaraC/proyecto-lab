@@ -1,5 +1,9 @@
 package proyecto.lab.server.models;
 
+import proyecto.lab.server.dto.EquipoDTO;
+
+import java.time.LocalDate;
+
 public class Equipo {
     private int id_equipo;
     private String rut_admin;
@@ -16,6 +20,7 @@ public class Equipo {
     private String ramTotal;
     private String almacenamiento;
     private String modeloGPU;
+    private LocalDate fecha_ingreso;
 
 
     //constructor vacío
@@ -25,7 +30,7 @@ public class Equipo {
     // Constructor
     public Equipo(int id_equipo, String rut_admin, int id_lab_equipo, String hostname, String numero_serie,
                   String fabricante, String estado, String modelo, String mac, String ip, String modeloCPU,
-                  String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU) {
+                  String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU, LocalDate fecha_ingreso) {
         this.id_equipo = id_equipo;
         this.rut_admin = rut_admin;
         this.id_lab_equipo = id_lab_equipo;
@@ -41,6 +46,27 @@ public class Equipo {
         this.ramTotal = ramTotal;
         this.almacenamiento = almacenamiento;
         this.modeloGPU = modeloGPU;
+        this.fecha_ingreso = fecha_ingreso;
+    }
+
+    //Constructor que recibe un DTO
+    public Equipo(EquipoDTO dto) {
+        this.id_equipo = dto.id_equipo();
+        this.rut_admin = dto.rut_admin();
+        this.id_lab_equipo = dto.id_lab_equipo();
+        this.hostname = dto.hostname();
+        this.numero_serie = dto.numero_serie();
+        this.fabricante = dto.fabricante();
+        this.estado = dto.estado();
+        this.modelo = dto.modelo();
+        this.mac = dto.mac();
+        this.ip = dto.ip();
+        this.modeloCPU = dto.modeloCPU();
+        this.nucleosCPU = dto.nucleosCPU();
+        this.ramTotal = dto.ramTotal();
+        this.almacenamiento = dto.almacenamiento();
+        this.modeloGPU = dto.modeloGPU();
+        this.fecha_ingreso = dto.fecha_ingreso();
     }
 
     //Setters
@@ -104,6 +130,10 @@ public class Equipo {
         this.modeloGPU = modeloGPU;
     }
 
+    public void setFecha_ingreso(LocalDate fecha_ingreso) {
+        this.fecha_ingreso = fecha_ingreso;
+    }
+
 
     //Getters
     public int getId_equipo() {
@@ -164,6 +194,10 @@ public class Equipo {
 
     public String getModeloGPU() {
         return modeloGPU;
+    }
+
+    public LocalDate getFecha_ingreso() {
+        return fecha_ingreso;
     }
 }
 
