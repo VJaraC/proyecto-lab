@@ -33,9 +33,9 @@ public class FormularioEditarUsuarioController {
         String nombre = txtNombre.getText();
 
         try{
-            UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombre(),usuario.getEstado());
+            UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombres(), usuario.getApellidos(), usuario.getEstado());
             usuario = AppContext.admin().modificarNombreUsuario(usuarioUpdateDTO,nombre);
-            alert(Alert.AlertType.INFORMATION, "Usuario modificado: " + usuario.getNombre());
+            alert(Alert.AlertType.INFORMATION, "Usuario modificado: " + usuario.getNombres());
             cerrar(event);
 
         } catch (RuntimeException ex) { // por validaciones de AdminController
@@ -56,7 +56,7 @@ public class FormularioEditarUsuarioController {
     }
 
     private void cargarCampos() {
-        txtNombre.setText(usuario.getNombre());
+        txtNombre.setText(usuario.getNombres());
     }
 
     @FXML

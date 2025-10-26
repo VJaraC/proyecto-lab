@@ -25,7 +25,13 @@ public class AdminController {
     public UsuarioDTO crearUsuario(UsuarioLoginDTO in){
         validarNoNulo(in, "Datos requeridos");
         validarTexto(in.getRut(), "El RUT es obligatorio");
+        validarTexto(in.getNombre(), "El nombre es obligatorio");
+        validarTexto(in.getApellidos() , "El apellidos es obligatorio");
+        validarTexto(in.getEmail(), "El email es obligatorio");
+        validarTexto(in.getGenero(), "El genero es obligatorio");
         validarMinLen(in.getContrasena(), 4, "La contraseña debe tener al menos 4 caracteres");
+        validarTexto(in.getCargo(), "El cargo es obligatorio");
+        validarTexto(in.getTelefono(), "El telefono es obligatorio");
         return usuarioService.crearUsuario(in);
     }
 
@@ -83,7 +89,7 @@ public class AdminController {
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
         dto.setId(in.getId());
-        dto.setNombre(nuevonombre);
+        dto.setNombres(nuevonombre);
 
         return usuarioService.actualizarUsuario(dto);
     }

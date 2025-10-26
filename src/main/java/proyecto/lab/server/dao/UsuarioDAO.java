@@ -5,6 +5,7 @@ import proyecto.lab.server.models.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 
 //DATA ACCESS OBJECT, se usa para comunicarse directamente con el servidor.
@@ -17,14 +18,22 @@ public class UsuarioDAO {
 
 
     public Usuario insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
-        String sql = "INSERT INTO usuario(rut , nombre, estado, contrasena) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO USUARIO(rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fecha_nac, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+
         try (Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
 
             ps.setString(1, user.getRut());
-            ps.setString(2, user.getNombre());
-            ps.setString(3, user.getEstado());
-            ps.setString(4, user.getContrasena());
+            ps.setString(2, user.getNombres());
+            ps.setString(3, user.getApellidos());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getEstado());
+            ps.setString(6, user.getGenero());
+            ps.setString(7, user.getContrasena());
+            ps.setString(8, user.getCargo());
+            ps.setDate(9, Date.valueOf(user.getFecha_nacimiento()));
+            ps.setString(10, user.getTelefono());
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -34,29 +43,35 @@ public class UsuarioDAO {
         return user;
     }
 
+
     public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar el nombre de un usuario.
-        String sql = "UPDATE usuario SET nombre = ?, estado = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, email = ?, telefono = ?, contrasena = ? WHERE id = ?";
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setString(1, user.getNombre());
-            ps.setString(2, user.getEstado());
-            ps.setInt(3, user.getID());
+            ps.setString(1, user.getNombres());
+            ps.setString(2, user.getApellidos());
+            ps.setString(3, user.getEstado());
+            ps.setString(4, user.getEmail());
+            ps.setString(5, user.getTelefono());
+            ps.setString(6, user.getContrasena());
+            ps.setInt(7, user.getID());
             int rows = ps.executeUpdate();
 
             if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println("Error al actualizar usuario" + e.getMessage());
+            System.out.println("Error al actualizar datos del usuario" + e.getMessage());
             return false;
         }
         return false;
     }
 
+
     public List<Usuario> mostrarUsuarios() { //Función para mostrar los usuarios habilitados en la base de datos.
 
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT id, rut, nombre, estado FROM usuario";
+        String sql = "SELECT id, rut, nombres, apellidos, estado, cargo FROM usuario WHERE estado = 'habilitado'";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -64,9 +79,10 @@ public class UsuarioDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String rut = rs.getString("rut");
-                String nombre = rs.getString("nombre");
+                String nombres = rs.getString("nombre");
+                String apellidos = rs.getString("apellidos");
                 String estado = rs.getString("estado");
-                usuarios.add(new Usuario(id, rut, nombre, estado));
+                usuarios.add(new Usuario(id, rut, nombres, apellidos, estado));
             }
             return usuarios;
         } catch (SQLException e) {
@@ -75,6 +91,8 @@ public class UsuarioDAO {
         return usuarios;
     }
 
+
+    //implementar mapearUsuarios
     public Usuario buscarUsuarioPorID(int id) {
         Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE id = ?";
@@ -86,20 +104,30 @@ public class UsuarioDAO {
                 if (rs.next()) {
                     int id2 = rs.getInt("id");
                     String rut = rs.getString("rut");
-                    String nombre = rs.getString("nombre");
+                    String nombres = rs.getString("nombres");
+                    String apellidos = rs.getString("apellidos");
+                    String email = rs.getString("email");
                     String estado = rs.getString("estado");
+                    String genero = rs.getString("genero");
                     String contrasena = rs.getString("contrasena");
+                    String cargo = rs.getString("cargo");
+                    java.sql.Date sqlDate = rs.getDate("fecha_nac");
+                    java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
+                    String telefono = rs.getString("telefono");
 
-                    usuario = new Usuario(id2 ,rut, nombre, estado, contrasena);
+
+                    usuario = new Usuario(id2 ,rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fechaNacimiento, telefono);
                 }
             }
-            return null;
+            return usuario;
         }catch (SQLException e){
-            System.out.println("Error al buscar usuario" + e.getMessage());
+            System.out.println("Error al buscar usuario por ID" + e.getMessage());
         }
         return usuario;
     }
 
+
+    //implementar mapearUsuarios.
     public Usuario buscarUsuarioPorRut(String rut) {
         String sql = "SELECT * FROM usuario WHERE rut = ?";
         try (Connection conn = conexion.getConnection();
@@ -108,12 +136,20 @@ public class UsuarioDAO {
             ps.setString(1, rut);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    java.sql.Date sqlDate = rs.getDate("fecha_nac");
+                    java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
                     return new Usuario(
                             rs.getInt("id"),
                             rs.getString("rut"),
-                            rs.getString("nombre"),
+                            rs.getString("nombres"),
+                            rs.getString("apellidos"),
+                            rs.getString("email"),
                             rs.getString("estado"),
-                            rs.getString("contrasena")
+                            rs.getString("genero"),
+                            rs.getString("contrasena"),
+                            rs.getString("cargo"),
+                            fechaNacimiento,
+                            rs.getString("telefono")
                     );
                 }
                 return null;
@@ -124,17 +160,26 @@ public class UsuarioDAO {
     }
 
 
+    //se le pasa un resultset (resultados de una consulta generada) para poder traducirlas (mapearlas) a un objeto usuario el cual será ingresado a una lista para tener facil acceso a los objetos.
+    //modificarla.
     private List<Usuario> mapearUsuarios(ResultSet rs) {
         List<Usuario> usuarios = new ArrayList<>();
         try {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String rut = rs.getString("rut");
-                String nombre = rs.getString("nombre");
+                String nombres = rs.getString("nombres");
+                String apellidos = rs.getString("apellidos");
+                String email = rs.getString("email");
                 String estado = rs.getString("estado");
+                String genero = rs.getString("genero");
                 String contrasena = rs.getString("contrasena");
+                String cargo = rs.getString("cargo");
+                java.sql.Date sqlDate = rs.getDate("fecha_nac");
+                java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
+                String telefono = rs.getString("telefono");
 
-                usuarios.add(new Usuario(id, rut, nombre, estado, contrasena));
+                usuarios.add(new Usuario(id, rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fechaNacimiento, telefono));
             }
         } catch (SQLException e) {
             throw AppException.internal("Error al mapear usuarios: + e.getMessage()");
@@ -144,11 +189,12 @@ public class UsuarioDAO {
 
 
     public List<Usuario> buscarUsuarioPorNombre(String n) {
-        String sql = "SELECT * FROM usuario WHERE nombre LIKE ?";
+        String sql = "SELECT * FROM usuario WHERE nombres LIKE ? or apellidos LIKE ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
 
             ps.setString(1, "%" + n + "%");
+            ps.setString(2, "%" + n + "%");
 
             try (ResultSet rs = ps.executeQuery()) {
                 return mapearUsuarios(rs);
@@ -173,6 +219,7 @@ public class UsuarioDAO {
             throw AppException.internal("Error al buscar usuario: " + e.getMessage());
         }
     }
+
 
 
 

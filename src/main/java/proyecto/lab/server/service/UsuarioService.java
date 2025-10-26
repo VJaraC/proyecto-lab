@@ -6,6 +6,8 @@ import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.models.Usuario;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
@@ -50,14 +52,20 @@ public class UsuarioService {
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
 
             // crear nuevo usuario
-            Usuario nuevo = new Usuario(rutNormalizado ,user.getNombre(), EstadoUtils.HABILITADO, hash);
+            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), user.getFecha_nacimiento(), user.getTelefono());
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
 
             return new UsuarioDTO(
                     guardado.getID(),
                     guardado.getRut(),
-                    guardado.getNombre(),
-                    guardado.getEstado()
+                    guardado.getNombres(),
+                    guardado.getApellidos(),
+                    guardado.getEmail(),
+                    guardado.getEstado(),
+                    guardado.getGenero(),
+                    guardado.getCargo(),
+                    guardado.getFecha_nacimiento(),
+                    guardado.getTelefono()
             );
 
         } catch (AppException e) {
@@ -87,7 +95,7 @@ public class UsuarioService {
         final String contrasena = user.getContrasena();
 
         try {
-            // ✅ Buscar usuario directamente por RUT (único)
+            // Buscar usuario directamente por RUT (único)
             Usuario existente = usuariodao.buscarUsuarioPorRut(rutNormalizado);
 
             if (existente == null || existente.getContrasena() == null) {
@@ -105,8 +113,14 @@ public class UsuarioService {
                 return new UsuarioDTO(
                         existente.getID(),
                         existente.getRut(),
-                        existente.getNombre(),
-                        existente.getEstado()
+                        existente.getNombres(),
+                        existente.getApellidos(),
+                        existente.getEmail(),
+                        existente.getEstado(),
+                        existente.getGenero(),
+                        existente.getCargo(),
+                        existente.getFecha_nacimiento(),
+                        existente.getTelefono()
                 );
             } else {
                 throw AppException.unauthorized("Las credenciales ingresadas son incorrectas.");
@@ -131,7 +145,18 @@ public class UsuarioService {
             if (u == null) {
                 throw AppException.notFound("Usuario no encontrado.");
             }
-            return new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(), u.getEstado());
+            return new UsuarioDTO(
+                    u.getID(),
+                    u.getRut(),
+                    u.getNombres(),
+                    u.getApellidos(),
+                    u.getEmail(),
+                    u.getEstado(),
+                    u.getGenero(),
+                    u.getCargo(),
+                    u.getFecha_nacimiento(),
+                    u.getTelefono()
+            );
         } catch (AppException e){
             throw e;
         } catch (Exception e) {
@@ -157,7 +182,18 @@ public class UsuarioService {
             throw AppException.notFound("Usuario no encontrado.");
         }
 
-        return new UsuarioDTO(u.getID(), u.getRut(), u.getNombre(), u.getEstado());
+        return new UsuarioDTO(
+                u.getID(),
+                u.getRut(),
+                u.getNombres(),
+                u.getApellidos(),
+                u.getEmail(),
+                u.getEstado(),
+                u.getGenero(),
+                u.getCargo(),
+                u.getFecha_nacimiento(),
+                u.getTelefono()
+        );
     }
 
     public List<UsuarioDTO> buscarUsuarios(UsuarioBusquedaDTO in){
@@ -176,14 +212,36 @@ public class UsuarioService {
             if(hasNombre &&  hasEstado){
                 List<Usuario> lista = usuariodao.buscarUsuarioPorNombre(nombre);
                 return lista.stream()
-                        .map(u -> new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(),u.getEstado()))
+                        .map(u -> new UsuarioDTO(
+                                u.getID(),
+                                u.getRut(),
+                                u.getNombres(),
+                                u.getApellidos(),
+                                u.getEmail(),
+                                u.getEstado(),
+                                u.getGenero(),
+                                u.getCargo(),
+                                u.getFecha_nacimiento(),
+                                u.getTelefono()
+                        ))
                         .toList();
             }
             // Solo nombre
             if(hasNombre){
                 List<Usuario> lista = usuariodao.buscarUsuarioPorNombre(nombre);
                 return lista.stream()
-                        .map(u -> new UsuarioDTO(u.getID(), u.getRut(), u.getNombre(),u.getEstado()))
+                        .map(u -> new UsuarioDTO(
+                                u.getID(),
+                                u.getRut(),
+                                u.getNombres(),
+                                u.getApellidos(),
+                                u.getEmail(),
+                                u.getEstado(),
+                                u.getGenero(),
+                                u.getCargo(),
+                                u.getFecha_nacimiento(),
+                                u.getTelefono()
+                        ))
                         .toList();
             }
             // Solo estados con valor habilitado y deshabilitado
@@ -193,7 +251,18 @@ public class UsuarioService {
 
             List<Usuario> lista = usuariodao.buscarUsuarioPorEstado(estado);
             return lista.stream()
-                    .map(u -> new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(), u.getEstado()))
+                    .map(u -> new UsuarioDTO(
+                            u.getID(),
+                            u.getRut(),
+                            u.getNombres(),
+                            u.getApellidos(),
+                            u.getEmail(),
+                            u.getEstado(),
+                            u.getGenero(),
+                            u.getCargo(),
+                            u.getFecha_nacimiento(),
+                            u.getTelefono()
+                    ))
                     .toList();
         } catch (AppException e) {
             throw e;
@@ -209,7 +278,18 @@ public class UsuarioService {
                List<UsuarioDTO> listaUsuarios = new ArrayList<>();
 
                for (Usuario u : usuarios) {
-                   listaUsuarios.add(new UsuarioDTO(u.getID(),u.getRut(), u.getNombre(), u.getEstado()));
+                   listaUsuarios.add(new UsuarioDTO(
+                           u.getID(),
+                           u.getRut(),
+                           u.getNombres(),
+                           u.getApellidos(),
+                           u.getEmail(),
+                           u.getEstado(),
+                           u.getGenero(),
+                           u.getCargo(),
+                           u.getFecha_nacimiento(),
+                           u.getTelefono()
+                   ));
                }
 
                return listaUsuarios;
@@ -231,14 +311,14 @@ public class UsuarioService {
 
             boolean cambios = false;
 
-            if (dto.getNombre() != null) { // Si hubo un cambio en el nombre, se actualiza
-                String nuevoNombre = dto.getNombre().trim();
+            if (dto.getNombres() != null) { // Si hubo un cambio en el nombre, se actualiza
+                String nuevoNombre = dto.getNombres().trim();
                 if (nuevoNombre.isEmpty()) throw AppException.badRequest("El nombre no puede estar vacío"); // Verifica si el nombre entregado es vacío
 
-                if (nuevoNombre.equals(existente.getNombre())){  // Verifica si el nombre entregado es igual al de la BD.
+                if (nuevoNombre.equals(existente.getNombres())){  // Verifica si el nombre entregado es igual al de la BD.
                     throw AppException.conflict("El nombre existe en el sistema.");
                 }
-                existente.setNombre(nuevoNombre);
+                existente.setNombres(nuevoNombre);
                 cambios = true;
             }
             if (dto.getEstado() != null){ // Si hubo cambio en el estado, se actualiza
@@ -263,7 +343,18 @@ public class UsuarioService {
             boolean ok = usuariodao.actualizarUsuario(existente);
             if(!ok) throw AppException.internal("Error al actualizar usuario");
 
-            return new UsuarioDTO(existente.getID(), existente.getRut(), existente.getNombre(), existente.getEstado());
+            return new UsuarioDTO(
+                    existente.getID(),
+                    existente.getRut(),
+                    existente.getNombres(),
+                    existente.getApellidos(),
+                    existente.getEmail(),
+                    existente.getEstado(),
+                    existente.getGenero(),
+                    existente.getCargo(),
+                    existente.getFecha_nacimiento(),
+                    existente.getTelefono()
+            );
         } catch (AppException e){
             throw e;
         } catch(Exception e) {

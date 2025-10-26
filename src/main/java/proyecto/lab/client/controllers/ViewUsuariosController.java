@@ -99,11 +99,11 @@ public class ViewUsuariosController {
     void initialize(){
         IdTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("ID"));
         EstadoTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombres"));
         RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
         configurarColumnaAccion();
         ActualizarTablaEstudiantes();
-        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombre()));
+        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
     }
 
     private void EditarUsuarios(ActionEvent event){
@@ -184,7 +184,7 @@ public class ViewUsuariosController {
 
     private UsuarioUpdateDTO crearUpdateDTO(UsuarioDTO usuario) {
         UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO();
-        usuarioUpdateDTO.setNombre(usuario.getNombre());
+        usuarioUpdateDTO.setNombres(usuario.getNombres());
         usuarioUpdateDTO.setEstado(usuario.getEstado());
         usuarioUpdateDTO.setId(usuario.getID());
         return usuarioUpdateDTO;

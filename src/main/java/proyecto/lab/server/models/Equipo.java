@@ -1,4 +1,169 @@
 package proyecto.lab.server.models;
 
 public class Equipo {
+    private int id_equipo;
+    private String rut_admin;
+    private int id_lab_equipo;
+    private String hostname;
+    private String numero_serie;
+    private String fabricante;
+    private String estado;
+    private String modelo;
+    private String mac;
+    private String ip;
+    private String modeloCPU;
+    private String nucleosCPU;
+    private String ramTotal;
+    private String almacenamiento;
+    private String modeloGPU;
+
+
+    //constructor vacío
+    public Equipo() {}
+
+
+    // Constructor
+    public Equipo(int id_equipo, String rut_admin, int id_lab_equipo, String hostname, String numero_serie,
+                  String fabricante, String estado, String modelo, String mac, String ip, String modeloCPU,
+                  String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU) {
+        this.id_equipo = id_equipo;
+        this.rut_admin = rut_admin;
+        this.id_lab_equipo = id_lab_equipo;
+        this.hostname = hostname;
+        this.numero_serie = numero_serie;
+        this.fabricante = fabricante;
+        this.estado = estado;
+        this.modelo = modelo;
+        this.mac = mac;
+        this.ip = ip;
+        this.modeloCPU = modeloCPU;
+        this.nucleosCPU = nucleosCPU;
+        this.ramTotal = ramTotal;
+        this.almacenamiento = almacenamiento;
+        this.modeloGPU = modeloGPU;
+    }
+
+    //Setters
+    public void setId_equipo(int id_equipo) {
+        this.id_equipo = id_equipo;
+    }
+
+    public void setRut_admin(String rut_admin) {
+        this.rut_admin = rut_admin;
+    }
+
+    public void setId_lab_equipo(int id_lab_equipo) {
+        this.id_lab_equipo = id_lab_equipo;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public void setNumero_serie(String numero_serie) {
+        this.numero_serie = numero_serie;
+    }
+
+    public void setFabricante(String fabricante) {
+        this.fabricante = fabricante;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setMac(String mac) {
+        this.mac = mac;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setModeloCPU(String modeloCPU) {
+        this.modeloCPU = modeloCPU;
+    }
+
+    public void setNucleosCPU(String nucleosCPU) {
+        this.nucleosCPU = nucleosCPU;
+    }
+
+    public void setRamTotal(String ramTotal) {
+        this.ramTotal = ramTotal;
+    }
+
+    public void setAlmacenamiento(String almacenamiento) {
+        this.almacenamiento = almacenamiento;
+    }
+
+    public void setModeloGPU(String modeloGPU) {
+        this.modeloGPU = modeloGPU;
+    }
+
+
+    //Getters
+    public int getId_equipo() {
+        return id_equipo;
+    }
+
+    public String getRut_admin() {
+        return rut_admin;
+    }
+
+    public int getId_lab_equipo() {
+        return id_lab_equipo;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public String getNumero_serie() {
+        return numero_serie;
+    }
+
+    public String getFabricante() {
+        return fabricante;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public String getMac() {
+        return mac;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public String getModeloCPU() {
+        return modeloCPU;
+    }
+
+    public String getNucleosCPU() {
+        return nucleosCPU;
+    }
+
+    public String getRamTotal() {
+        return ramTotal;
+    }
+
+    public String getAlmacenamiento() {
+        return almacenamiento;
+    }
+
+    public String getModeloGPU() {
+        return modeloGPU;
+    }
 }
+
