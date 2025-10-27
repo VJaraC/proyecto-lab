@@ -10,7 +10,7 @@ import proyecto.lab.server.utils.EstadoUtils;
 
 import java.util.List;
 
-import static proyecto.lab.server.utils.Validador.*;
+import static proyecto.lab.server.utils.ValidadorUtils.*;
 
 public class UsuarioController {
 

@@ -2,8 +2,8 @@ package proyecto.lab.server.utils;
 
 import proyecto.lab.server.exceptions.AppException;
 
-public class Validador {
-    private Validador(){}
+public class ValidadorUtils {
+    private ValidadorUtils(){}
 
     public static void validarNoNulo(Object o, String msg){
         if(o == null) throw AppException.badRequest(msg);
