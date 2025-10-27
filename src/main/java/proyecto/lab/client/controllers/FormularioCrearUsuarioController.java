@@ -38,7 +38,7 @@ public class FormularioCrearUsuarioController {
             alert(Alert.AlertType.INFORMATION, "Usuario creado: " + creado.getNombres());
             cerrar(e);
 
-        } catch (RuntimeException ex) { // por validaciones de AdminController
+        } catch (RuntimeException ex) { // por validaciones de UsuarioController
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {
             alert(Alert.AlertType.ERROR, "Error al crear: " + ex.getMessage());

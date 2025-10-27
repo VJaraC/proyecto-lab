@@ -7,18 +7,15 @@ import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.service.UsuarioService;
 import proyecto.lab.server.utils.RutUtils;
 import proyecto.lab.server.utils.EstadoUtils;
-
 import java.util.List;
-import java.util.Objects;
 
-public class AdminController {
+public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    public AdminController(UsuarioService usuarioService){
+    public UsuarioController(UsuarioService usuarioService){
         this.usuarioService = usuarioService;
     }
-
 
     //Casos de uso
 

@@ -1,19 +1,19 @@
 package proyecto.lab.client.application;
+import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dto.UsuarioDTO;
-import proyecto.lab.server.controller.AdminController;
 
 public final class AppContext {
-    private static AdminController admin;
+    private static UsuarioController admin;
     private static UsuarioDTO usuarioActual;
 
     private AppContext() {
     }
 
-    public static void setAdmin(AdminController c) {
+    public static void setAdmin(UsuarioController c) {
         admin = c;
     }
 
-    public static AdminController admin() {
+    public static UsuarioController admin() {
         return admin;
     }
 

@@ -220,7 +220,7 @@ public class ViewUsuariosController {
                         break;
             }
 
-        } catch (RuntimeException ex) {// por validaciones de AdminController
+        } catch (RuntimeException ex) {// por validaciones de UsuarioController
             ActualizarTablaEstudiantes();
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {

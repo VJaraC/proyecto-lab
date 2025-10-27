@@ -38,7 +38,7 @@ public class FormularioEditarUsuarioController {
             alert(Alert.AlertType.INFORMATION, "Usuario modificado: " + usuario.getNombres());
             cerrar(event);
 
-        } catch (RuntimeException ex) { // por validaciones de AdminController
+        } catch (RuntimeException ex) { // por validaciones de UsuarioController
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {
             alert(Alert.AlertType.ERROR, "Error al modificar: " + ex.getMessage());

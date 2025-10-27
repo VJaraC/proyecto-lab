@@ -1,13 +1,11 @@
 package proyecto.lab.client.application;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import proyecto.lab.server.controller.AdminController;
+import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.service.UsuarioService;
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.Parent;
 
 public class App extends Application {
@@ -15,7 +13,7 @@ public class App extends Application {
     public void start(Stage stage) throws Exception {
         UsuarioDAO usuarioDao = new UsuarioDAO();         // tu impl real
         UsuarioService usuarioService = new UsuarioService(usuarioDao);
-        AdminController admin = new AdminController(usuarioService);
+        UsuarioController admin = new UsuarioController(usuarioService);
 
         AppContext.setAdmin(admin);
 
