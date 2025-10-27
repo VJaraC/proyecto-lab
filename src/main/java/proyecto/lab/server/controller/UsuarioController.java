@@ -7,7 +7,10 @@ import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.service.UsuarioService;
 import proyecto.lab.server.utils.RutUtils;
 import proyecto.lab.server.utils.EstadoUtils;
+
 import java.util.List;
+
+import static proyecto.lab.server.utils.Validador.*;
 
 public class UsuarioController {
 
@@ -115,27 +118,5 @@ public class UsuarioController {
         return usuarioService.actualizarUsuario(dto);
     }
 
-    private static void validarNoNulo(Object o, String msg){
-        if(o == null) throw AppException.badRequest(msg);
-    }
 
-    private static void validarEstado(String o, String msg){
-        if (!EstadoUtils.esValido(o)) throw AppException.badRequest(msg);
-    }
-    private static void validarTexto(String s, String msg){
-        if(s == null || s.trim().isEmpty()) throw AppException.badRequest(msg);
-    }
-
-    private static void validarPositivo(int n, String msg){
-        if (n<=0) throw AppException.badRequest(msg);
-    }
-    private static void validarNoNegativo(int n, String msg){
-        if (n<0) throw AppException.badRequest(msg);
-    }
-    private static void validarMinLen(String s, int n, String msg){
-        if(s == null || s.length() < n) throw AppException.badRequest(msg);
-    }
-    private static void validarRango(int v, int min, int max, String msg){
-        if(v<min || v>max) throw AppException.badRequest(msg);
-    }
 }

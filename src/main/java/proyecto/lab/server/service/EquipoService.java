@@ -1,5 +1,6 @@
 package proyecto.lab.server.service;
 
+import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dao.EquipoDAO;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.exceptions.AppException;
@@ -12,16 +13,16 @@ public class EquipoService {
 
     public EquipoService(EquipoDAO equipoDAO) { this.equipoDAO = equipoDAO; }
 
-    public EquipoDTO crearEquipo(EquipoDTO equipo){
+    public EquipoDTO crearEquipo(EquipoDTO equipo) {
 
         //verificar que el dto contenga información
-        if(equipo == null){
+        if (equipo == null) {
             throw AppException.badRequest("DTO vacío");
         }
 
         //verificar que el valor de estado sea valido
         String estado = equipo.estado().toLowerCase();
-        Set<String> estadosPermitidos = Set.of("operativo", "disponible", "fuera de servicio");
+        Set<String> estadosPermitidos = Set.of("operativo", "disponible", "fuera de servicio"); //estados del equipo
         if (!estadosPermitidos.contains(estado)) {
             throw AppException.badRequest("Ingrese un valor válido para estado");
         }
@@ -29,7 +30,7 @@ public class EquipoService {
         //buscar un equipo existente
         String numSerie = equipo.numero_serie();
         Equipo equipoExistente = equipoDAO.buscarEquipo(numSerie);
-        if(equipoExistente != null){
+        if (equipoExistente != null) {
             throw AppException.badRequest("Equipo ya existente");
         }
 
