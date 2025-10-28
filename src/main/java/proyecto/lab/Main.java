@@ -1,10 +1,15 @@
 package proyecto.lab;
 
+import proyecto.lab.server.controller.EquipoController;
 import proyecto.lab.server.controller.UsuarioController;
+import proyecto.lab.server.dao.EquipoDAO;
 import proyecto.lab.server.dao.UsuarioDAO;
+import proyecto.lab.server.dto.EquipoBusquedaDTO;
+import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.models.Rol;
+import proyecto.lab.server.service.EquipoService;
 import proyecto.lab.server.service.UsuarioService;
 
 import java.sql.SQLException;
@@ -15,29 +20,13 @@ import java.time.LocalDate;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        UsuarioService usuarioService = new UsuarioService(usuarioDAO);
-        UsuarioController usuarioController = new UsuarioController(usuarioService);
+        EquipoDAO equipoDAO = new EquipoDAO();
+        EquipoService equipoService = new EquipoService(equipoDAO);
+        EquipoController equipoController = new EquipoController(equipoService);
 
-        UsuarioLoginDTO nuevousuario = new UsuarioLoginDTO();
-        nuevousuario.setNombre("Vito");
-        nuevousuario.setApellidos("Jara");
-        nuevousuario.setRut("21243169-9");
-        nuevousuario.setContrasena("vito123");
-        nuevousuario.setGenero("Masculino");
-        nuevousuario.setEmail("nuevousuario@example.com");
-        nuevousuario.setCargo("TI");
-        nuevousuario.setTelefono("964031692");
-        nuevousuario.setFecha_nacimiento(LocalDate.of(2002,5,12));
-
-
-        UsuarioDTO adminAuth = new UsuarioDTO();
-        adminAuth.setID(777);
-        adminAuth.setNombre("Administrador");
-        adminAuth.setRol(Rol.ADMIN);
-
-        usuarioController.crearUsuario(nuevousuario,adminAuth);
-
+        EquipoBusquedaDTO filtrosBusqueda = new EquipoBusquedaDTO(null, null, null, null, "12341234", null, null, null, null, null, null);
+        EquipoDTO resultados = equipoController.buscarEquipo(filtrosBusqueda);
+        System.out.println(resultados);
 
     }
 }

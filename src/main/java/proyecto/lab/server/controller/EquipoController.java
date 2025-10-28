@@ -23,7 +23,14 @@ public class EquipoController {
 
     public EquipoDTO buscarEquipo(EquipoBusquedaDTO filtros){
         validarNoNulo(filtros, "Datos requeridos");
-        return equipoService.buscarEquipo(filtros);
+
+        if(filtros.id_equipo() != null || filtros.numero_serie() != null){
+            return equipoService.buscarEquipo(filtros);
+        }
+        else{
+            return equipoService.buscarEquipos(filtros);
+        }
+
     }
 
 }
