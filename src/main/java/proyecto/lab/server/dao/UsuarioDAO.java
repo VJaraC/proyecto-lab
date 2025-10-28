@@ -73,7 +73,7 @@ public class UsuarioDAO {
     public List<Usuario> mostrarUsuarios() { //Función para mostrar los usuarios habilitados en la base de datos.
 
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT id, rut, nombres, apellidos, estado, cargo , rol FROM usuario WHERE estado = 'habilitado'";
+        String sql = "SELECT id, rut, nombres, apellidos, estado, cargo , rol FROM usuario ";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
