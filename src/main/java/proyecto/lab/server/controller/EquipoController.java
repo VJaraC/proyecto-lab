@@ -21,4 +21,9 @@ public class EquipoController {
         return equipoService.crearEquipo(equipo);
     }
 
+    public EquipoDTO buscarEquipo(EquipoBusquedaDTO filtros){
+        validarNoNulo(filtros, "Datos requeridos");
+        return equipoService.buscarEquipo(filtros);
+    }
+
 }

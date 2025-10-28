@@ -47,7 +47,8 @@ public class EquipoService {
         return new EquipoDTO(equipoNuevo); //se le pasa al dto el equipo (modelo) que se creó
     }
 
-    public List<EquipoDTO> buscarEquipo(EquipoBusquedaDTO filtros){
+    //función para hacer la busqueda de mas de un equipo.
+    public List<EquipoDTO> buscarEquipos(EquipoBusquedaDTO filtros){
         validarNoNulo(filtros, "Datos requeridos");
         List<Equipo> resultados = new ArrayList<>();
 
@@ -57,9 +58,29 @@ public class EquipoService {
         if(filtros.id_lab_equipo() != null){
             resultados = equipoDAO.buscarEquipoPorIdLab(filtros.id_lab_equipo());
         }
+        else if(filtros.hostname() != null){
+            resultados = equipoDAO.buscarEquipoPorHostname(filtros.hostname());
+        }
 
+        //transforma la lista de Equipo a EquipoDTO
         return resultados.stream()
                 .map(EquipoDTO::new)
                 .toList();
+    }
+
+    //funcion para hacer la busqueda de un solo equipo (id, numero de serie)
+    public EquipoDTO buscarEquipo(EquipoBusquedaDTO filtros){
+        validarNoNulo(filtros, "Datos requeridos");
+        Equipo equipo = new Equipo();
+        if(filtros.id_equipo() != null){
+            equipo = equipoDAO.buscarEquipoPorId(filtros.id_equipo());
+        }
+        else if(filtros.numero_serie() != null){
+            equipo  = equipoDAO.buscarEquipoPorNumSerie(filtros.numero_serie());
+        }
+        else{
+            System.out.println("Error al buscar equipo");
+        }
+        return new EquipoDTO(equipo);
     }
 }

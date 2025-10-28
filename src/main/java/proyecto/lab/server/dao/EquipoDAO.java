@@ -142,6 +142,21 @@ public class EquipoDAO {
         }
     }
 
+    public List<Equipo> buscarEquipoPorHostname(String hostname){
+        String sql = "SELECT * FROM equipo WHERE hostname = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, hostname);
+            try(ResultSet rs = ps.executeQuery()) {
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Hostname",e);
+        }
+    }
+
 
 
     public Equipo buscarEquipoPorNumSerie(String numSerie){
