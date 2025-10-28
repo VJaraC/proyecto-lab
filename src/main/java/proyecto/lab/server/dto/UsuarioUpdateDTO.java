@@ -1,5 +1,7 @@
 package proyecto.lab.server.dto;
 
+import proyecto.lab.server.models.Rol;
+
 import java.io.Serializable;
 
 public class UsuarioUpdateDTO implements Serializable {
@@ -9,6 +11,7 @@ public class UsuarioUpdateDTO implements Serializable {
     private String estado;
     private String email;
     private String telefono;
+    private Rol rol;
 
     public UsuarioUpdateDTO(){}
 
@@ -39,9 +42,14 @@ public class UsuarioUpdateDTO implements Serializable {
     public String getEmail() {
         return email;
     }
+
     public String getTelefono() {
         return telefono;
     }
+
+    public Rol getRol() {return rol;}
+
+    // Setters
 
     public void setId(int id) {
         this.id = id;
@@ -66,5 +74,7 @@ public class UsuarioUpdateDTO implements Serializable {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public void setRol(Rol rol) {this.rol = rol;}
 
 }

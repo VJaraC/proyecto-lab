@@ -1,4 +1,5 @@
 package proyecto.lab.server.dto;
+import proyecto.lab.server.models.Rol;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -12,12 +13,13 @@ public class UsuarioDTO implements Serializable {
     private String estado;
     private String genero;
     private String cargo;
+    private Rol rol;
     private LocalDate fechaNacimiento;
     private String telefono;
 
     public UsuarioDTO() {} //Constructor vacío requerido para serialización.
 
-    public UsuarioDTO(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero, String cargo, LocalDate fechaNacimiento, String telefono) {
+    public UsuarioDTO(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero, String cargo, Rol rol, LocalDate fechaNacimiento, String telefono) {
         this.ID = ID;
         this.rut = rut;
         this.nombres = nombres;
@@ -66,6 +68,8 @@ public class UsuarioDTO implements Serializable {
         return cargo;
     }
 
+    public Rol getRol() { return rol; }
+
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -95,6 +99,7 @@ public class UsuarioDTO implements Serializable {
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }
+    public void setRol(Rol rol) {this.rol = rol;}
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }

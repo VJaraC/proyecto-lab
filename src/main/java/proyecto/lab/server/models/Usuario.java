@@ -12,11 +12,12 @@ public class Usuario {
     private String genero;
     private String contrasena;
     private String cargo;
+    private Rol rol;
     private LocalDate fecha_nacimiento;
     private String telefono;
 
     //constructor
-    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo, LocalDate fecha_nacimiento, String telefono) {
+    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo, Rol rol, LocalDate fecha_nacimiento, String telefono) {
         this.ID = ID;
         this.rut = rut;
         this.nombres = nombres;
@@ -26,12 +27,13 @@ public class Usuario {
         this.genero = genero;
         this.contrasena = contrasena;
         this.cargo = cargo;
+        this.rol = rol;
         this.fecha_nacimiento = fecha_nacimiento;
         this.telefono = telefono;
     }
 
     //constructor usado en crear usuario
-    public Usuario(String rut, String nombres, String apellidos, String estado, String genero, String contrasena, String cargo, LocalDate fecha_nacimiento, String telefono, String email) {
+    public Usuario(String rut, String nombres, String apellidos, String estado, String genero, String contrasena, String cargo,Rol rol, LocalDate fecha_nacimiento, String telefono, String email) {
         this.rut = rut;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -39,17 +41,20 @@ public class Usuario {
         this.genero = genero;
         this.contrasena = contrasena;
         this.cargo = cargo;
+        this.rol = rol;
         this.fecha_nacimiento = fecha_nacimiento;
         this.telefono = telefono;
         this.email = email;
     }
 
-    public Usuario(int ID, String rut, String nombre, String apellidos, String estado) {
+    public Usuario(int ID, String rut, String nombre, String apellidos, String estado, String cargo, Rol rol) {
         this.ID = ID;
         this.rut = rut;
         this.nombres = nombre;
         this.apellidos = apellidos;
         this.estado = estado;
+        this.cargo = cargo;
+        this.rol = rol;
     }
 
 
@@ -81,6 +86,8 @@ public class Usuario {
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }
+
+    public void setRol(Rol rol) { this.rol = rol; }
 
     public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
         this.fecha_nacimiento = fecha_nacimiento;
@@ -121,6 +128,8 @@ public class Usuario {
     public String getCargo() {
         return cargo;
     }
+
+    public Rol getRol() { return rol; }
 
     public LocalDate getFecha_nacimiento() {
         return fecha_nacimiento;
