@@ -39,30 +39,30 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <TableView fx:id="TablaEstudiantes" layoutX="6.0" layoutY="196.0" prefHeight="415.0" prefWidth="834.0">
+            <TableView id="Tabla" fx:id="TablaEstudiantes" layoutX="21.0" layoutY="196.0" prefHeight="415.0" prefWidth="809.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
               <columns>
-                <TableColumn fx:id="IdTablaEstudiantes" prefWidth="53.0" text="ID" />
-                  <TableColumn fx:id="RUTTablaEstudiantes" prefWidth="157.0" text="RUT" />
-                <TableColumn fx:id="NombreTablaEstudiantes" prefWidth="262.0" text="Nombre" />
-                  <TableColumn fx:id="EstadoTablaEstudiantes" minWidth="0.0" prefWidth="146.0" text="Estado" />
-                  <TableColumn fx:id="AccionTablaEstudiantes" prefWidth="214.0" text="Acción" />
+                <TableColumn fx:id="IdTablaEstudiantes" editable="false" prefWidth="53.0" styleClass="ColumnaTabla" text="ID" />
+                  <TableColumn fx:id="RUTTablaEstudiantes" editable="false" prefWidth="157.0" styleClass="ColumnaTabla" text="RUT" />
+                <TableColumn fx:id="NombreTablaEstudiantes" editable="false" prefWidth="262.0" styleClass="ColumnaTabla" text="Nombre" />
+                  <TableColumn fx:id="EstadoTablaEstudiantes" editable="false" minWidth="0.0" prefWidth="172.0" styleClass="ColumnaTabla" text="Estado" />
+                  <TableColumn fx:id="AccionTablaEstudiantes" editable="false" prefWidth="161.0" sortable="false" styleClass="ColumnaTabla" text="Acción" />
               </columns>
             </TableView>
-            <TextField fx:id="txtBuscar" layoutX="14.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar...">
+            <TextField fx:id="txtBuscar" layoutX="21.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar..." styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
                <padding>
                   <Insets left="30.0" />
                </padding>
             </TextField>
-            <Button id="BotonCrearUsuario" layoutX="14.0" layoutY="141.0" mnemonicParsing="false" onAction="#AbrirFormularioCrearUsuario" prefHeight="36.0" prefWidth="126.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Crear Usuario">
+            <Button id="BotonCrearUsuario" layoutX="21.0" layoutY="137.0" mnemonicParsing="false" onAction="#AbrirFormularioCrearUsuario" prefHeight="36.0" prefWidth="126.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Crear Usuario">
                <font>
                   <Font name="Product Sans Bold" size="14.0" />
                </font>
             </Button>
-            <SplitMenuButton fx:id="Buscar" layoutX="314.0" layoutY="80.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" text="Escoge un filtro" textAlignment="CENTER">
+            <SplitMenuButton fx:id="Buscar" layoutX="328.0" layoutY="80.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" styleClass="btnFiltro" stylesheets="@../css/ViewUsuarios.css" text="Escoge un filtro" textAlignment="CENTER">
               <items>
-                  <MenuItem fx:id="FiltroID" mnemonicParsing="false" onAction="#FiltroID" text="Buscar por ID" />
-                <MenuItem fx:id="FiltroNombre" mnemonicParsing="false" onAction="#FiltroNombre" text="Buscar por Nombre" />
-                <MenuItem fx:id="FiltroEstado" mnemonicParsing="false" onAction="#FiltroEstado" text="Buscar por Estado" />
+                  <MenuItem fx:id="FiltroID" mnemonicParsing="false" onAction="#FiltroID" styleClass="filtro" text="Buscar por ID" />
+                <MenuItem fx:id="FiltroNombre" mnemonicParsing="false" onAction="#FiltroNombre" styleClass="filtro" text="Buscar por Nombre" />
+                <MenuItem fx:id="FiltroEstado" mnemonicParsing="false" onAction="#FiltroEstado" styleClass="filtro" text="Buscar por Estado" />
               </items>
             </SplitMenuButton>
          </children>
