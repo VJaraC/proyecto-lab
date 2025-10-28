@@ -4,12 +4,12 @@ import proyecto.lab.server.dto.UsuarioLoginDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.dto.UsuarioBusquedaDTO;
 import proyecto.lab.server.exceptions.AppException;
+import proyecto.lab.server.models.Rol;
+import proyecto.lab.server.security.AuthUtils;
 import proyecto.lab.server.service.UsuarioService;
 import proyecto.lab.server.utils.RutUtils;
 import proyecto.lab.server.utils.EstadoUtils;
-
 import java.util.List;
-
 import static proyecto.lab.server.utils.ValidadorUtils.*;
 
 public class UsuarioController {
@@ -22,7 +22,19 @@ public class UsuarioController {
 
     //Casos de uso
 
-    public UsuarioDTO crearUsuario(UsuarioLoginDTO in){
+   // ====================== Autenticación ======================
+    // No requiere rol, es login
+    public UsuarioDTO iniciarSesion(UsuarioLoginDTO in){
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(in.getRut(), "El RUT es obligatorio");
+        validarTexto(in.getContrasena(), "La contraseña es obligatoria");
+        return usuarioService.iniciarSesion(in);
+    }
+
+    // =================== Comandos (ADMIN) ===================
+
+    public UsuarioDTO crearUsuario(UsuarioLoginDTO in, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(in, "Datos requeridos");
         validarTexto(in.getRut(), "El RUT es obligatorio");
         validarTexto(in.getNombre(), "El nombre es obligatorio");
@@ -35,14 +47,58 @@ public class UsuarioController {
         return usuarioService.crearUsuario(in);
     }
 
-    public UsuarioDTO iniciarSesion(UsuarioLoginDTO in){
+    public UsuarioDTO modificarNombreUsuario(UsuarioUpdateDTO in , String nuevonombre, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(in, "Datos requeridos");
-        validarTexto(in.getRut(), "El RUT es obligatorio");
-        validarTexto(in.getContrasena(), "La contraseña es obligatoria");
-        return usuarioService.iniciarSesion(in);
+        validarTexto(nuevonombre, "Debes ingresar un nombre");
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+        dto.setId(in.getId());
+        dto.setNombres(nuevonombre);
+
+        return usuarioService.actualizarUsuario(dto);
     }
 
-    public UsuarioDTO buscarUsuarioPorRUT(String rut){
+    public UsuarioDTO actualizarRolUsuario(UsuarioUpdateDTO in, UsuarioDTO auth ){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+
+        validarNoNulo(in, "Datos requeridos");
+        validarPositivo(in.getId(), "ID inválido");
+        if (in.getRol()== null) throw AppException.badRequest("Debes seleccionar un rol válido.");
+
+        if (auth.getID() == in.getId()){
+            throw AppException.forbidden("No puedes cambiar tu propio rol.");
+        }
+
+        return usuarioService.actualizarUsuario(in);
+    }
+
+    public UsuarioDTO habilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+        validarNoNulo(in, "Datos requeridos");
+        validarPositivo(in.getId(),"ID invalido");
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+        dto.setId(in.getId());
+        dto.setEstado(EstadoUtils.HABILITADO);
+        return usuarioService.actualizarUsuario(dto);
+    }
+
+    public UsuarioDTO deshabilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+        validarNoNulo(in, "Datos requeridos");
+        validarPositivo(in.getId(),"ID invalido");
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
+        dto.setId(in.getId());
+        dto.setEstado(EstadoUtils.DESHABILITADO);
+        return usuarioService.actualizarUsuario(dto);
+    }
+
+    // ==================== Consultas (ADMIN | MONITOR) ==========
+
+    public UsuarioDTO buscarUsuarioPorRUT(String rut, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         validarNoNulo(rut, "El nombre es obligatorio");
 
         // Normalizar + Validar DV
@@ -59,7 +115,8 @@ public class UsuarioController {
         return usuarioService.buscarUsuarioPorRut(busqueda);
     }
 
-    public UsuarioDTO buscarUsuarioPorId(Integer id){
+    public UsuarioDTO buscarUsuarioPorId(Integer id, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         validarNoNulo(id, "El id es obligatorio");
         validarPositivo(id, "El id debe ser positivo");
 
@@ -68,14 +125,16 @@ public class UsuarioController {
         return usuarioService.buscarUsuarioPorId(busqueda);
     }
 
-    public List<UsuarioDTO> buscarUsuarioPorNombre(String nombre){
+    public List<UsuarioDTO> buscarUsuarioPorNombre(String nombre, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         validarTexto(nombre, "El nombre es obligatorio");
         UsuarioBusquedaDTO busqueda = new UsuarioBusquedaDTO();
         busqueda.setNombre(nombre);
         return usuarioService.buscarUsuarios(busqueda);
     }
 
-    public List<UsuarioDTO> buscarUsuarioPorEstado(String estado){
+    public List<UsuarioDTO> buscarUsuarioPorEstado(String estado, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         validarNoNulo(estado, "El estado es obligatorio");
         validarEstado(estado, "El estado debe ser habilitado o deshabilitado");
         UsuarioBusquedaDTO busqueda = new UsuarioBusquedaDTO();
@@ -83,40 +142,9 @@ public class UsuarioController {
         return usuarioService.buscarUsuarios(busqueda);
     }
 
-    public UsuarioDTO modificarNombreUsuario(UsuarioUpdateDTO in , String nuevonombre){
-        validarNoNulo(in, "Datos requeridos");
-        validarTexto(nuevonombre, "Debes ingresar un nombre");
-
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
-        dto.setId(in.getId());
-        dto.setNombres(nuevonombre);
-
-        return usuarioService.actualizarUsuario(dto);
-    }
-
-    public UsuarioDTO habilitarUsuario(UsuarioUpdateDTO in){
-        validarNoNulo(in, "Datos requeridos");
-        validarPositivo(in.getId(),"ID invalido");
-
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
-        dto.setId(in.getId());
-        dto.setEstado(EstadoUtils.HABILITADO);
-        return usuarioService.actualizarUsuario(dto);
-    }
-
-    public List<UsuarioDTO> listarUsuarios(){
+    public List<UsuarioDTO> listarUsuarios(UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         return usuarioService.listarUsuarios();
     }
-
-    public UsuarioDTO deshabilitarUsuario(UsuarioUpdateDTO in){
-        validarNoNulo(in, "Datos requeridos");
-        validarPositivo(in.getId(),"ID invalido");
-
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
-        dto.setId(in.getId());
-        dto.setEstado(EstadoUtils.DESHABILITADO);
-        return usuarioService.actualizarUsuario(dto);
-    }
-
 
 }

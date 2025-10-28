@@ -5,6 +5,7 @@ import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
+import proyecto.lab.server.models.Rol;
 import proyecto.lab.server.models.Usuario;
 
 import java.time.LocalDate;
@@ -52,7 +53,7 @@ public class UsuarioService {
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
 
             // crear nuevo usuario
-            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), user.getFecha_nacimiento(), user.getTelefono(), user.getEmail());
+            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), Rol.MONITOR, user.getFecha_nacimiento(), user.getTelefono(), user.getEmail());
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
 
             return new UsuarioDTO(
@@ -64,6 +65,7 @@ public class UsuarioService {
                     guardado.getEstado(),
                     guardado.getGenero(),
                     guardado.getCargo(),
+                    guardado.getRol(),
                     guardado.getFecha_nacimiento(),
                     guardado.getTelefono()
             );
@@ -119,6 +121,7 @@ public class UsuarioService {
                         existente.getEstado(),
                         existente.getGenero(),
                         existente.getCargo(),
+                        existente.getRol(),
                         existente.getFecha_nacimiento(),
                         existente.getTelefono()
                 );
@@ -154,6 +157,7 @@ public class UsuarioService {
                     u.getEstado(),
                     u.getGenero(),
                     u.getCargo(),
+                    u.getRol(),
                     u.getFecha_nacimiento(),
                     u.getTelefono()
             );
@@ -191,6 +195,7 @@ public class UsuarioService {
                 u.getEstado(),
                 u.getGenero(),
                 u.getCargo(),
+                u.getRol(),
                 u.getFecha_nacimiento(),
                 u.getTelefono()
         );
@@ -221,6 +226,7 @@ public class UsuarioService {
                                 u.getEstado(),
                                 u.getGenero(),
                                 u.getCargo(),
+                                u.getRol(),
                                 u.getFecha_nacimiento(),
                                 u.getTelefono()
                         ))
@@ -239,6 +245,7 @@ public class UsuarioService {
                                 u.getEstado(),
                                 u.getGenero(),
                                 u.getCargo(),
+                                u.getRol(),
                                 u.getFecha_nacimiento(),
                                 u.getTelefono()
                         ))
@@ -260,6 +267,7 @@ public class UsuarioService {
                             u.getEstado(),
                             u.getGenero(),
                             u.getCargo(),
+                            u.getRol(),
                             u.getFecha_nacimiento(),
                             u.getTelefono()
                     ))
@@ -287,6 +295,7 @@ public class UsuarioService {
                            u.getEstado(),
                            u.getGenero(),
                            u.getCargo(),
+                           u.getRol(),
                            u.getFecha_nacimiento(),
                            u.getTelefono()
                    ));
@@ -337,6 +346,13 @@ public class UsuarioService {
                 cambios=true;
             }
 
+            if(dto.getRol() != null){
+                if(dto.getRol() == existente.getRol())
+                    throw AppException.conflict("El rol ya está asignado en el sistema.");
+                existente.setRol(dto.getRol());
+                cambios = true;
+            }
+
             if(!cambios) {
                 throw AppException.badRequest("No hay cambios para aplicar");
             }
@@ -352,6 +368,7 @@ public class UsuarioService {
                     existente.getEstado(),
                     existente.getGenero(),
                     existente.getCargo(),
+                    existente.getRol(),
                     existente.getFecha_nacimiento(),
                     existente.getTelefono()
             );

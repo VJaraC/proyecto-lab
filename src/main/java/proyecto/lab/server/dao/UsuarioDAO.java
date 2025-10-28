@@ -1,11 +1,11 @@
 package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
 import proyecto.lab.server.exceptions.AppException;
+import proyecto.lab.server.models.Rol;
 import proyecto.lab.server.models.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
 
 
 //DATA ACCESS OBJECT, se usa para comunicarse directamente con el servidor.
@@ -18,7 +18,7 @@ public class UsuarioDAO {
 
 
     public Usuario insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
-        String sql = "INSERT INTO USUARIO(rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fecha_nac, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO(rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fecha_nac, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
         try (Connection conn = conexion.getConnection();
@@ -32,8 +32,9 @@ public class UsuarioDAO {
             ps.setString(6, user.getGenero());
             ps.setString(7, user.getContrasena());
             ps.setString(8, user.getCargo());
-            ps.setDate(9, Date.valueOf(user.getFecha_nacimiento()));
-            ps.setString(10, user.getTelefono());
+            ps.setString(9, user.getRol().name());
+            ps.setDate(10, Date.valueOf(user.getFecha_nacimiento()));
+            ps.setString(11, user.getTelefono());
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -45,16 +46,17 @@ public class UsuarioDAO {
 
 
     public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar el nombre de un usuario.
-        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, email = ?, telefono = ?, contrasena = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, rol= ?, email = ?, telefono = ?, contrasena = ? WHERE id = ?";
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, user.getNombres());
             ps.setString(2, user.getApellidos());
             ps.setString(3, user.getEstado());
-            ps.setString(4, user.getEmail());
-            ps.setString(5, user.getTelefono());
-            ps.setString(6, user.getContrasena());
-            ps.setInt(7, user.getID());
+            ps.setString(4, user.getRol().name());
+            ps.setString(5, user.getEmail());
+            ps.setString(6, user.getTelefono());
+            ps.setString(7, user.getContrasena());
+            ps.setInt(8, user.getID());
             int rows = ps.executeUpdate();
 
             if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
@@ -71,7 +73,7 @@ public class UsuarioDAO {
     public List<Usuario> mostrarUsuarios() { //Función para mostrar los usuarios habilitados en la base de datos.
 
         List<Usuario> usuarios = new ArrayList<>();
-        String sql = "SELECT id, rut, nombres, apellidos, estado, cargo FROM usuario WHERE estado = 'habilitado'";
+        String sql = "SELECT id, rut, nombres, apellidos, estado, cargo , rol FROM usuario WHERE estado = 'habilitado'";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -82,7 +84,11 @@ public class UsuarioDAO {
                 String nombres = rs.getString("nombres");
                 String apellidos = rs.getString("apellidos");
                 String estado = rs.getString("estado");
-                usuarios.add(new Usuario(id, rut, nombres, apellidos, estado));
+                String cargo = rs.getString("cargo");
+                String rolStr = rs.getString("rol");
+
+                Rol rol = Rol.valueOf(rolStr.toUpperCase());
+                usuarios.add(new Usuario(id, rut, nombres, apellidos, estado, cargo , rol));
             }
             return usuarios;
         } catch (SQLException e) {
@@ -95,7 +101,7 @@ public class UsuarioDAO {
     //implementar mapearUsuarios
     public Usuario buscarUsuarioPorID(int id) {
         Usuario usuario = null;
-        String sql = "SELECT * FROM usuario WHERE id = ?";
+        String sql = "SELECT id, rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol , fecha_nac, telefono FROM usuario WHERE id = ?";
         try (Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
 
@@ -111,12 +117,21 @@ public class UsuarioDAO {
                     String genero = rs.getString("genero");
                     String contrasena = rs.getString("contrasena");
                     String cargo = rs.getString("cargo");
+
+                    String rolStr = rs.getString("rol");
+                    Rol rol = null;
+                    if(rolStr != null && !rolStr.isBlank()){
+                        rol = Rol.valueOf(rolStr.toUpperCase());
+                    } else{
+                        rol = Rol.MONITOR;
+                    }
+
                     java.sql.Date sqlDate = rs.getDate("fecha_nac");
                     java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
                     String telefono = rs.getString("telefono");
 
 
-                    usuario = new Usuario(id2 ,rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fechaNacimiento, telefono);
+                    usuario = new Usuario(id2 ,rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fechaNacimiento, telefono);
                 }
             }
             return usuario;
@@ -129,7 +144,7 @@ public class UsuarioDAO {
 
     //implementar mapearUsuarios.
     public Usuario buscarUsuarioPorRut(String rut) {
-        String sql = "SELECT * FROM usuario WHERE rut = ?";
+        String sql = "SELECT id, rut, nombres, apellidos, email , estado, genero , contrasena, cargo, rol, fecha_nac, telefono FROM usuario WHERE rut = ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -138,6 +153,18 @@ public class UsuarioDAO {
                 if (rs.next()) {
                     java.sql.Date sqlDate = rs.getDate("fecha_nac");
                     java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
+
+                    String rolStr = rs.getString("rol");
+                    Rol rol = null;
+                    if(rolStr != null && !rolStr.isBlank()){
+                        try{
+                            rol = Rol.valueOf(rolStr.toUpperCase());
+                        } catch (IllegalArgumentException e){
+                            rol = Rol.MONITOR;
+                        }
+                    } else{
+                        rol = Rol.MONITOR;
+                    }
                     return new Usuario(
                             rs.getInt("id"),
                             rs.getString("rut"),
@@ -148,6 +175,7 @@ public class UsuarioDAO {
                             rs.getString("genero"),
                             rs.getString("contrasena"),
                             rs.getString("cargo"),
+                            rol,
                             fechaNacimiento,
                             rs.getString("telefono")
                     );
@@ -175,11 +203,21 @@ public class UsuarioDAO {
                 String genero = rs.getString("genero");
                 String contrasena = rs.getString("contrasena");
                 String cargo = rs.getString("cargo");
+
+                String rolStr = rs.getString("rol");
+                Rol rol = Rol.MONITOR;
+                if(rolStr != null && !rolStr.isBlank()){
+                    try{
+                        rol = Rol.valueOf(rolStr.toUpperCase());
+                    } catch (IllegalArgumentException ignored){
+
+                    }
+                }
                 java.sql.Date sqlDate = rs.getDate("fecha_nac");
                 java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
                 String telefono = rs.getString("telefono");
 
-                usuarios.add(new Usuario(id, rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fechaNacimiento, telefono));
+                usuarios.add(new Usuario(id, rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fechaNacimiento, telefono));
             }
         } catch (SQLException e) {
             throw AppException.internal("Error al mapear usuarios: + e.getMessage()");
