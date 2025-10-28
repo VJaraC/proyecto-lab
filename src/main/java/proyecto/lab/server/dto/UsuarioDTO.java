@@ -28,6 +28,7 @@ public class UsuarioDTO implements Serializable {
         this.estado = estado;
         this.genero = genero;
         this.cargo = cargo;
+        this.rol = rol;
         this.fechaNacimiento = fechaNacimiento;
         this.telefono = telefono;
     }

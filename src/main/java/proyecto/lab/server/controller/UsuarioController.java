@@ -95,10 +95,8 @@ public class UsuarioController {
         return usuarioService.actualizarUsuario(dto);
     }
 
-    // ==================== Consultas (ADMIN | MONITOR) ==========
-
     public UsuarioDTO buscarUsuarioPorRUT(String rut, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(rut, "El nombre es obligatorio");
 
         // Normalizar + Validar DV
@@ -116,7 +114,7 @@ public class UsuarioController {
     }
 
     public UsuarioDTO buscarUsuarioPorId(Integer id, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(id, "El id es obligatorio");
         validarPositivo(id, "El id debe ser positivo");
 
@@ -126,7 +124,7 @@ public class UsuarioController {
     }
 
     public List<UsuarioDTO> buscarUsuarioPorNombre(String nombre, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         validarTexto(nombre, "El nombre es obligatorio");
         UsuarioBusquedaDTO busqueda = new UsuarioBusquedaDTO();
         busqueda.setNombre(nombre);
@@ -134,7 +132,7 @@ public class UsuarioController {
     }
 
     public List<UsuarioDTO> buscarUsuarioPorEstado(String estado, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(estado, "El estado es obligatorio");
         validarEstado(estado, "El estado debe ser habilitado o deshabilitado");
         UsuarioBusquedaDTO busqueda = new UsuarioBusquedaDTO();
@@ -143,7 +141,7 @@ public class UsuarioController {
     }
 
     public List<UsuarioDTO> listarUsuarios(UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
+        AuthUtils.requireRole(auth, Rol.ADMIN);
         return usuarioService.listarUsuarios();
     }
 

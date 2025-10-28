@@ -86,7 +86,7 @@ public class ViewUsuariosController {
 
     private void ActualizarTablaEstudiantes(){
         TablaEstudiantes.getItems().clear();
-        TablaEstudiantes.getItems().addAll(AppContext.admin().listarUsuarios());
+        TablaEstudiantes.getItems().addAll(AppContext.admin().listarUsuarios(AppContext.getUsuarioActual()));
         TablaEstudiantes.refresh();
     }
 
@@ -104,7 +104,7 @@ public class ViewUsuariosController {
         RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
         configurarColumnaAccion();
         ActualizarTablaEstudiantes();
-        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombre()));
+        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
 
         for (MenuItem item : Buscar.getItems()) {
             item.addEventHandler(ActionEvent.ACTION, e -> {
@@ -156,7 +156,7 @@ public class ViewUsuariosController {
                     btnDeshabilitar.setOnAction(event -> {
                         UsuarioDTO usuarioDeshabilitar = getTableView().getItems().get(getIndex());
                         UsuarioUpdateDTO usuarioUpdateDTO = crearUpdateDTO(usuarioDeshabilitar);
-                        AppContext.admin().deshabilitarUsuario(usuarioUpdateDTO);
+                        AppContext.admin().deshabilitarUsuario(usuarioUpdateDTO,AppContext.getUsuarioActual());
                         ActualizarTablaEstudiantes();
 
                     });
@@ -164,7 +164,7 @@ public class ViewUsuariosController {
                     btnHabilitar.setOnAction(event -> {
                         UsuarioDTO usuario = getTableView().getItems().get(getIndex());
                         UsuarioUpdateDTO usuarioUpdateDTO = crearUpdateDTO(usuario);
-                        AppContext.admin().habilitarUsuario(usuarioUpdateDTO);
+                        AppContext.admin().habilitarUsuario(usuarioUpdateDTO,AppContext.getUsuarioActual());
                         ActualizarTablaEstudiantes();
                     });
 
@@ -215,11 +215,11 @@ public class ViewUsuariosController {
             switch (FiltroSeleccionado) {
                     case "estado":
                         LimpiarTablaEstudiantes();
-                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorEstado(busqueda));
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorEstado(busqueda,AppContext.getUsuarioActual()));
                         break;
                     case "nombre":
                         LimpiarTablaEstudiantes();
-                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorNombre(busqueda));
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorNombre(busqueda,AppContext.getUsuarioActual()));
                         break;
                     case "ID":
 
@@ -228,7 +228,7 @@ public class ViewUsuariosController {
                             id = Integer.valueOf(busqueda);
                         }
                         LimpiarTablaEstudiantes();
-                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorId(id));
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorId(id,AppContext.getUsuarioActual()));
                         break;
             }
 
