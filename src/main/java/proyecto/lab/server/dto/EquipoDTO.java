@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public record EquipoDTO(
         int id_equipo,
-        String rut_admin,
+        int id_admin,
         int id_lab_equipo,
         String hostname,
         String numero_serie,
@@ -25,7 +25,7 @@ public record EquipoDTO(
     public EquipoDTO(Equipo equipo) {
         this(
                 equipo.getId_equipo(),
-                equipo.getRut_admin(),
+                equipo.getId_admin(),
                 equipo.getId_lab_equipo(),
                 equipo.getHostname(),
                 equipo.getNumero_serie(),

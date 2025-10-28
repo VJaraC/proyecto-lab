@@ -1,6 +1,12 @@
 package proyecto.lab.server.controller;
+import proyecto.lab.server.dto.EquipoBusquedaDTO;
 import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.models.Equipo;
 import proyecto.lab.server.service.EquipoService;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static proyecto.lab.server.utils.ValidadorUtils.*;
 
 
@@ -14,4 +20,5 @@ public class EquipoController {
         validarNoNulo(equipo, "Datos requeridos");
         return equipoService.crearEquipo(equipo);
     }
+
 }

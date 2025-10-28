@@ -20,7 +20,7 @@ public class EquipoDAO {
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            ps.setString(1, equipo.getRut_admin());
+            ps.setInt(1, equipo.getId_admin());
             ps.setInt(2, equipo.getId_lab_equipo());
             ps.setString(3, equipo.getHostname());
             ps.setString(4, equipo.getNumero_serie());
@@ -85,7 +85,66 @@ public class EquipoDAO {
         return true;
     }
 
-    public Equipo buscarEquipo(String numSerie){
+
+
+    //tratar de hacer una funcion que se le pase un rs y esta la transforme a un objeto. Hacer el mapear equipo en otra función que tome la función anterior y las agregue a una lista.
+    public Equipo buscarEquipoPorId(int id){
+        String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                int id_equipo = rs.getInt("id_eq");
+                int id_lab = rs.getInt("id_lab");
+                int id_admin = rs.getInt("id");
+                String hostname = rs.getString("hostname");
+                String numero_serie = rs.getString("numero_serie");
+                String fabricante_pc = rs.getString("fabricante_pc");
+                String estado_equipo = rs.getString("estado_equipo");
+                String modelo = rs.getString("modelo");
+                String mac = rs.getString("mac");
+                String ip  = rs.getString("ip");
+                String cpu_modelo = rs.getString("cpu_modelo");
+                String cpu_nucleos = rs.getString("cpu_nucleos");
+                String ram_total = rs.getString("ram_total");
+                String almacenamiento = rs.getString("almacenamiento");
+                String gpu_modelo = rs.getString("gpu_modelo");
+
+                java.sql.Date sqlDate = rs.getDate("fecha_ingreso_eq");
+                java.time.LocalDate fecha_ingreso_eq = (sqlDate != null ? sqlDate.toLocalDate() : null);
+
+                return new Equipo(id_equipo, id_lab, id_admin, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq);
+            }
+        }
+        catch (SQLException e){
+            System.out.println("Error al buscar equipo: " + e.getMessage());
+        }
+        return null;
+    }
+
+
+    public List<Equipo> buscarEquipoPorIdLab(int id_lab){
+        String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, id_lab);
+
+            try(ResultSet rs = ps.executeQuery()) {
+                return mapearEquipos(rs);
+            }
+
+        } catch(SQLException e){
+            throw new RuntimeException("Error al buscar por ID del Laboratorio",e);
+        }
+    }
+
+
+
+    public Equipo buscarEquipoPorNumSerie(String numSerie){
         String sql = "SELECT * FROM equipo WHERE numero_serie = ?";
         Equipo equipo = null;
 
@@ -96,7 +155,7 @@ public class EquipoDAO {
                 if(rs.next()){
                     equipo = new Equipo();
                     equipo.setId_equipo(rs.getInt("id_eq"));
-                    equipo.setRut_admin(rs.getString("rut"));
+                    equipo.setId_admin(rs.getInt("id"));
                     equipo.setId_lab_equipo(rs.getInt("id_lab"));
                     equipo.setHostname(rs.getString("hostname"));
                     equipo.setNumero_serie(rs.getString("numero_serie"));
@@ -120,5 +179,41 @@ public class EquipoDAO {
         }
         return equipo;
     }
+
+
+    public List<Equipo> mapearEquipos(ResultSet rs){
+        List<Equipo> equipos = new ArrayList<>();
+        try{
+            while(rs.next()){
+                int id = rs.getInt("id_eq");
+                int id_lab = rs.getInt("id_lab");
+                int id_admin = rs.getInt("id");
+                String hostname = rs.getString("hostname");
+                String numero_serie = rs.getString("numero_serie");
+                String fabricante_pc = rs.getString("fabricante_pc");
+                String estado_equipo = rs.getString("estado_equipo");
+                String modelo = rs.getString("modelo");
+                String mac = rs.getString("mac");
+                String ip  = rs.getString("ip");
+                String cpu_modelo = rs.getString("cpu_modelo");
+                String cpu_nucleos = rs.getString("cpu_nucleos");
+                String ram_total = rs.getString("ram_total");
+                String almacenamiento = rs.getString("almacenamiento");
+                String gpu_modelo = rs.getString("gpu_modelo");
+
+                java.sql.Date sqlDate = rs.getDate("fecha_ingreso_eq");
+                java.time.LocalDate fecha_ingreso_eq = (sqlDate != null ? sqlDate.toLocalDate() : null);
+
+                equipos.add(new Equipo(id, id_lab, id_admin, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq));
+            }
+        }
+
+        catch(SQLException e){
+            throw AppException.internal("Error al mapear equipos: "+ e.getMessage());
+        }
+        return equipos;
+
+    }
+
 
 }

@@ -1,12 +1,16 @@
 package proyecto.lab.server.service;
 
-import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dao.EquipoDAO;
+import proyecto.lab.server.dto.EquipoBusquedaDTO;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Equipo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import static proyecto.lab.server.utils.ValidadorUtils.validarNoNulo;
 
 public class EquipoService {
     private final EquipoDAO equipoDAO;
@@ -29,7 +33,7 @@ public class EquipoService {
 
         //buscar un equipo existente
         String numSerie = equipo.numero_serie();
-        Equipo equipoExistente = equipoDAO.buscarEquipo(numSerie);
+        Equipo equipoExistente = equipoDAO.buscarEquipoPorNumSerie(numSerie);
         if (equipoExistente != null) {
             throw AppException.badRequest("Equipo ya existente");
         }
@@ -41,5 +45,20 @@ public class EquipoService {
             System.out.println("Error al crear equipo");
         }
         return new EquipoDTO(equipoNuevo); //se le pasa al dto el equipo (modelo) que se creó
+    }
+
+    public List<EquipoDTO> buscarEquipo(EquipoBusquedaDTO filtros){
+        validarNoNulo(filtros, "Datos requeridos");
+        List<Equipo> resultados = new ArrayList<>();
+
+        if(filtros.id_equipo() != null){
+            resultados = equipoDAO.buscarPorId(filtros.id_equipo());
+        } else if(filtros.id_lab_equipo() != null){
+            resultados = equipoDAO.buscarEquipoPorIdLab(filtros.id_lab_equipo());
+        }
+
+        return resultados.stream()
+                .map(EquipoDTO::new)
+                .toList();
     }
 }

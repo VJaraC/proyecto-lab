@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class Equipo {
     private int id_equipo;
-    private String rut_admin;
+    private int id_admin;
     private int id_lab_equipo;
     private String hostname;
     private String numero_serie;
@@ -28,11 +28,11 @@ public class Equipo {
 
 
     // Constructor
-    public Equipo(int id_equipo, String rut_admin, int id_lab_equipo, String hostname, String numero_serie,
+    public Equipo(int id_equipo, int id_admin, int id_lab_equipo, String hostname, String numero_serie,
                   String fabricante, String estado, String modelo, String mac, String ip, String modeloCPU,
                   String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU, LocalDate fecha_ingreso) {
         this.id_equipo = id_equipo;
-        this.rut_admin = rut_admin;
+        this.id_admin = id_admin;
         this.id_lab_equipo = id_lab_equipo;
         this.hostname = hostname;
         this.numero_serie = numero_serie;
@@ -52,7 +52,7 @@ public class Equipo {
     //Constructor que recibe un DTO
     public Equipo(EquipoDTO dto) {
         this.id_equipo = dto.id_equipo();
-        this.rut_admin = dto.rut_admin();
+        this.id_admin = dto.id_admin();
         this.id_lab_equipo = dto.id_lab_equipo();
         this.hostname = dto.hostname();
         this.numero_serie = dto.numero_serie();
@@ -74,8 +74,8 @@ public class Equipo {
         this.id_equipo = id_equipo;
     }
 
-    public void setRut_admin(String rut_admin) {
-        this.rut_admin = rut_admin;
+    public void setId_admin(int id_admin) {
+        this.id_admin = id_admin;
     }
 
     public void setId_lab_equipo(int id_lab_equipo) {
@@ -140,8 +140,8 @@ public class Equipo {
         return id_equipo;
     }
 
-    public String getRut_admin() {
-        return rut_admin;
+    public int getId_admin() {
+        return id_admin;
     }
 
     public int getId_lab_equipo() {
