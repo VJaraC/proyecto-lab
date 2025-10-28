@@ -89,7 +89,7 @@ public class EquipoDAO {
 
     //tratar de hacer una funcion que se le pase un rs y esta la transforme a un objeto. Hacer el mapear equipo en otra función que tome la función anterior y las agregue a una lista.
     public Equipo buscarEquipoPorId(int id){
-        String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
+        String sql = "SELECT * FROM equipo WHERE id_eq = ?";
 
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){

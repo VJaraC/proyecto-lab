@@ -51,9 +51,10 @@ public class EquipoService {
         validarNoNulo(filtros, "Datos requeridos");
         List<Equipo> resultados = new ArrayList<>();
 
-        if(filtros.id_equipo() != null){
-            resultados = equipoDAO.buscarPorId(filtros.id_equipo());
-        } else if(filtros.id_lab_equipo() != null){
+        /*if(filtros.id_equipo() != null){
+            resultados = equipoDAO.buscarEquipoPorId(filtros.id_equipo());
+        }*/
+        if(filtros.id_lab_equipo() != null){
             resultados = equipoDAO.buscarEquipoPorIdLab(filtros.id_lab_equipo());
         }
 
