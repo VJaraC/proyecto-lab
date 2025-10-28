@@ -95,6 +95,7 @@ public class ViewUsuariosController {
         TablaEstudiantes.refresh();
     }
 
+
     @FXML
     void initialize(){
         IdTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("ID"));
@@ -103,8 +104,17 @@ public class ViewUsuariosController {
         RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
         configurarColumnaAccion();
         ActualizarTablaEstudiantes();
-        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
-    }
+        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombre()));
+
+        for (MenuItem item : Buscar.getItems()) {
+            item.addEventHandler(ActionEvent.ACTION, e -> {
+                Buscar.setText(item.getText());
+                if (!Buscar.getStyleClass().contains("activo")) {
+                    Buscar.getStyleClass().add("activo");
+                }
+                e.consume(); // evita que el evento se propague a otra acción del SplitMenuButton
+            });
+        }}
 
     private void EditarUsuarios(ActionEvent event){
     }
@@ -194,6 +204,8 @@ public class ViewUsuariosController {
     @FXML
     void Buscar(ActionEvent event) {
         String busqueda = txtBuscar.getText();
+
+        Buscar.getStyleClass().remove("activo");
         try{
 
             if (FiltroSeleccionado == null) {

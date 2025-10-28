@@ -31,10 +31,7 @@
 
 
 .anchorLateral {
-    -fx-background-color: #062040;
-    -fx-border-color: black;
-    -fx-border-width: 1;
-    -fx-border-style: solid;
+    -fx-background-color: linear-gradient(to left, #026ab1, #037fad, #018ea9,#009aa6);
 }
 
 .FondoLogoUnap{
@@ -45,22 +42,24 @@
 }
 
 .BotonPanelLateral{
-   -fx-background-color: #062040;
+    -fx-background-color: linear-gradient(to left, #026ab1, #037fad, #018ea9,#009aa6);
 }
 
 .BotonPanelLateral:hover{
-    -fx-background-color: #283d57;
+    -fx-background-color: #2596be;
     -fx-cursor:hand;
 }
 
 .BotonPanelLateral.activo {
-    -fx-background-color: #8ba2bf;
-    -fx-text-fill:#062040;
+    -fx-background-color: #ffffff;
+    -fx-text-fill:#2596be;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
 }
 
 .PanelCredencial{
     -fx-border-color: #062040;
-    -fx-background-color: white;
+    -fx-background-color: rgba(255, 255, 255, 0.57);
     -fx-border-radius: 8;
 }
 
@@ -76,4 +75,8 @@
     -fx-text-fill:black;
     -fx-underline: true;
     -fx-cursor: hand;
+}
+
+.ContentArea{
+    -fx-background-color: white;
 }
