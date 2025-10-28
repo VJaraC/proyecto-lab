@@ -11,6 +11,8 @@ import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 
+import java.time.LocalDate;
+
 public class FormularioCrearUsuarioController {
 
     @FXML private TextField txtRUT;
@@ -20,16 +22,23 @@ public class FormularioCrearUsuarioController {
     @FXML
     void GuardarUsuario(ActionEvent e) {
         String rut = txtRUT.getText();
-        String nombre = txtNombre.getText();
+        String nombres = txtNombre.getText();
+        String apellidos = "hidalgo";
+        String estado = "habilitado";
+        String genero = "masculino";
+        String cargo = "profesor";
+        LocalDate fecha_nacimiento = LocalDate.now();
+        String telefono = "944863825";
+        String email = "alonso@gmail.com";
         String contr  = txtContrasena.getText();
         try {
-            UsuarioLoginDTO in = new UsuarioLoginDTO(rut, nombre, contr);
+            UsuarioLoginDTO in = new UsuarioLoginDTO(rut, nombres, apellidos, estado, genero, contr, cargo, fecha_nacimiento, telefono, email);
             UsuarioDTO creado = AppContext.admin().crearUsuario(in);  // 💾 BD a través del server
 
-            alert(Alert.AlertType.INFORMATION, "Usuario creado: " + creado.getNombre());
+            alert(Alert.AlertType.INFORMATION, "Usuario creado: " + creado.getNombres());
             cerrar(e);
 
-        } catch (RuntimeException ex) { // por validaciones de AdminController
+        } catch (RuntimeException ex) { // por validaciones de UsuarioController
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {
             alert(Alert.AlertType.ERROR, "Error al crear: " + ex.getMessage());

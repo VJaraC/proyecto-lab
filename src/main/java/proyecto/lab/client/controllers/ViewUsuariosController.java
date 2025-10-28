@@ -100,7 +100,7 @@ public class ViewUsuariosController {
     void initialize(){
         IdTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("ID"));
         EstadoTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombres"));
         RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
         configurarColumnaAccion();
         ActualizarTablaEstudiantes();
@@ -194,7 +194,7 @@ public class ViewUsuariosController {
 
     private UsuarioUpdateDTO crearUpdateDTO(UsuarioDTO usuario) {
         UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO();
-        usuarioUpdateDTO.setNombre(usuario.getNombre());
+        usuarioUpdateDTO.setNombres(usuario.getNombres());
         usuarioUpdateDTO.setEstado(usuario.getEstado());
         usuarioUpdateDTO.setId(usuario.getID());
         return usuarioUpdateDTO;
@@ -232,7 +232,7 @@ public class ViewUsuariosController {
                         break;
             }
 
-        } catch (RuntimeException ex) {// por validaciones de AdminController
+        } catch (RuntimeException ex) {// por validaciones de UsuarioController
             ActualizarTablaEstudiantes();
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {

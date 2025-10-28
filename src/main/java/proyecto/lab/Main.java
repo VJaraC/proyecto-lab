@@ -1,11 +1,8 @@
 package proyecto.lab;
 
-import proyecto.lab.server.controller.AdminController;
+import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dao.UsuarioDAO;
-import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
-import proyecto.lab.server.dto.UsuarioUpdateDTO;
-import proyecto.lab.server.models.Usuario;
 import proyecto.lab.server.service.UsuarioService;
 
 import java.sql.SQLException;
@@ -17,13 +14,13 @@ public class Main {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioService usuarioService = new UsuarioService(usuarioDAO);
-        AdminController adminController = new AdminController(usuarioService);
+        UsuarioController usuarioController = new UsuarioController(usuarioService);
 
         UsuarioLoginDTO nuevousuario = new UsuarioLoginDTO();
         nuevousuario.setNombre("Vito");
         nuevousuario.setRut("21243169-9");
         nuevousuario.setContrasena("vito123");
-        adminController.crearUsuario(nuevousuario);
+        usuarioController.crearUsuario(nuevousuario);
 
     }
 }
