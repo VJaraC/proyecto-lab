@@ -1,10 +1,15 @@
 package proyecto.lab.server.service;
 import proyecto.lab.server.dao.LaboratorioDAO;
-import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.dto.LaboratorioBusquedaDTO;
 import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.models.Laboratorio;
 import proyecto.lab.server.exceptions.AppException;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+
+import static proyecto.lab.server.utils.ValidadorUtils.validarNoNulo;
 
 
 public class LaboratorioService {
@@ -14,7 +19,7 @@ public class LaboratorioService {
         this.laboratorioDAO = laboratorioDAO;
     }
 
-    public LaboratorioDTO crearUsuario(LaboratorioDTO laboratorio){
+    public LaboratorioDTO crearLaboratorio(LaboratorioDTO laboratorio){
         //DTO vacio
         if(laboratorio == null){
             throw AppException.badRequest("DTO vacio");
@@ -43,4 +48,11 @@ public class LaboratorioService {
 
 
     }
+    // nombre y todos
+    public List<Laboratorio> BuscarLaboratorios(LaboratorioBusquedaDTO filtros) {
+        validarNoNulo(filtros, "Datos requeridos");
+        List<Laboratorio> resultados = new ArrayList<>();
+        return resultados;
+    }
+
 }
