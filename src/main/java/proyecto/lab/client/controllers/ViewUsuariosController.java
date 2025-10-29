@@ -122,10 +122,13 @@ public class ViewUsuariosController {
 
     void AbrirFormularioEditarUsuario(UsuarioDTO usuarioSeleccionado) {
         try {
+            UsuarioDTO completo = AppContext.admin()
+                    .buscarUsuarioPorId(usuarioSeleccionado.getID(), AppContext.getUsuarioActual());
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/FormularioEditarUsuario.fxml"));
             Parent root = loader.load();
             FormularioEditarUsuarioController controller = loader.getController();
-            controller.setUsuario(usuarioSeleccionado);
+            controller.setUsuario(completo);
 
             Stage stage = new Stage();
             stage.setTitle("Editar usuario");

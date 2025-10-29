@@ -9,6 +9,9 @@ import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.UsuarioDTO;
 import javafx.event.ActionEvent;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
+import proyecto.lab.server.models.Rol;
+
+import java.time.LocalDate;
 
 public class FormularioEditarUsuarioController {
     private UsuarioDTO usuario;
@@ -57,6 +60,12 @@ public class FormularioEditarUsuarioController {
     @FXML
     void GuardarActualizar(ActionEvent event) {
         String nombre = txtNombre.getText();
+        String apellidos = txtApellidos.getText();
+        String cargo = txtCargo.getText();
+        String telefono = txtTelefono.getText();
+        String email = txtCorreo.getText();
+        Rol rol = Rol.valueOf(txtRol.getText());
+        //String contr  = txtContrasena.getText();
 
         try{
             UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombres(), usuario.getApellidos(), usuario.getEstado(), null, null, null, null, null);
@@ -89,12 +98,13 @@ public class FormularioEditarUsuarioController {
         txtTelefono.setText(usuario.getTelefono());
         txtCorreo.setText(usuario.getEmail());
         //txtContrasena.setText(usuario.getContrasena);
-        txtRol.setText("Rol actual: "+ usuario.getRol());
+        txtRol.setText(String.valueOf(usuario.getRol()));
     }
 
     @FXML
     void rolSeleccionado(ActionEvent event) {
-
+        MenuItem item = (MenuItem) event.getSource();
+        txtRol.setText(item.getText());
     }
 
 
