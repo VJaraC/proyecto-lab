@@ -1,4 +1,5 @@
 package proyecto.lab.server.service;
+import proyecto.lab.client.application.App;
 import proyecto.lab.server.dto.UsuarioBusquedaDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
@@ -313,15 +314,15 @@ public class UsuarioService {
 
     public UsuarioDTO actualizarUsuario(UsuarioUpdateDTO dto) {
         try {
-            Usuario existente = usuariodao.buscarUsuarioPorID(dto.getId()); // Verificar si el usuario a cambiar existe
+            Usuario existente = usuariodao.buscarUsuarioPorID(dto.id()); // Verificar si el usuario a cambiar existe
             if (existente == null) {
                 throw AppException.notFound("Usuario no encontrado");
             }
 
             boolean cambios = false;
 
-            if (dto.getNombres() != null) { // Si hubo un cambio en el nombre, se actualiza
-                String nuevoNombre = dto.getNombres().trim();
+            if (dto.nombres() != null) { // Si hubo un cambio en el nombre, se actualiza
+                String nuevoNombre = dto.nombres().trim();
                 if (nuevoNombre.isEmpty()) throw AppException.badRequest("El nombre no puede estar vacío"); // Verifica si el nombre entregado es vacío
 
                 if (nuevoNombre.equals(existente.getNombres())){  // Verifica si el nombre entregado es igual al de la BD.
@@ -330,8 +331,18 @@ public class UsuarioService {
                 existente.setNombres(nuevoNombre);
                 cambios = true;
             }
-            if (dto.getEstado() != null){ // Si hubo cambio en el estado, se actualiza
-                String nuevoEstado = EstadoUtils.normalizar(dto.getEstado());
+            if(dto.apellidos() != null){
+                String nuevoApellido = dto.apellidos().trim();
+                if(nuevoApellido.isEmpty()) throw AppException.badRequest("El apellido no puede estar vacío");
+                if (nuevoApellido.equals(existente.getApellidos())){
+                    throw AppException.conflict("El apellido existe en el sistema.");
+                }
+                existente.setApellidos(nuevoApellido);
+                cambios = true;
+            }
+
+            if (dto.estado() != null){ // Si hubo cambio en el estado, se actualiza
+                String nuevoEstado = EstadoUtils.normalizar(dto.estado());
                 if (nuevoEstado == null || nuevoEstado.isEmpty()) {
                     throw AppException.badRequest("El estado no puede estar vacío");} // Verifica si el estado entregado es vacío
 
@@ -346,10 +357,43 @@ public class UsuarioService {
                 cambios=true;
             }
 
-            if(dto.getRol() != null){
-                if(dto.getRol() == existente.getRol())
+            if(dto.rol() != null){
+                if(dto.rol() == existente.getRol())
                     throw AppException.conflict("El rol ya está asignado en el sistema.");
-                existente.setRol(dto.getRol());
+                existente.setRol(dto.rol());
+                cambios = true;
+            }
+            if(dto.email() != null){
+                String nuevoEmail = dto.email().trim();
+                if(nuevoEmail.equals(existente.getEmail().trim())){
+                    throw AppException.conflict("El email ya existe en el sistema.");
+                }
+                existente.setEmail(nuevoEmail);
+                cambios = true;
+            }
+            if(dto.telefono() != null){
+                String nuevoTelefono = dto.telefono().trim();
+                if(nuevoTelefono.equals(existente.getTelefono().trim())){
+                    throw AppException.conflict("El telefono ya existe en el sistema.");
+                }
+                existente.setTelefono(nuevoTelefono);
+                cambios = true;
+            }
+            if(dto.contrasena() != null){
+                String nuevaContrasena = dto.contrasena().trim();
+                if(nuevaContrasena.equals(existente.getContrasena().trim())){
+                    throw AppException.conflict("El contrasena ya existe en el sistema.");
+                }
+                existente.setContrasena(nuevaContrasena);
+                cambios = true;
+            }
+
+            if(dto.cargo() != null){
+                String nuevoCargo = dto.cargo().trim();
+                if(nuevoCargo.equals(existente.getCargo())){
+                    throw AppException.conflict("El cargo ya existe en el sistema.");
+                }
+                existente.setCargo(nuevoCargo);
                 cambios = true;
             }
 

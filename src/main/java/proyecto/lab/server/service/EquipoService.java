@@ -3,6 +3,7 @@ package proyecto.lab.server.service;
 import proyecto.lab.server.dao.EquipoDAO;
 import proyecto.lab.server.dto.EquipoBusquedaDTO;
 import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.dto.EquipoUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Equipo;
 
@@ -52,14 +53,32 @@ public class EquipoService {
         validarNoNulo(filtros, "Datos requeridos");
         List<Equipo> resultados = new ArrayList<>();
 
-        /*if(filtros.id_equipo() != null){
-            resultados = equipoDAO.buscarEquipoPorId(filtros.id_equipo());
-        }*/
-        if(filtros.id_lab_equipo() != null){
+        if(filtros.id_admin() != null){
+            resultados = equipoDAO.buscarPorIdAdmin(filtros.id_admin());
+        }
+        else if(filtros.id_lab_equipo() != null){
             resultados = equipoDAO.buscarEquipoPorIdLab(filtros.id_lab_equipo());
         }
         else if(filtros.hostname() != null){
             resultados = equipoDAO.buscarEquipoPorHostname(filtros.hostname());
+        }
+        else if(filtros.fabricante() != null){
+            resultados = equipoDAO.buscarPorFabricante(filtros.fabricante());
+        }
+        else if(filtros.estado() != null){
+            resultados = equipoDAO.buscarPorEstado(filtros.estado());
+        }
+        else if(filtros.modelo() != null){
+            resultados = equipoDAO.buscarEquipoPorModelo(filtros.modelo());
+        }
+        else if(filtros.mac() != null){
+            resultados = equipoDAO.buscarPorMac(filtros.mac());
+        }
+        else if(filtros.ip() != null){
+            resultados = equipoDAO .buscarPorIp(filtros.ip());
+        }
+        else if(filtros.fecha_ingreso() != null){
+            resultados = equipoDAO.buscarPorFechaIngreso(filtros.fecha_ingreso());
         }
 
         //transforma la lista de Equipo a EquipoDTO
@@ -82,5 +101,78 @@ public class EquipoService {
             System.out.println("Error al buscar equipo");
         }
         return new EquipoDTO(equipo);
+    }
+
+    public EquipoDTO actualizarEquipo(EquipoUpdateDTO dto) {
+        Equipo existente = equipoDAO.buscarEquipoPorId(dto.id());
+
+        if(existente == null){
+            throw AppException.badRequest("Equipo no existe");
+        }
+
+        if(dto.hostname() != null){
+            String nuevoHostname = dto.hostname().trim();
+            if(nuevoHostname.equals(existente.getHostname().trim())){
+                throw AppException.badRequest("Hostname ya existente");
+            }
+            existente.setHostname(nuevoHostname);
+        }
+
+        if(dto.estado() != null){
+            String nuevoEstado = dto.estado().trim();
+            if(nuevoEstado.equals(existente.getEstado())){
+                throw AppException.badRequest("Estado ya existente");
+            }
+            existente.setEstado(nuevoEstado);
+        }
+        if(dto.ip() != null){
+            String nuevoIp = dto.ip().trim();
+            if(nuevoIp.equals(existente.getIp())){
+                throw AppException.badRequest("Ip ya existente");
+            }
+            existente.setIp(nuevoIp);
+        }
+        if(dto.modeloCPU() != null){
+            String nuevoModeloCPU = dto.modeloCPU().trim();
+            if(nuevoModeloCPU.equals(existente.getModeloCPU())){
+                throw AppException.badRequest("ModeloCPU ya existente");
+            }
+            existente.setModeloCPU(nuevoModeloCPU);
+        }
+        if(dto.nucleosCPU() != null){
+            String nuevoNucleos = dto.nucleosCPU().trim();
+            if(nuevoNucleos.equals(existente.getNucleosCPU())){
+                throw AppException.badRequest("Nucleos CPU ya existente");
+            }
+            existente.setNucleosCPU(nuevoNucleos);
+        }
+        if(dto.ramTotal() != null){
+            String nuevoRamTotal = dto.ramTotal().trim();
+            if(nuevoRamTotal.equals(existente.getRamTotal())){
+                throw AppException.badRequest("Ram total ya existente");
+            }
+            existente.setRamTotal(nuevoRamTotal);
+        }
+        if(dto.almacenamiento() != null){
+            String nuevoAlmacenamiento = dto.almacenamiento().trim();
+            if(nuevoAlmacenamiento.equals(existente.getAlmacenamiento())){
+                throw AppException.badRequest("Almacenamiento ya existente");
+            }
+            existente.setAlmacenamiento(nuevoAlmacenamiento);
+        }
+        if(dto.modeloGPU() != null){
+            String nuevoModeloGPU = dto.modeloGPU().trim();
+            if(nuevoModeloGPU.equals(existente.getModeloGPU())){
+                throw AppException.badRequest("ModeloGPU ya existente");
+            }
+            existente.setModeloGPU(nuevoModeloGPU);
+        }
+
+        Boolean ok = equipoDAO.actualizarEquipo(existente);
+        if(!ok){
+            throw AppException.badRequest("Error al actualizar equipo");
+        }
+        return new EquipoDTO(existente);
+
     }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public record EquipoBusquedaDTO(
         //filtros de busqueda
         Integer id_equipo,
-        Integer rut_admin,
+        Integer id_admin,
         Integer id_lab_equipo,
         String hostname,
         String numero_serie,

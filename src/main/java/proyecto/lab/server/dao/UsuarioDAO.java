@@ -46,7 +46,7 @@ public class UsuarioDAO {
 
 
     public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar el nombre de un usuario.
-        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, rol= ?, email = ?, telefono = ?, contrasena = ? WHERE id = ?";
+        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, rol= ?, email = ?, telefono = ?, contrasena = ?, cargo = ? WHERE id = ?";
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, user.getNombres());
@@ -56,7 +56,8 @@ public class UsuarioDAO {
             ps.setString(5, user.getEmail());
             ps.setString(6, user.getTelefono());
             ps.setString(7, user.getContrasena());
-            ps.setInt(8, user.getID());
+            ps.setString(8, user.getCargo());
+            ps.setInt(9, user.getID());
             int rows = ps.executeUpdate();
 
             if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
