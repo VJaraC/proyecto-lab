@@ -28,20 +28,8 @@ public class EquipoController {
         if(filtros.id_equipo() != null || filtros.numero_serie() != null){
             return equipoService.buscarEquipo(filtros);
         }
-        return null;
-
-    }
-
-    //llamar cuando los filtros puedan retornar mas de un equipo
-    public List<EquipoDTO> buscarEquipos(EquipoBusquedaDTO filtros){
-        validarNoNulo(filtros, "Datos requeridos");
-        if(filtros.id_admin() != null || filtros.id_lab_equipo() != null
-                || filtros.hostname() != null || filtros.fabricante() != null
-                || filtros.estado() != null || filtros.modelo() != null
-                || filtros.mac() != null || filtros.ip() != null
-                || filtros.fecha_ingreso() != null ){
-
-            return equipoService.buscarEquipos(filtros);
+        else{
+            return equipoService.buscarEquipo(filtros);
         }
         return null;
     }

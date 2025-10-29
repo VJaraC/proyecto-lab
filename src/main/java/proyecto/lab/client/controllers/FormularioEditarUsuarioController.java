@@ -2,14 +2,12 @@ package proyecto.lab.client.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.UsuarioDTO;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 
 public class FormularioEditarUsuarioController {
@@ -26,7 +24,35 @@ public class FormularioEditarUsuarioController {
     private Button GuardarActualizar;
 
     @FXML
+    private MenuItem rolAdministrador;
+
+    @FXML
+    private MenuItem rolMonitor;
+
+    @FXML
+    private MenuButton txtRol;
+
+    @FXML
     private TextField txtNombre;
+
+    @FXML
+    private TextField txtApellidos;
+
+    @FXML
+    private TextField txtCargo;
+
+    @FXML
+    private TextField txtContrasena;
+
+    @FXML
+    private TextField txtCorreo;
+
+
+    @FXML
+    private TextField txtTelefono;
+
+
+
 
     @FXML
     void GuardarActualizar(ActionEvent event) {
@@ -58,7 +84,19 @@ public class FormularioEditarUsuarioController {
 
     private void cargarCampos() {
         txtNombre.setText(usuario.getNombres());
+        txtApellidos.setText(usuario.getApellidos());
+        txtCargo.setText(usuario.getCargo());
+        txtTelefono.setText(usuario.getTelefono());
+        txtCorreo.setText(usuario.getEmail());
+        //txtContrasena.setText(usuario.getContrasena);
+        txtRol.setText("Rol actual: "+ usuario.getRol());
     }
+
+    @FXML
+    void rolSeleccionado(ActionEvent event) {
+
+    }
+
 
     @FXML
     void initialize() {
