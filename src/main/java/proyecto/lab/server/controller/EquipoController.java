@@ -31,7 +31,6 @@ public class EquipoController {
         else{
             return equipoService.buscarEquipo(filtros);
         }
-        return null;
     }
 
     public EquipoDTO actualizarEquipo(EquipoUpdateDTO actualizarDTO){
