@@ -28,7 +28,7 @@ public class EquipoController {
             return equipoService.buscarEquipo(filtros);
         }
         else{
-            return equipoService.buscarEquipos(filtros);
+            return equipoService.buscarEquipo(filtros);
         }
 
     }
