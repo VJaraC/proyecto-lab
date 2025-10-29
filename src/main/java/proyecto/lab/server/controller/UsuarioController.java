@@ -65,7 +65,7 @@ public class UsuarioController {
 
         int id = in.id();
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, nuevoapellidos, null, null, null, null, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, nuevoapellidos, null, null, null, null, null, null);
 
         return usuarioService.actualizarUsuario(dto);
     }

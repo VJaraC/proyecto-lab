@@ -50,6 +50,9 @@ public class ViewUsuariosController {
     private String FiltroSeleccionado;
 
     @FXML
+    private TableColumn<UsuarioDTO, String> ApellidosTablaEstudiantes;
+
+    @FXML
     private MenuItem FiltroEstado;
 
     @FXML
@@ -102,6 +105,7 @@ public class ViewUsuariosController {
         EstadoTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("estado"));
         NombreTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("nombres"));
         RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
+        ApellidosTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
         configurarColumnaAccion();
         ActualizarTablaEstudiantes();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
