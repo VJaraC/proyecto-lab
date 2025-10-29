@@ -59,26 +59,75 @@ public class FormularioEditarUsuarioController {
 
     @FXML
     void GuardarActualizar(ActionEvent event) {
-        String nombre = txtNombre.getText();
+        String nombre    = txtNombre.getText();
         String apellidos = txtApellidos.getText();
-        String cargo = txtCargo.getText();
-        String telefono = txtTelefono.getText();
-        String email = txtCorreo.getText();
-        Rol rol = Rol.valueOf(txtRol.getText());
-        //String contr  = txtContrasena.getText();
+        String cargo     = txtCargo.getText();
+        String telefono  = txtTelefono.getText();
+        String email     = txtCorreo.getText();
+        String rolTexto  = txtRol.getText();
 
-        try{
-            UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombres(), usuario.getApellidos(), null,  usuario.getEmail(), usuario.getTelefono(), usuario.getRol(), null, usuario.getCargo());
-            usuario = AppContext.admin().modificarNombreUsuario(usuarioUpdateDTO,nombre,AppContext.getUsuarioActual());
+        boolean cambios = false;
 
-            alert(Alert.AlertType.INFORMATION, "Usuario modificado: " + usuario.getNombres());
+        try {
+            if ((usuario.getNombres() == null && nombre != null) ||
+                    (usuario.getNombres() != null && !usuario.getNombres().equals(nombre))) {
+                UsuarioUpdateDTO dto = dtoSoloId();
+                usuario = AppContext.admin().modificarNombreUsuario(dto, nombre, AppContext.getUsuarioActual());
+                cambios = true;
+            }
+
+            if ((usuario.getApellidos() == null && apellidos != null) ||
+                    (usuario.getApellidos() != null && !usuario.getApellidos().equals(apellidos))) {
+                UsuarioUpdateDTO dto = dtoSoloId();
+                usuario = AppContext.admin().modificarApellidoUsuario(dto, apellidos, AppContext.getUsuarioActual());
+                cambios = true;
+            }
+
+            if ((usuario.getEmail() == null && email != null) ||
+                    (usuario.getEmail() != null && !usuario.getEmail().equals(email))) {
+                UsuarioUpdateDTO dto = dtoSoloId();
+                usuario = AppContext.admin().modificarCorreoUsuario(dto, email, AppContext.getUsuarioActual());
+                cambios = true;
+            }
+
+            if ((usuario.getTelefono() == null && telefono != null) ||
+                    (usuario.getTelefono() != null && !usuario.getTelefono().equals(telefono))) {
+                UsuarioUpdateDTO dto = dtoSoloId();
+                usuario = AppContext.admin().modificarTelefonoUsuario(dto, telefono, AppContext.getUsuarioActual());
+                cambios = true;
+            }
+
+            if ((usuario.getCargo() == null && cargo != null) ||
+                    (usuario.getCargo() != null && !usuario.getCargo().equals(cargo))) {
+                UsuarioUpdateDTO dto = dtoSoloId();
+                usuario = AppContext.admin().modificarCargoUsuario(dto, cargo, AppContext.getUsuarioActual());
+                cambios = true;
+            }
+
+            if (rolTexto != null && !rolTexto.isBlank()) {
+                Rol rolNuevo = Rol.valueOf(rolTexto.trim().toUpperCase());
+                if (usuario.getRol() != rolNuevo) {
+                    UsuarioUpdateDTO dto = dtoSoloId();
+                    usuario = AppContext.admin().actualizarRolUsuario(dto, AppContext.getUsuarioActual());
+                    cambios = true;
+                }
+            }
+
+            if (!cambios) {
+                alert(Alert.AlertType.INFORMATION, "No hay cambios para aplicar.");
+                return;
+            }
+
+            alert(Alert.AlertType.INFORMATION, "Usuario modificado: " + usuario.getNombres() + " "+ usuario.getApellidos());
             cerrar(event);
 
-        } catch (RuntimeException ex) { // por validaciones de UsuarioController
+        } catch (RuntimeException ex) {
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {
             alert(Alert.AlertType.ERROR, "Error al modificar: " + ex.getMessage());
-        }}
+        }
+    }
+
 
 
     private void cerrar(ActionEvent e) {
@@ -97,7 +146,6 @@ public class FormularioEditarUsuarioController {
         txtCargo.setText(usuario.getCargo());
         txtTelefono.setText(usuario.getTelefono());
         txtCorreo.setText(usuario.getEmail());
-        //txtContrasena.setText(usuario.getContrasena);
         txtRol.setText(String.valueOf(usuario.getRol()));
     }
 
@@ -105,6 +153,10 @@ public class FormularioEditarUsuarioController {
     void rolSeleccionado(ActionEvent event) {
         MenuItem item = (MenuItem) event.getSource();
         txtRol.setText(item.getText());
+    }
+
+    private UsuarioUpdateDTO dtoSoloId() {
+        return new UsuarioUpdateDTO(usuario.getID(), null, null, null, null, null, null, null, null);
     }
 
 

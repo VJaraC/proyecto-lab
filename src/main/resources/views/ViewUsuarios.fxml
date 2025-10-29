@@ -42,10 +42,11 @@
             <TableView id="Tabla" fx:id="TablaEstudiantes" layoutX="21.0" layoutY="196.0" prefHeight="415.0" prefWidth="809.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
               <columns>
                 <TableColumn fx:id="IdTablaEstudiantes" editable="false" prefWidth="53.0" styleClass="ColumnaTabla" text="ID" />
-                  <TableColumn fx:id="RUTTablaEstudiantes" editable="false" prefWidth="157.0" styleClass="ColumnaTabla" text="RUT" />
-                <TableColumn fx:id="NombreTablaEstudiantes" editable="false" prefWidth="262.0" styleClass="ColumnaTabla" text="Nombre" />
-                  <TableColumn fx:id="EstadoTablaEstudiantes" editable="false" minWidth="0.0" prefWidth="172.0" styleClass="ColumnaTabla" text="Estado" />
-                  <TableColumn fx:id="AccionTablaEstudiantes" editable="false" prefWidth="161.0" sortable="false" styleClass="ColumnaTabla" text="Acción" />
+                  <TableColumn fx:id="RUTTablaEstudiantes" editable="false" prefWidth="136.8000259399414" styleClass="ColumnaTabla" text="RUT" />
+                <TableColumn fx:id="NombreTablaEstudiantes" editable="false" prefWidth="168.8000030517578" styleClass="ColumnaTabla" text="Nombres" />
+                  <TableColumn fx:id="ApellidosTablaEstudiantes" editable="false" minWidth="0.0" prefWidth="153.60000610351562" styleClass="ColumnaTabla" text="Apellidos" />
+                  <TableColumn fx:id="EstadoTablaEstudiantes" editable="false" prefWidth="117.60003662109375" sortable="false" styleClass="ColumnaTabla" text="Estado" />
+                  <TableColumn fx:id="AccionTablaEstudiantes" editable="false" prefWidth="178.4000244140625" styleClass="ColumnaTabla" text="Acción" />
               </columns>
             </TableView>
             <TextField fx:id="txtBuscar" layoutX="21.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar..." styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
