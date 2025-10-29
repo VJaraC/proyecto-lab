@@ -1,8 +1,13 @@
 package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
 import proyecto.lab.server.models.Laboratorio;
+import proyecto.lab.server.models.Rol;
+import proyecto.lab.server.models.Usuario;
+
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.sql.Date.valueOf;
 
@@ -96,32 +101,54 @@ public class LaboratorioDAO {
         return laboratorio;
     }
 
-    public Laboratorio BuscarLaboratorioPorNombre_lab(String nombre_lab){
+    public List<Laboratorio> BuscarLaboratorioPorNombre_lab(String nombre_lab){
         String sql = "SELECT laboratorio WHERE nombre_lab LIKE ?" ;
-        Laboratorio laboratorio = null;
+        List<Laboratorio> laboratorios = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, nombre_lab);
             try(ResultSet rs = ps.executeQuery()){
-                if(rs.next()){
-                    laboratorio = new Laboratorio();
-                    laboratorio.setId_lab(rs.getInt("id_lab"));
-                    laboratorio.setNombre_lab(rs.getString("nombre_lab"));
-                    laboratorio.setUbicacion(rs.getString("ubicacion"));
-                    laboratorio.setCapacidad_personas(rs.getString("capacidad_personas"));
-                    laboratorio.setCapacidad_equipo(rs.getString("capacidad_equipo"));
-                    laboratorio.setEstado_lab(rs.getString("estado_lab"));
-                    java.sql.Date fr = rs.getDate("fecha_registro_lab");
-                    laboratorio.setFecha_registro_lab(fr.toLocalDate());
+                while (rs.next()) {
+                    int id_lab = rs.getInt("id_lab");
+                    String ubicacion = rs.getString("ubicacion");
+                    String capacidad_personas = rs.getString("capacidad_personas");
+                    String capacidad_equipo = rs.getString("capacidad_equipo");
+                    String estado_lab = rs.getString("estado_lab");
+                    LocalDate fecha_registro_lab = rs.getDate("fecha_registro_lab").toLocalDate();
+                    laboratorios.add(new Laboratorio(id_lab, nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab , fecha_registro_lab));
                 }
             }
-            return laboratorio;
+            return laboratorios;
         }catch(SQLException e){
             System.out.println("Error al buscar laboratorio: " + e.getMessage());
         }
-        return laboratorio;
+        return laboratorios;
     }
 
+    public List<Laboratorio> MostrarLaboratorios(){
+        List<Laboratorio> laboratorios = new ArrayList<>();
+        String sql = "SELECT * FROM laboratorio";
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                int id_lab = rs.getInt("id_lab");
+                String nombre_lab = rs.getString("nombre_lab");
+                String ubicacion = rs.getString("ubicacion");
+                String capacidad_personas = rs.getString("capacidad_personas");
+                String capacidad_equipo = rs.getString("capacidad_equipo");
+                String estado_lab = rs.getString("estado_lab");
+                LocalDate fecha_registro_lab = rs.getDate("fecha_registro_lab").toLocalDate();
+                laboratorios.add(new Laboratorio(id_lab, nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab , fecha_registro_lab));
+            }
+            return laboratorios;
+        } catch (SQLException e) {
+            System.out.println("Error al listar laboratorios" + e.getMessage());
+        }
+        return laboratorios;
+    }
 
 }
