@@ -40,7 +40,7 @@ public class LaboratorioService {
         }
         //Creación nueva lab
         Laboratorio laboratorioNuevo = new Laboratorio(laboratorio);
-        boolean insercion = laboratorioDAO.InsertarLaboratorio(laboratorioNuevo);
+        boolean insercion = laboratorioDAO.insertarLaboratorio(laboratorioNuevo);
         if(!insercion){
             System.out.println("Error al crear laboratorio");
         }
