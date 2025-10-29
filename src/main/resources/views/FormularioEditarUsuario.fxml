@@ -63,8 +63,8 @@
       </Label>
       <MenuButton fx:id="txtRol" layoutX="208.0" layoutY="409.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="259.0" text="Selecciona un rol">
         <items>
-          <MenuItem fx:id="rolMonitor" mnemonicParsing="false" onAction="#rolSeleccionado" text="Monitor" />
-          <MenuItem fx:id="rolAdministrador" mnemonicParsing="false" onAction="#rolSeleccionado" text="Administrador" />
+          <MenuItem fx:id="rolMonitor" mnemonicParsing="false" onAction="#rolSeleccionado" text="MONITOR" />
+          <MenuItem fx:id="rolAdministrador" mnemonicParsing="false" onAction="#rolSeleccionado" text="ADMIN" />
         </items>
       </MenuButton>
    </children>
