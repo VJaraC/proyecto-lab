@@ -357,13 +357,13 @@ public class UsuarioService {
                 cambios=true;
             }
 
-            if(dto.rol() != null){
+            if(dto.rol() != null){ // Si hubo cambio en el rol, se actualiza
                 if(dto.rol() == existente.getRol())
                     throw AppException.conflict("El rol ya está asignado en el sistema.");
                 existente.setRol(dto.rol());
                 cambios = true;
             }
-            if(dto.email() != null){
+            if(dto.email() != null){ // Si hubo cambio en el email, se actualiza
                 String nuevoEmail = dto.email().trim();
                 if(nuevoEmail.equals(existente.getEmail().trim())){
                     throw AppException.conflict("El email ya existe en el sistema.");
@@ -371,7 +371,7 @@ public class UsuarioService {
                 existente.setEmail(nuevoEmail);
                 cambios = true;
             }
-            if(dto.telefono() != null){
+            if(dto.telefono() != null){ // Si hubo cambio en el telefono, se actualiza
                 String nuevoTelefono = dto.telefono().trim();
                 if(nuevoTelefono.equals(existente.getTelefono().trim())){
                     throw AppException.conflict("El telefono ya existe en el sistema.");
@@ -379,16 +379,17 @@ public class UsuarioService {
                 existente.setTelefono(nuevoTelefono);
                 cambios = true;
             }
-            if(dto.contrasena() != null){
-                String nuevaContrasena = dto.contrasena().trim();
-                if(nuevaContrasena.equals(existente.getContrasena().trim())){
-                    throw AppException.conflict("El contrasena ya existe en el sistema.");
-                }
-                existente.setContrasena(nuevaContrasena);
-                cambios = true;
-            }
 
-            if(dto.cargo() != null){
+//            if(dto.contrasena() != null){
+//                String nuevaContrasena = dto.contrasena().trim();
+//                if(nuevaContrasena.equals(existente.getContrasena().trim())){
+//                    throw AppException.conflict("El contrasena ya existe en el sistema.");
+//                }
+//                existente.setContrasena(nuevaContrasena);
+//                cambios = true;
+//            }
+
+            if(dto.cargo() != null){ // Si hubo cambio en el cargo, se actualiza
                 String nuevoCargo = dto.cargo().trim();
                 if(nuevoCargo.equals(existente.getCargo())){
                     throw AppException.conflict("El cargo ya existe en el sistema.");

@@ -58,6 +58,17 @@ public class UsuarioController {
 
         return usuarioService.actualizarUsuario(dto);
     }
+    public UsuarioDTO modificarApellidoUsuario(UsuarioUpdateDTO in , String nuevoapellidos, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(nuevoapellidos, "Debes ingresar apellidos.");
+
+        int id = in.id();
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, nuevoapellidos, null, null, null, null, null, null, null);
+
+        return usuarioService.actualizarUsuario(dto);
+    }
 
     public UsuarioDTO actualizarRolUsuario(UsuarioUpdateDTO in, UsuarioDTO auth ){
         AuthUtils.requireRole(auth, Rol.ADMIN);
@@ -71,6 +82,42 @@ public class UsuarioController {
         }
 
         return usuarioService.actualizarUsuario(in);
+    }
+
+    public UsuarioDTO modificarCorreoUsuario(UsuarioUpdateDTO in , String nuevocorreo, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(nuevocorreo, "Debes ingresar un correo válido.");
+
+        int id = in.id();
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, nuevocorreo, null, null, null, null);
+
+        return usuarioService.actualizarUsuario(dto);
+    }
+
+    public UsuarioDTO modificarTelefonoUsuario(UsuarioUpdateDTO in , String nuevotelefono, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(nuevotelefono, "Debes ingresar un teléfono válido.");
+
+        int id = in.id();
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, nuevotelefono, null, null, null);
+
+        return usuarioService.actualizarUsuario(dto);
+    }
+
+    public UsuarioDTO modificarCargoUsuario(UsuarioUpdateDTO in , String nuevocargo, UsuarioDTO auth){
+        AuthUtils.requireRole(auth, Rol.ADMIN);
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(nuevocargo, "Debes ingresar un teléfono válido.");
+
+        int id = in.id();
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, null, null, null, nuevocargo);
+
+        return usuarioService.actualizarUsuario(dto);
     }
 
     public UsuarioDTO habilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
