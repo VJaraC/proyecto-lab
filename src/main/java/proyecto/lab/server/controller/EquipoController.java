@@ -5,6 +5,7 @@ import proyecto.lab.server.dto.EquipoUpdateDTO;
 import proyecto.lab.server.models.Equipo;
 import proyecto.lab.server.service.EquipoService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,17 @@ public class EquipoController {
 
     }
 
+    public EquipoDTO buscarEquipoPorId(int id){
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(id, null, null, null,  null, null, null, null, null, null, null);
+        return equipoService.buscarEquipo(filtros);
+    }
+
+    public EquipoDTO buscarEquipoPorNumSerie(String numSerie){
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  numSerie, null, null, null, null, null, null);
+        return equipoService.buscarEquipo(filtros);
+    }
+
+
     //llamar cuando los filtros puedan retornar mas de un equipo
     public List<EquipoDTO> buscarEquipos(EquipoBusquedaDTO filtros){
         validarNoNulo(filtros, "Datos requeridos");
@@ -46,7 +58,62 @@ public class EquipoController {
         return null;
     }
 
+    public List<EquipoDTO> buscarEquipoPorIdAdmin(int idAdmin){
+        validarNoNulo(idAdmin, "Id Admin requerido");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, idAdmin, null, null,  null, null, null, null, null, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorIdLab(int idLab){
+        validarNoNulo(idLab, "Id Laboratorio requerido");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, idLab, null,  null, null, null, null, null, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorHostname(String hostname){
+        validarTexto(hostname, "El hostname es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, hostname,  null, null, null, null, null, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorFabricante(String fabricante){
+        validarTexto(fabricante, "El fabricante es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, fabricante, null, null, null, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorIdAdmin(String estado){
+        validarTexto(estado, "El estado es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, null, estado, null, null, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorModelo(String modelo){
+        validarTexto(modelo, "El modelo es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, null, null, modelo, null, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorMac(String mac){
+        validarTexto(mac, "El mac es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, null, null, null, mac, null, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorIP(String ip){
+        validarTexto(ip, "El ip es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, null, null, null, null, ip, null);
+        return equipoService.buscarEquipos(filtros);
+    }
+
+    public List<EquipoDTO> buscarEquipoPorFechaIngreso(LocalDate fechaIngreso){
+        validarNoNulo(fechaIngreso, "Fecha ingreso es obligatorio");
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, null, null, null, null, null, fechaIngreso);
+        return equipoService.buscarEquipos(filtros);
+    }
+
     public EquipoDTO actualizarEquipo(EquipoUpdateDTO actualizarDTO){
+        validarNoNulo(actualizarDTO, "Campos de edición vacio");
         return equipoService.actualizarEquipo(actualizarDTO);
     }
 
