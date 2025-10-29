@@ -52,9 +52,9 @@ public class UsuarioController {
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevonombre, "Debes ingresar un nombre");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
-        dto.setId(in.getId());
-        dto.setNombres(nuevonombre);
+        int id = in.id();
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, nuevonombre, null, null, null, null, null, null, null);
 
         return usuarioService.actualizarUsuario(dto);
     }
@@ -63,10 +63,10 @@ public class UsuarioController {
         AuthUtils.requireRole(auth, Rol.ADMIN);
 
         validarNoNulo(in, "Datos requeridos");
-        validarPositivo(in.getId(), "ID inválido");
-        if (in.getRol()== null) throw AppException.badRequest("Debes seleccionar un rol válido.");
+        validarPositivo(in.id(), "ID inválido");
+        if (in.rol()== null) throw AppException.badRequest("Debes seleccionar un rol válido.");
 
-        if (auth.getID() == in.getId()){
+        if (auth.getID() == in.id()){
             throw AppException.forbidden("No puedes cambiar tu propio rol.");
         }
 
@@ -76,22 +76,24 @@ public class UsuarioController {
     public UsuarioDTO habilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(in, "Datos requeridos");
-        validarPositivo(in.getId(),"ID invalido");
+        validarPositivo(in.id(),"ID invalido");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
-        dto.setId(in.getId());
-        dto.setEstado(EstadoUtils.HABILITADO);
+        int id = in.id();
+        String estado = EstadoUtils.HABILITADO;
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null, null);
         return usuarioService.actualizarUsuario(dto);
     }
 
     public UsuarioDTO deshabilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
         validarNoNulo(in, "Datos requeridos");
-        validarPositivo(in.getId(),"ID invalido");
+        validarPositivo(in.id(),"ID invalido");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO();
-        dto.setId(in.getId());
-        dto.setEstado(EstadoUtils.DESHABILITADO);
+        int id = in.id();
+        String estado = EstadoUtils.DESHABILITADO;
+
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null, null);
         return usuarioService.actualizarUsuario(dto);
     }
 

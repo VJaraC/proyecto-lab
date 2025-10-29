@@ -59,7 +59,8 @@ public class FormularioEditarUsuarioController {
         String nombre = txtNombre.getText();
 
         try{
-            UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombres(), usuario.getApellidos(), usuario.getEstado());
+            UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO(usuario.getID(), usuario.getNombres(), usuario.getApellidos(), usuario.getEstado(), null, null, null, null, null);
+
             usuario = AppContext.admin().modificarNombreUsuario(usuarioUpdateDTO,nombre,AppContext.getUsuarioActual());
             alert(Alert.AlertType.INFORMATION, "Usuario modificado: " + usuario.getNombres());
             cerrar(event);

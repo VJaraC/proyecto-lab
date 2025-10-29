@@ -193,11 +193,10 @@ public class ViewUsuariosController {
     }
 
     private UsuarioUpdateDTO crearUpdateDTO(UsuarioDTO usuario) {
-        UsuarioUpdateDTO usuarioUpdateDTO = new UsuarioUpdateDTO();
-        usuarioUpdateDTO.setNombres(usuario.getNombres());
-        usuarioUpdateDTO.setEstado(usuario.getEstado());
-        usuarioUpdateDTO.setId(usuario.getID());
-        return usuarioUpdateDTO;
+        int id = usuario.getID();
+        String nombres = usuario.getNombres();
+        String estado =  usuario.getEstado();
+        return new UsuarioUpdateDTO(id, nombres, null, usuario.getEstado(), null, null, null, null, null);
     }
 
 
