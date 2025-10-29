@@ -15,4 +15,5 @@ public record UsuarioUpdateDTO(
     String contrasena,
     String cargo
 )
-{}
+{
+}
