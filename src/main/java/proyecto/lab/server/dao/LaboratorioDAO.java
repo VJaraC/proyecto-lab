@@ -2,8 +2,6 @@ package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Laboratorio;
-import proyecto.lab.server.models.Rol;
-import proyecto.lab.server.models.Usuario;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -72,9 +70,9 @@ public class LaboratorioDAO {
         return false;
     }
 
-    public Laboratorio BuscarLaboratorioPorId_lab(int id_lab){
+    public Laboratorio buscarLaboratorioPorIdlab(int id_lab){
         Laboratorio laboratorio = null;
-        String sql = "SELECT id_lab, nombre_lab,ubicacion,capacidad_personas,capacidad_equipo,estado_lab,fecha_registro_lab  WHERE id_lab = ?";
+        String sql = "SELECT id_lab, nombre_lab,ubicacion,capacidad_personas,capacidad_equipo,estado_lab,fecha_registro_lab FROM laboratorio  WHERE id_lab = ?";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -99,8 +97,26 @@ public class LaboratorioDAO {
         return laboratorio;
     }
 
-    public List<Laboratorio> BuscarLaboratorioPorNombre_lab(String nombre_lab){
-        String sql = "SELECT laboratorio WHERE nombre_lab LIKE ?" ;
+    public List<Laboratorio> buscarLaboratorioPorUbicacion(String ubicacion){
+        String sql = "SELECT id_lab , nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab FROM laboratorio WHERE ubicacion LIKE ?" ;
+        List<Laboratorio> laboratorios = new ArrayList<>();
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)){
+
+            ps.setString(1, "%" + ubicacion + "%");
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearLaboratorios(rs);
+            }
+        } catch (SQLException e){
+            System.err.printf("SQL Error al buscar laboratorio por ubicación : state=%s code= %d msg= %s%n", e.getSQLState(), e.getErrorCode(), e.getMessage());
+        }
+        return laboratorios;
+    }
+
+    public List<Laboratorio> buscarLaboratorioPorNombrelab(String nombre_lab){
+        String sql = "SELECT id_lab , nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab FROM laboratorio WHERE nombre_lab ILIKE ?" ;
         List<Laboratorio> laboratorios = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection();
@@ -117,7 +133,7 @@ public class LaboratorioDAO {
         return laboratorios;
     }
 
-    public List<Laboratorio> MostrarLaboratorios(){
+    public List<Laboratorio> mostrarLaboratorios(){
         List<Laboratorio> laboratorios = new ArrayList<>();
         String sql = "SELECT * FROM laboratorio";
 

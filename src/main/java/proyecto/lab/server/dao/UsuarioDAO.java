@@ -241,7 +241,7 @@ public class UsuarioDAO {
 
 
     public List<Usuario> buscarUsuarioPorNombre(String n) {
-        String sql = "SELECT id, rut, nombres, apellidos,email,estado,genero,cargo,fecha_nac,telefono,rol FROM usuario WHERE nombres LIKE ? or apellidos LIKE ?";
+        String sql = "SELECT id, rut, nombres, apellidos,email,estado,genero,cargo,fecha_nac,telefono,rol FROM usuario WHERE nombres ILIKE ? or apellidos ILIKE ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)){
 

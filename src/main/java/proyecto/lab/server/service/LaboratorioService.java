@@ -34,7 +34,7 @@ public class LaboratorioService {
 
         //Lab ya existente
         int idLab = laboratorio.id_lab();
-        Laboratorio laboratorioExistente = laboratorioDAO.BuscarLaboratorioPorId_lab(idLab);
+        Laboratorio laboratorioExistente = laboratorioDAO.buscarLaboratorioPorIdlab(idLab);
         if(laboratorioExistente != null){
             throw AppException.badRequest("Laboratorio ya existente");
         }
