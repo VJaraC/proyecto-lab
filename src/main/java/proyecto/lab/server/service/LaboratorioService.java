@@ -34,13 +34,13 @@ public class LaboratorioService {
 
         //Lab ya existente
         int idLab = laboratorio.id_lab();
-        Laboratorio laboratorioExistente = laboratorioDAO.BuscarLaboratorioPorId_lab(idLab);
+        Laboratorio laboratorioExistente = laboratorioDAO.buscarLaboratorioPorIdlab(idLab);
         if(laboratorioExistente != null){
             throw AppException.badRequest("Laboratorio ya existente");
         }
         //Creación nueva lab
         Laboratorio laboratorioNuevo = new Laboratorio(laboratorio);
-        boolean insercion = laboratorioDAO.InsertarLaboratorio(laboratorioNuevo);
+        boolean insercion = laboratorioDAO.insertarLaboratorio(laboratorioNuevo);
         if(!insercion){
             System.out.println("Error al crear laboratorio");
         }

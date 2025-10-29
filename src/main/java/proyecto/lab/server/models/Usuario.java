@@ -47,14 +47,18 @@ public class Usuario {
         this.email = email;
     }
 
-    public Usuario(int ID, String rut, String nombre, String apellidos, String estado, String cargo, Rol rol) {
+    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero,String cargo, Rol rol, LocalDate fecha_nacimiento, String telefono) {
         this.ID = ID;
         this.rut = rut;
-        this.nombres = nombre;
+        this.nombres = nombres;
         this.apellidos = apellidos;
+        this.email = email;
         this.estado = estado;
+        this.genero = genero;
         this.cargo = cargo;
         this.rol = rol;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.telefono = telefono;
     }
 
 
