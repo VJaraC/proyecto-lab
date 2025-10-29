@@ -11,7 +11,9 @@ import java.time.LocalDate;
 public class EquipoDAO {
     private final Conexion conexion;
 
-    public EquipoDAO() { this.conexion = new Conexion(); }
+    public EquipoDAO() {
+        this.conexion = new Conexion();
+    }
 
     public boolean insertarEquipo(Equipo equipo) {
         String sql = "INSERT INTO equipo (rut, id_lab, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq) " +
@@ -57,11 +59,11 @@ public class EquipoDAO {
     }
 
 
-    public Boolean actualizarEquipo(Equipo equipo){
+    public Boolean actualizarEquipo(Equipo equipo) {
         String sql = "UPDATE equipo SET hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_equipo = ?";
 
         try (Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, equipo.getHostname());
             ps.setString(2, equipo.getEstado());
             ps.setString(3, equipo.getIp());
@@ -72,31 +74,29 @@ public class EquipoDAO {
             ps.setString(8, equipo.getModeloGPU());
             ps.setInt(9, equipo.getId_equipo());
 
+
             int filas = ps.executeUpdate();
-            if(filas > 0){
+            if (filas > 0) {
                 System.out.println("Equipo actualizado exitosamente");
-            }
-            else{
+            } else {
                 System.out.println("No se encontró un equipo con ese ID");
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error al actualizar equipo: " + e.getMessage());
         }
         return true;
     }
 
-
-
     //tratar de hacer una funcion que se le pase un rs y esta la transforme a un objeto. Hacer el mapear equipo en otra función que tome la función anterior y las agregue a una lista.
-    public Equipo buscarEquipoPorId(int id){
+    public Equipo buscarEquipoPorId(int id) {
         String sql = "SELECT * FROM equipo WHERE id_eq = ?";
 
-        try(Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 int id_equipo = rs.getInt("id_eq");
                 int id_lab = rs.getInt("id_lab");
                 int id_admin = rs.getInt("id");
@@ -106,7 +106,7 @@ public class EquipoDAO {
                 String estado_equipo = rs.getString("estado_equipo");
                 String modelo = rs.getString("modelo");
                 String mac = rs.getString("mac");
-                String ip  = rs.getString("ip");
+                String ip = rs.getString("ip");
                 String cpu_modelo = rs.getString("cpu_modelo");
                 String cpu_nucleos = rs.getString("cpu_nucleos");
                 String ram_total = rs.getString("ram_total");
@@ -118,46 +118,11 @@ public class EquipoDAO {
 
                 return new Equipo(id_equipo, id_lab, id_admin, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq);
             }
-        }
-        catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error al buscar equipo: " + e.getMessage());
         }
         return null;
     }
-
-
-    public List<Equipo> buscarEquipoPorIdLab(int id_lab){
-        String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
-
-        try(Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setInt(1, id_lab);
-
-            try(ResultSet rs = ps.executeQuery()) {
-                return mapearEquipos(rs);
-            }
-
-        } catch(SQLException e){
-            throw new RuntimeException("Error al buscar por ID del Laboratorio",e);
-        }
-    }
-
-    public List<Equipo> buscarEquipoPorHostname(String hostname){
-        String sql = "SELECT * FROM equipo WHERE hostname = ?";
-
-        try(Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setString(1, hostname);
-            try(ResultSet rs = ps.executeQuery()) {
-                return mapearEquipos(rs);
-            }
-        }
-        catch(SQLException e){
-            throw new RuntimeException("Error al buscar por Hostname",e);
-        }
-    }
-
-
 
     public Equipo buscarEquipoPorNumSerie(String numSerie){
         String sql = "SELECT * FROM equipo WHERE numero_serie = ?";
@@ -195,6 +160,147 @@ public class EquipoDAO {
         return equipo;
     }
 
+    public List<Equipo> buscarEquipoPorIdLab(int id_lab){
+        String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, id_lab);
+
+            try(ResultSet rs = ps.executeQuery()) {
+                return mapearEquipos(rs);
+            }
+
+        } catch(SQLException e){
+            throw new RuntimeException("Error al buscar por ID del Laboratorio",e);
+        }
+    }
+
+    public List<Equipo> buscarPorIdAdmin(int idAdmin) {
+        String sql =  "SELECT * FROM equipo WHERE id = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setInt(1, idAdmin);
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Admin",e);
+        }
+    }
+
+    public List<Equipo> buscarPorFechaIngreso(LocalDate fechaIngreso) {
+        String sql =  "SELECT * FROM equipo WHERE ip = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setDate(1, Date.valueOf(fechaIngreso));
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por fecha de ingreso",e);
+        }
+    }
+
+    public List<Equipo> buscarEquipoPorHostname(String hostname){
+        String sql = "SELECT * FROM equipo WHERE hostname = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, hostname);
+            try(ResultSet rs = ps.executeQuery()) {
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Hostname",e);
+        }
+    }
+
+    public List<Equipo> buscarEquipoPorModelo(String hostname) {
+        String sql = "SELECT * FROM equipo WHERE hostname = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, hostname);
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Modelo",e);
+        }
+    }
+
+    public List<Equipo> buscarPorFabricante(String fabricante) {
+        String sql =  "SELECT * FROM equipo WHERE fabricante = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, fabricante);
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Fabricante",e);
+        }
+    }
+
+    public List<Equipo> buscarPorMac(String Mac) {
+        String sql =  "SELECT * FROM equipo WHERE mac = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, Mac);
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Mac",e);
+        }
+    }
+
+    public List<Equipo> buscarPorIp(String Ip) {
+        String sql =  "SELECT * FROM equipo WHERE ip = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, Ip);
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por IP",e);
+        }
+    }
+
+    public List<Equipo> buscarPorEstado(String Estado) {
+        String sql =  "SELECT * FROM equipo WHERE estado = ?";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, Estado);
+
+            try(ResultSet rs = ps.executeQuery()){
+                return mapearEquipos(rs);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al buscar por Estado",e);
+        }
+    }
 
     public List<Equipo> mapearEquipos(ResultSet rs){
         List<Equipo> equipos = new ArrayList<>();
@@ -229,6 +335,5 @@ public class EquipoDAO {
         return equipos;
 
     }
-
 
 }
