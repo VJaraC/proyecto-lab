@@ -93,6 +93,9 @@ public class EquipoService {
         Equipo equipo = new Equipo();
         if(filtros.id_equipo() != null){
             equipo = equipoDAO.buscarEquipoPorId(filtros.id_equipo());
+            if(equipo == null){
+                throw AppException.badRequest("Equipo no encontrado");
+            }
         }
         else if(filtros.numero_serie() != null){
             equipo  = equipoDAO.buscarEquipoPorNumSerie(filtros.numero_serie());
@@ -174,5 +177,17 @@ public class EquipoService {
         }
         return new EquipoDTO(existente);
 
+    }
+
+    /*public List<EquipoDTO> listarEquipos() {
+        List<Equipo> resultados = new ArrayList<>();
+        resultados = equipoDAO.mostrarEquipos();
+        return resultados.stream()
+                .map(EquipoDTO::new)
+                .toList();
+    }*/
+
+    public List<EquipoDTO> listarEquipos() {
+        return equipoDAO.listarEquiposDTO();
     }
 }

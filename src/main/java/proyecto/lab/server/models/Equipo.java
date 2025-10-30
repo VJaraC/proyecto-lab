@@ -21,6 +21,7 @@ public class Equipo {
     private String almacenamiento;
     private String modeloGPU;
     private LocalDate fecha_ingreso;
+    private String nombreLab;
 
 
     //constructor vacío
@@ -47,6 +48,28 @@ public class Equipo {
         this.almacenamiento = almacenamiento;
         this.modeloGPU = modeloGPU;
         this.fecha_ingreso = fecha_ingreso;
+    }
+
+    public Equipo(int id_equipo, int id_admin, int id_lab_equipo, String hostname, String numero_serie,
+                  String fabricante, String estado, String modelo, String mac, String ip, String modeloCPU,
+                  String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU, LocalDate fecha_ingreso, String nombreLab) {
+        this.id_equipo = id_equipo;
+        this.id_admin = id_admin;
+        this.id_lab_equipo = id_lab_equipo;
+        this.hostname = hostname;
+        this.numero_serie = numero_serie;
+        this.fabricante = fabricante;
+        this.estado = estado;
+        this.modelo = modelo;
+        this.mac = mac;
+        this.ip = ip;
+        this.modeloCPU = modeloCPU;
+        this.nucleosCPU = nucleosCPU;
+        this.ramTotal = ramTotal;
+        this.almacenamiento = almacenamiento;
+        this.modeloGPU = modeloGPU;
+        this.fecha_ingreso = fecha_ingreso;
+        this.nombreLab = nombreLab;
     }
 
     //Constructor que recibe un DTO

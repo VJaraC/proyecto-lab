@@ -1,12 +1,8 @@
 package proyecto.lab.server.controller;
-import proyecto.lab.server.dto.EquipoBusquedaDTO;
-import proyecto.lab.server.dto.EquipoDTO;
-import proyecto.lab.server.dto.EquipoUpdateDTO;
-import proyecto.lab.server.models.Equipo;
+import proyecto.lab.server.dto.*;
 import proyecto.lab.server.service.EquipoService;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static proyecto.lab.server.utils.ValidadorUtils.*;
@@ -23,18 +19,10 @@ public class EquipoController {
         return equipoService.crearEquipo(equipo);
     }
 
-    //llamar cuando los filtros retornen solo 1 equipo
-    public EquipoDTO buscarEquipo(EquipoBusquedaDTO filtros){
-        validarNoNulo(filtros, "Datos requeridos");
-        if(filtros.id_equipo() != null || filtros.numero_serie() != null){
-            return equipoService.buscarEquipo(filtros);
-        }
-        return null;
 
-    }
-
+    //funciones para buscar equipo
     public EquipoDTO buscarEquipoPorId(int id){
-        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(id, null, null, null,  null, null, null, null, null, null, null);
+        EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(id, null, null, null, null, null, null, null, null, null, null);
         return equipoService.buscarEquipo(filtros);
     }
 
@@ -43,20 +31,6 @@ public class EquipoController {
         return equipoService.buscarEquipo(filtros);
     }
 
-
-    //llamar cuando los filtros puedan retornar mas de un equipo
-    public List<EquipoDTO> buscarEquipos(EquipoBusquedaDTO filtros){
-        validarNoNulo(filtros, "Datos requeridos");
-        if(filtros.id_admin() != null || filtros.id_lab_equipo() != null
-                || filtros.hostname() != null || filtros.fabricante() != null
-                || filtros.estado() != null || filtros.modelo() != null
-                || filtros.mac() != null || filtros.ip() != null
-                || filtros.fecha_ingreso() != null ){
-
-            return equipoService.buscarEquipos(filtros);
-        }
-        return null;
-    }
 
     public List<EquipoDTO> buscarEquipoPorIdAdmin(int idAdmin){
         validarNoNulo(idAdmin, "Id Admin requerido");
@@ -112,9 +86,119 @@ public class EquipoController {
         return equipoService.buscarEquipos(filtros);
     }
 
-    public EquipoDTO actualizarEquipo(EquipoUpdateDTO actualizarDTO){
-        validarNoNulo(actualizarDTO, "Campos de edición vacio");
-        return equipoService.actualizarEquipo(actualizarDTO);
+    public List<EquipoDTO> listarEquipos(){
+        return equipoService.listarEquipos();
     }
+
+
+    //funciones para modificar el equipo
+    public EquipoDTO modificarHostname(EquipoUpdateDTO in, String hostname){
+        validarTexto(hostname, "Ingresar Hostname válido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, hostname, null, null, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO modificarIP(EquipoUpdateDTO in, String ip){
+        validarTexto(ip, "Ingresar una IP válida");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, ip, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO modificarModeloCPU(EquipoUpdateDTO in, String modeloCPU){
+        validarTexto(modeloCPU, "Ingresar modelo de CPU válido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, modeloCPU, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO modificarNucleosCPU(EquipoUpdateDTO in, String NucleosCPU){
+        validarTexto(NucleosCPU, "Ingresar nucleos de CPU válido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, NucleosCPU, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO modificarRamTotal(EquipoUpdateDTO in, String ramTotal){
+        validarTexto(ramTotal, "Ingresar total de ram válida");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, null, ramTotal, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO modificarAlmacenamiento(EquipoUpdateDTO in, String almacenamiento){
+        validarTexto(almacenamiento, "Ingresar almacenamiento válido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, null, null, almacenamiento, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO modificarModeloGPU(EquipoUpdateDTO in, String modeloGPU){
+        validarTexto(modeloGPU, "Ingresar almacenamiento válido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, null, null, null, modeloGPU);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+
+    //funciones para cambiar el estado del equipo (operativo, disponible y fuera de uso), se agrega una función opcional por si hay que cambiar a otro estado
+    public EquipoDTO deshabilitarEquipo(EquipoUpdateDTO in){
+        validarNoNulo(in, "Usuario invalido");
+        validarPositivo(in.id(),"ID invalido");
+
+        int id = in.id();
+        String estado = "fuera de servicio"; //revisar el estado
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+    public EquipoDTO habilitarEquipo(EquipoUpdateDTO in){
+        validarNoNulo(in, "Equipo invalido");
+        validarPositivo(in.id(),"ID invalido");
+
+        int id = in.id();
+        String estado = "disponible"; //revisar el estado
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+
+    public EquipoDTO equipoEnUso(EquipoUpdateDTO in){
+        validarNoNulo(in, "Equipo invalido");
+        validarPositivo(in.id(),"ID invalido");
+
+        int id = in.id();
+        String estado = "operativo"; //revisar el estado
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
+
+
+    //función por si es que hay que cambiar a mas de un estado (opcional, borrable)
+    public EquipoDTO modificarEstado(EquipoUpdateDTO in, String estado){
+        validarTexto(estado, "Ingresar estado válido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
 
 }

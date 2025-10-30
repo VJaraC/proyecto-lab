@@ -1,5 +1,6 @@
 package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
+import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Usuario;
 import proyecto.lab.server.models.Equipo;
@@ -60,7 +61,7 @@ public class EquipoDAO {
 
 
     public Boolean actualizarEquipo(Equipo equipo) {
-        String sql = "UPDATE equipo SET hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_equipo = ?";
+        String sql = "UPDATE equipo SET hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_eq = ?";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -239,7 +240,7 @@ public class EquipoDAO {
     }
 
     public List<Equipo> buscarPorFabricante(String fabricante) {
-        String sql =  "SELECT * FROM equipo WHERE fabricante = ?";
+        String sql =  "SELECT * FROM equipo WHERE fabricante_pc = ?";
 
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -334,6 +335,57 @@ public class EquipoDAO {
         }
         return equipos;
 
+    }
+
+    public List<Equipo> mostrarEquipos() {
+        String sql = "SELECT equipo.*, nombre_lab FROM equipo\n" +
+                "join laboratorio on equipo.id_lab = laboratorio.id_lab";
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+            return mapearEquipos(rs);
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al mostrar equipos",e);
+        }
+    }
+
+    public List<EquipoDTO> listarEquiposDTO() {
+        String sql = "SELECT equipo.*, nombre_lab FROM equipo\n" +
+                "join laboratorio on equipo.id_lab = laboratorio.id_lab";
+
+        List<EquipoDTO> lista = new ArrayList<>();
+        try (Connection c = conexion.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                lista.add(new EquipoDTO(
+                        rs.getInt("id_eq"),
+                        rs.getInt("id_lab"),
+                        rs.getInt("id"),
+                        rs.getString("hostname"),
+                        rs.getString("numero_serie"),
+                        rs.getString("fabricante_pc"),
+                        rs.getString("estado_equipo"),
+                        rs.getString("modelo"),
+                        rs.getString("mac"),
+                        rs.getString("ip"),
+                        rs.getString("cpu_modelo"),
+                        rs.getString("cpu_nucleos"),
+                        rs.getString("ram_total"),
+                        rs.getString("almacenamiento"),
+                        rs.getString("gpu_modelo"),
+
+                        rs.getDate("fecha_ingreso_eq").toLocalDate(),
+
+                        rs.getString("nombre_lab")
+                ));
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error al listar equipos DTO", ex);
+        }
+        return lista;
     }
 
 }
