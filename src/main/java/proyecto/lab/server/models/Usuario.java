@@ -33,7 +33,7 @@ public class Usuario {
     }
 
     //constructor usado en crear usuario
-    public Usuario(String rut, String nombres, String apellidos, String estado, String genero, String contrasena, String cargo,Rol rol, LocalDate fecha_nacimiento, String telefono, String email) {
+    public Usuario(String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo,Rol rol, LocalDate fecha_nacimiento, String telefono) {
         this.rut = rut;
         this.nombres = nombres;
         this.apellidos = apellidos;

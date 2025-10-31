@@ -1,5 +1,4 @@
 package proyecto.lab.server.service;
-import proyecto.lab.client.application.App;
 import proyecto.lab.server.dto.UsuarioBusquedaDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.exceptions.AppException;
@@ -10,6 +9,7 @@ import proyecto.lab.server.models.Rol;
 import proyecto.lab.server.models.Usuario;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
@@ -42,7 +42,21 @@ public class UsuarioService {
         if(user.getContrasena().length() > 255) {
             throw AppException.badRequest("La contraseña es demasiado larga");
         }
+        LocalDate hoy = LocalDate.now();
+        LocalDate fechaNacimiento = user.getFecha_nacimiento();
 
+        if(fechaNacimiento == null) {
+            throw AppException.badRequest("La fecha de nacimiento es obligatoria");
+        }
+
+        if (fechaNacimiento.isAfter(hoy)) {
+            throw AppException.badRequest("La fecha de nacimiento no puede ser posterior a hoy");
+        }
+
+        int edad = Period.between(fechaNacimiento,hoy).getYears();
+        if (edad < 18){
+            throw AppException.badRequest("El usuario debe tener al menos 18 años");
+        }
 
         final String rutNormalizado;
 
@@ -54,7 +68,7 @@ public class UsuarioService {
             String hash = BCrypt.hashpw(user.getContrasena(), BCrypt.gensalt(12));
 
             // crear nuevo usuario
-            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), Rol.MONITOR, user.getFecha_nacimiento(), user.getTelefono(), user.getEmail());
+            Usuario nuevo = new Usuario(rutNormalizado, user.getNombre(), user.getApellidos(), user.getEmail(), EstadoUtils.HABILITADO, user.getGenero(), hash, user.getCargo(), Rol.MONITOR, user.getFecha_nacimiento(), user.getTelefono());
             Usuario guardado = usuariodao.insertarUsuario(nuevo);
 
             return new UsuarioDTO(
