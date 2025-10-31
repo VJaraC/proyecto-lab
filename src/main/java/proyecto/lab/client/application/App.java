@@ -2,10 +2,13 @@ package proyecto.lab.client.application;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import proyecto.lab.server.controller.EquipoController;
+import proyecto.lab.server.controller.LaboratorioController;
 import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dao.EquipoDAO;
+import proyecto.lab.server.dao.LaboratorioDAO;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.service.EquipoService;
+import proyecto.lab.server.service.LaboratorioService;
 import proyecto.lab.server.service.UsuarioService;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,6 +31,12 @@ public class App extends Application {
         EquipoService equipoService = new EquipoService(equipoDao);
         EquipoController equipoController = new EquipoController(equipoService);
         AppContext.setEquipoController(equipoController);
+
+        // Controladores de Laboratorios
+        LaboratorioDAO labDao = new LaboratorioDAO();
+        LaboratorioService laboratorioService = new LaboratorioService(labDao);
+        LaboratorioController laboratorioController = new LaboratorioController(laboratorioService);
+        AppContext.setLaboratorioController(laboratorioController);
 
 
         // Se lanza la vista

@@ -1,5 +1,6 @@
 package proyecto.lab.client.application;
 import proyecto.lab.server.controller.EquipoController;
+import proyecto.lab.server.controller.LaboratorioController;
 import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dto.UsuarioDTO;
 
@@ -7,6 +8,7 @@ public final class AppContext {
     private static UsuarioController admin;
     private static UsuarioDTO usuarioActual;
     private static EquipoController equipoController;
+    private static LaboratorioController laboratorioController;
 
     private AppContext() {
     }
@@ -17,6 +19,22 @@ public final class AppContext {
 
     public static UsuarioController admin() {
         return admin;
+    }
+
+    public static void setEquipoController(EquipoController e) {
+        equipoController = e;
+    }
+
+    public static EquipoController equipo() {
+        return equipoController;
+    }
+
+    public static void setLaboratorioController(LaboratorioController c) {
+        laboratorioController = c;
+    }
+
+    public static LaboratorioController laboratorio() {
+        return laboratorioController;
     }
 
     public static void setUsuarioActual(UsuarioDTO u) {
@@ -31,11 +49,6 @@ public final class AppContext {
         usuarioActual = null;
     }
 
-    public static void setEquipoController(EquipoController e) {
-        equipoController = e;
-    }
 
-    public static EquipoController equipo() {
-        return equipoController;
-    }
+
 }
