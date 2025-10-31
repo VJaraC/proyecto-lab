@@ -56,7 +56,7 @@ public class UsuarioDAO {
 
 
     public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar el nombre de un usuario.
-        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, rol= ?, email = ?, telefono = ?, contrasena = ?, cargo = ? WHERE id = ?";
+        final String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, rol= ?, email = ?, telefono = ?, contrasena = ?, cargo = ? WHERE id = ?";
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
 
@@ -114,52 +114,64 @@ public class UsuarioDAO {
     }
 
 
-    //implementar mapearUsuarios
     public Usuario buscarUsuarioPorID(int id) {
-        Usuario usuario = null;
-        final String sql = "SELECT id, rut, nombres, apellidos, email, estado, genero,  cargo, rol , fecha_nac, telefono FROM usuario WHERE id = ?";
+        final String sql = "SELECT id, rut, nombres, apellidos, email, estado, genero, cargo, rol , fecha_nac, telefono FROM usuario WHERE id = ?";
+
         try (Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
-            try (ResultSet rs = ps.executeQuery()){
-                if (rs.next()) {
-                    int id2 = rs.getInt("id");
-                    String rut = rs.getString("rut");
-                    String nombres = rs.getString("nombres");
-                    String apellidos = rs.getString("apellidos");
-                    String email = rs.getString("email");
-                    String estado = rs.getString("estado");
-                    String genero = rs.getString("genero");
-                    String cargo = rs.getString("cargo");
+            try (ResultSet rs = ps.executeQuery()) {
 
-                    String rolStr = rs.getString("rol");
-                    Rol rol = null;
-                    if(rolStr != null && !rolStr.isBlank()){
-                        rol = Rol.valueOf(rolStr.toUpperCase());
-                    } else{
+                if (!rs.next()) {
+                    // No se encontró el usuario
+                    throw AppException.notFound("Usuario no encontrado");
+                }
+
+                // Parsear el rol con fallback a MONITOR
+                Rol rol;
+                String rolStr = rs.getString("rol");
+                if (rolStr == null || rolStr.isBlank()) {
+                    rol = Rol.MONITOR;
+                } else {
+                    try {
+                        rol = Rol.valueOf(rolStr.trim().toUpperCase());
+                    } catch (IllegalArgumentException ex) {
                         rol = Rol.MONITOR;
                     }
-
-                    LocalDate fechaNacimiento = rs.getObject("fecha_nac", LocalDate.class);
-                    String telefono = rs.getString("telefono");
-
-
-                    usuario = new Usuario(id2 ,rut, nombres, apellidos, email, estado, genero,cargo, rol, fechaNacimiento, telefono);
                 }
+
+                return new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("rut"),
+                        rs.getString("nombres"),
+                        rs.getString("apellidos"),
+                        rs.getString("email"),
+                        rs.getString("estado"),
+                        rs.getString("genero"),
+                        rs.getString("cargo"),
+                        rol,
+                        rs.getObject("fecha_nac", java.time.LocalDate.class),
+                        rs.getString("telefono")
+                );
             }
-            return usuario;
-        }catch (SQLException e){
-            System.err.printf("SQL Error al buscar usuario por ID : state=%s code= %d msg= %s%n", e.getSQLState(), e.getErrorCode(), e.getMessage());
+
+        } catch (SQLException e) {
+            System.err.printf(
+                    "SQL Error al buscar usuario por ID (id=%d): state=%s code=%d msg=%s%n",
+                    id, e.getSQLState(), e.getErrorCode(), e.getMessage()
+            );
+            // Si ocurre error de SQL, lanzamos una excepción interna de tu sistema
+            throw AppException.internal("Error al buscar usuario en la base de datos");
         }
-        return usuario;
     }
+
 
 
     //implementar mapearUsuarios.
     public Usuario buscarUsuarioPorRut(String rut) {
-        String sql = "SELECT id, rut, nombres, apellidos, email , estado, genero , contrasena, cargo, rol, fecha_nac, telefono FROM usuario WHERE rut = ?";
+        final String sql = "SELECT id, rut, nombres, apellidos, email , estado, genero , contrasena, cargo, rol, fecha_nac, telefono FROM usuario WHERE rut = ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
