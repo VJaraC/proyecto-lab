@@ -56,7 +56,7 @@ public class EquipoController {
         return equipoService.buscarEquipos(filtros);
     }
 
-    public List<EquipoDTO> buscarEquipoPorIdAdmin(String estado){
+    public List<EquipoDTO> buscarEquipoPorEstado(String estado){
         validarTexto(estado, "El estado es obligatorio");
         EquipoBusquedaDTO filtros = new EquipoBusquedaDTO(null, null, null, null,  null, null, estado, null, null, null, null);
         return equipoService.buscarEquipos(filtros);
