@@ -6,27 +6,12 @@ public class Laboratorio {
     private int id_lab;
     private String nombre_lab;
     private String ubicacion;
-    private String capacidad_personas;
-    private String capacidad_equipo;
+    private int capacidad_personas;
+    private int capacidad_equipo;
     private String estado_lab;
     private LocalDate fecha_registro_lab;
 
-    //constructor
-    public Laboratorio(){
-    }
-
-    // Constructor que recibe un DTO
-    public Laboratorio(LaboratorioDTO dto) {
-        this.id_lab = dto.id_lab();
-        this.nombre_lab = dto.nombre_lab();
-        this.ubicacion = dto.ubicacion();
-        this.capacidad_personas = dto.capacidad_personas();
-        this.capacidad_equipo = dto.capacidad_equipo();
-        this.estado_lab = dto.estado_lab();
-        this.fecha_registro_lab = dto.fecha_registro_lab();
-    }
-
-    public Laboratorio(int id_lab, String nombre_lab, String ubicacion, String capacidad_personas, String capacidad_equipo, String estado_lab, LocalDate fecha_registro_lab){
+    public Laboratorio(int id_lab, String nombre_lab, String ubicacion, int capacidad_personas, int capacidad_equipo, String estado_lab, LocalDate fecha_registro_lab){
             this.id_lab = id_lab;
             this.nombre_lab = nombre_lab;
             this.ubicacion = ubicacion;
@@ -34,6 +19,15 @@ public class Laboratorio {
             this.capacidad_equipo = capacidad_equipo;
             this.estado_lab = estado_lab;
             this.fecha_registro_lab = fecha_registro_lab;
+    }
+
+    public Laboratorio(String nombre_lab, String ubicacion, int capacidad_personas, int capacidad_equipo, String estado_lab, LocalDate fecha_registro_lab){
+        this.nombre_lab = nombre_lab;
+        this.ubicacion = ubicacion;
+        this.capacidad_personas = capacidad_personas;
+        this.capacidad_equipo = capacidad_equipo;
+        this.estado_lab = estado_lab;
+        this.fecha_registro_lab = fecha_registro_lab;
     }
 
     // setters
@@ -49,11 +43,11 @@ public class Laboratorio {
         this.ubicacion = ubicacion;
     }
 
-    public void setCapacidad_personas(String capacidad_personas){
+    public void setCapacidad_personas(int capacidad_personas){
         this.capacidad_personas = capacidad_personas;
     }
 
-    public void setCapacidad_equipo(String capacidad_equipo){
+    public void setCapacidad_equipo(int capacidad_equipo){
         this.capacidad_equipo = capacidad_equipo;
     }
 
@@ -74,15 +68,13 @@ public class Laboratorio {
         return nombre_lab;
     }
 
-    public String getUbicacion(){
-        return ubicacion;
-    }
+    public String getUbicacion(){return ubicacion;}
 
-    public String getCapacidad_personas(){
+    public int getCapacidad_personas(){
         return capacidad_personas;
     }
 
-    public String getCapacidad_equipo(){
+    public int getCapacidad_equipo(){
         return capacidad_equipo;
     }
 

@@ -2,7 +2,7 @@ package proyecto.lab.server.dto;
 import proyecto.lab.server.models.Laboratorio;
 import java.time.LocalDate;
 
-public record LaboratorioDTO(int id_lab, String nombre_lab, String ubicacion, String capacidad_personas, String capacidad_equipo, String estado_lab, LocalDate fecha_registro_lab){
+public record LaboratorioDTO(int id_lab, String nombre_lab, String ubicacion, int capacidad_personas, int capacidad_equipo, String estado_lab, LocalDate fecha_registro_lab){
 
     //constructor
     public LaboratorioDTO(Laboratorio laboratorio) {
