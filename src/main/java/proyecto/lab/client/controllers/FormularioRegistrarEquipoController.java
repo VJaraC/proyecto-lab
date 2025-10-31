@@ -6,6 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
+import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioLoginDTO;
 
@@ -14,74 +16,96 @@ import java.time.LocalDate;
 public class FormularioRegistrarEquipoController {
 
     @FXML
-    private MenuItem GeneroFemenino;
+    private Button BotonGuardarEquipo;
 
     @FXML
-    private MenuItem GeneroMasculino;
+    private TextField txtAlmacenamiento;
 
     @FXML
-    private TextField txtApellidos;
+    private TextField txtFabricante;
 
     @FXML
-    private TextField txtCargo;
+    private TextField txtHostname;
 
     @FXML
-    private TextField txtContrasena;
+    private ComboBox<LaboratorioDTO> txtIdLab;
 
     @FXML
-    private TextField txtCorreo;
+    private TextField txtMAC;
 
     @FXML
-    private DatePicker txtFechaNac;
+    private TextField txtIp;
 
     @FXML
-    private MenuButton txtGenero;
+    private TextField txtModelo;
 
     @FXML
-    private TextField txtNombre;
+    private TextField txtModeloCpu;
 
     @FXML
-    private TextField txtRUT;
+    private TextField txtModeloGpu;
 
     @FXML
-    private TextField txtTelefono;
+    private TextField txtNucleos;
 
     @FXML
-    void seleccionarGenero(ActionEvent event) {
+    private TextField txtNumSerie;
+
+    @FXML
+    private TextField txtRam;
+
+    @FXML
+    private MenuButton txtEstado;
+
+    @FXML
+    private MenuItem disponible;
+
+    @FXML
+    private MenuItem operativo;
+
+    @FXML
+    private MenuItem fueraDeServicio;
+
+
+    @FXML
+    void seleccionarEstado(ActionEvent event) {
         MenuItem item = (MenuItem) event.getSource();
-        txtGenero.setText(item.getText());
+        txtEstado.setText(item.getText());
     }
 
-
         @FXML
-    void GuardarUsuario(ActionEvent e) {
-        String rut = txtRUT.getText();
-        String nombres = txtNombre.getText();
-        String apellidos = txtApellidos.getText();
-        String genero = txtGenero.getText();
-        String cargo = txtCargo.getText();
-        LocalDate fecha_nacimiento = txtFechaNac.getValue();
-        String telefono = txtTelefono.getText();
-        String email = txtCorreo.getText();
-        String contr  = txtContrasena.getText();
-        try {
-            UsuarioLoginDTO in = new UsuarioLoginDTO(rut, nombres, apellidos, genero, contr, cargo, fecha_nacimiento, telefono, email);
-            UsuarioDTO creado = AppContext.admin().crearUsuario(in,AppContext.getUsuarioActual());  // 💾 BD a través del server
+    void GuardarEquipo(ActionEvent e) {
+        Integer idEquipo = null;
+        Integer idLab = 1;  // txtIdLab.getText();
+            Integer idUsuario = AppContext.getUsuarioActual().getID();
+        String hostname = txtHostname.getText();
+        String numSerie = txtNumSerie.getText();
+        String fabricante = txtFabricante.getText();
+        String estado = txtEstado.getText();
+        LocalDate fechaIngreso = LocalDate.now();
+        String modelo = txtModelo.getText();
+        String mac = txtMAC.getText();
+        String ip  = txtIp.getText();
+        String modeloCpu = txtModeloCpu.getText();
+        String modeloGpu = txtModeloGpu.getText();
+        String nucleos = txtNucleos.getText();
+        String ram = txtRam.getText();
+        String almacenamiento = txtAlmacenamiento.getText();
 
-            alert(Alert.AlertType.INFORMATION, "Usuario creado: " + creado.getNombres());
+        try {
+            EquipoDTO in = new EquipoDTO(idEquipo, idUsuario, idLab, hostname, numSerie, fabricante, estado, modelo, mac, ip, modeloCpu, nucleos, ram, almacenamiento, modeloGpu, fechaIngreso);
+            EquipoDTO creado = AppContext.equipo().crearEquipo(in);  // 💾 BD a través del server
+
+            alert(Alert.AlertType.INFORMATION, "Equipo registrado: " + creado.modelo());
             cerrar(e);
 
-        } catch (RuntimeException ex) { // por validaciones de UsuarioController
+        } catch (RuntimeException ex) { // por validaciones de EquipoController
             alert(Alert.AlertType.ERROR, ex.getMessage());
         } catch (Exception ex) {
             alert(Alert.AlertType.ERROR, "Error al crear: " + ex.getMessage());
         }
     }
 
-    @FXML
-    void txtRUT(ActionEvent event) {
-
-    }
 
     @FXML
     void Cancelar(ActionEvent e) { cerrar(e); }

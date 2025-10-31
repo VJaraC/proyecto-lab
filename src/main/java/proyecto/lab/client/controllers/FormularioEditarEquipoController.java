@@ -6,15 +6,16 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
-import proyecto.lab.server.dto.UsuarioDTO;
+import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
 import proyecto.lab.server.models.Rol;
 
 public class FormularioEditarEquipoController {
-    private UsuarioDTO usuario;
+    private EquipoDTO equipo;
 
-    public void setUsuario(UsuarioDTO usuario) {
-        this.usuario = usuario;
+    public void setEquipo(EquipoDTO equipo) {
+        this.equipo = equipo;
         if (txtNombre != null) {
             cargarCampos();
         }

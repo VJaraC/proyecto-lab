@@ -62,8 +62,13 @@
             <SplitMenuButton fx:id="Buscar" layoutX="328.0" layoutY="80.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" styleClass="btnFiltro" stylesheets="@../css/ViewUsuarios.css" text="Escoge un filtro" textAlignment="CENTER">
               <items>
                   <MenuItem fx:id="FiltroID" mnemonicParsing="false" onAction="#FiltroID" styleClass="filtro" text="Buscar por ID" />
-                <MenuItem fx:id="FiltroNombre" mnemonicParsing="false" onAction="#FiltroNombre" styleClass="filtro" text="Buscar por Nombre" />
+                <MenuItem fx:id="FiltroNumSerie" mnemonicParsing="false" onAction="#FiltroNumSerie" styleClass="filtro" text="Buscar por Numero de Serie" />
                 <MenuItem fx:id="FiltroEstado" mnemonicParsing="false" onAction="#FiltroEstado" styleClass="filtro" text="Buscar por Estado" />
+                  <MenuItem fx:id="FiltroIdLab" mnemonicParsing="false" onAction="#FiltroIdLab" styleClass="filtro" text="Buscar por ID de Laboratorio" />
+                  <MenuItem fx:id="FiltroHostname" mnemonicParsing="false" onAction="#FiltroHostname" styleClass="filtro" text="Buscar por Hostname" />
+                  <MenuItem fx:id="FiltroFabricante" mnemonicParsing="false" onAction="#FiltroFabricante" styleClass="filtro" text="Buscar por Fabricante" />
+                  <MenuItem fx:id="FiltroModelo" mnemonicParsing="false" onAction="#FiltroModelo" styleClass="filtro" text="Buscar por Modelo" />
+                  <MenuItem fx:id="FiltroMac" mnemonicParsing="false" onAction="#FiltroMac" styleClass="filtro" text="Buscar por MAC" />
               </items>
             </SplitMenuButton>
          </children>

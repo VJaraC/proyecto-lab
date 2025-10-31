@@ -30,7 +30,7 @@ public class ViewEquiposController {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana principal hasta cerrar
             stage.showAndWait();
-            ActualizarTablaEquipos();
+            ActualizarTablaEquipo();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,13 +52,28 @@ public class ViewEquiposController {
     private MenuItem FiltroID;
 
     @FXML
+    private MenuItem FiltroNumSerie;
+
+    @FXML
+    private MenuItem FiltroIdLab;
+
+    @FXML
+    private MenuItem FiltroHostname;
+
+    @FXML
+    private MenuItem FiltroFabricante;
+
+    @FXML
+    private MenuItem FiltroModelo;
+
+    @FXML
+    private MenuItem FiltroMac;
+
+    @FXML
     private Label txtUsuarioSesion;
 
     @FXML
     private Button btnCerrarSesion;
-
-    @FXML
-    private MenuItem FiltroNombre;
 
     @FXML
     private TextField txtBuscar;
@@ -119,17 +134,17 @@ public class ViewEquiposController {
             });
         }}
 
-    private void EditarUsuarios(ActionEvent event){
+    private void EditarEquipos(ActionEvent event){
     }
 
 
-    void AbrirFormularioEditarUsuario(EquipoDTO usuarioSeleccionado) {
+    void AbrirFormularioEditarEquipo(EquipoDTO equipoSeleccionado) {
         try {
-            EquipoDTO completo = AppContext.admin().buscarUsuarioPorId(usuarioSeleccionado.getID(), AppContext.getUsuarioActual());
+            EquipoDTO completo = AppContext.equipo().buscarEquipoPorId(equipoSeleccionado.id_equipo());
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/FormularioEditarEquipo.fxml"));
             Parent root = loader.load();
-            FormularioEditarUsuarioController controller = loader.getController();
+            FormularioEditarEquipoController controller = loader.getController();
             controller.setEquipo(completo);
 
             Stage stage = new Stage();
@@ -148,31 +163,13 @@ public class ViewEquiposController {
         AccionTablaEquipo.setCellFactory(col -> {
             return new TableCell<EquipoDTO, Void>() {
                 private final Button btn = new Button("Editar");
-                private final Button btnDeshabilitar = new Button("Deshabilitar");
-                private final Button btnHabilitar = new Button("Habilitar");
                 private final HBox box = new HBox(6, btn);
 
                 {
                     btn.setOnAction(event -> {
-                        EquipoDTO usuario = getTableView().getItems().get(getIndex());
-                        AbrirFormularioEditarUsuario(usuario);
-                    });
-
-                    btnDeshabilitar.setOnAction(event -> {
-                        EquipoDTO usuarioDeshabilitar = getTableView().getItems().get(getIndex());
-                        EquipoUpdateDTO EquipoUpdateDTO = crearUpdateDTO(usuarioDeshabilitar);
-                        AppContext.equipo().deshabilitarEquipo(EquipoUpdateDTO,AppContext.getUsuarioActual());
-                        ActualizarTablaEquipo();
-
-                    });
-
-                    btnHabilitar.setOnAction(event -> {
                         EquipoDTO equipo = getTableView().getItems().get(getIndex());
-                        EquipoUpdateDTO EquipoUpdateDTO = crearUpdateDTO(equipo);
-                        AppContext.equipo().habilitarEquipo(EquipoUpdateDTO,AppContext.getUsuarioActual());
-                        ActualizarTablaEquipo();
+                        AbrirFormularioEditarEquipo(equipo);
                     });
-
                 }
 
                 @Override
@@ -183,12 +180,6 @@ public class ViewEquiposController {
                         return;
                     }
                     EquipoDTO equipo = getTableView().getItems().get(getIndex());
-
-                    if ("habilitado".equals(equipo.estado())) {
-                        box.getChildren().setAll(btn, btnDeshabilitar);
-                    } else {
-                        box.getChildren().setAll(btn, btnHabilitar);
-                    }
                     setGraphic(box);
                 }
             };
@@ -199,9 +190,8 @@ public class ViewEquiposController {
 
     private EquipoUpdateDTO crearUpdateDTO(EquipoDTO equipo) {
         int id = equipo.id_equipo();
-        String nombres = equipo.getNombres();
-        String estado =  equipo.getEstado();
-        return new EquipoUpdateDTO(id, nombres, null, usuario.getEstado(), null, null, null, null, null);
+        String estado =  equipo.estado();
+        return new EquipoUpdateDTO(id, null, null, estado, null, null, null, null, null);
     }
 
 
@@ -219,21 +209,47 @@ public class ViewEquiposController {
             switch (FiltroSeleccionado) {
                     case "estado":
                         LimpiarTablaEquipo();
-                        TablaEquipo.getItems().addAll(AppContext.admin().buscarUsuarioPorEstado(busqueda,AppContext.getUsuarioActual()));
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorEstado(busqueda));
                         break;
-                    case "nombre":
+                    case "numSerie":
                         LimpiarTablaEquipo();
-                        TablaEquipo.getItems().addAll(AppContext.admin().buscarUsuarioPorNombre(busqueda,AppContext.getUsuarioActual()));
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorNumSerie(busqueda));
                         break;
                     case "ID":
-
-                        Integer id = null;
+                        Integer idEquipo = null;
                         if (busqueda != null && !busqueda.isBlank()) {
-                            id = Integer.valueOf(busqueda);
+                            idEquipo = Integer.valueOf(busqueda);
                         }
                         LimpiarTablaEquipo();
-                        TablaEquipo.getItems().addAll(AppContext.admin().buscarUsuarioPorId(id,AppContext.getUsuarioActual()));
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorId(idEquipo));
                         break;
+                    case "idLab":
+                        Integer idLab = null;
+                        if (busqueda != null && !busqueda.isBlank()) {
+                            idLab = Integer.valueOf(busqueda);
+                        }
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorIdLab(idLab));
+                        break;
+                    case "hostname":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorHostname(busqueda));
+                        break;
+                    case "fabricante":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorFabricante(busqueda));
+                        break;
+                    case "modelo":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorModelo(busqueda));
+                        break;
+                    case "mac":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorMac(busqueda));
+                        break;
+
+
+
             }
 
         } catch (RuntimeException ex) {// por validaciones de UsuarioController
@@ -260,11 +276,48 @@ public class ViewEquiposController {
     }
 
     @FXML
-    String FiltroNombre(ActionEvent event) {
-        FiltroSeleccionado = "nombre";
-        Buscar.setText("Buscar por Nombre");
+    String FiltroNumSerie(ActionEvent event) {
+        FiltroSeleccionado = "numSerie";
+        Buscar.setText("Buscar por Numero de Serie");
         return FiltroSeleccionado;
     }
+
+    @FXML
+    String FiltroIdLab(ActionEvent event) {
+        FiltroSeleccionado = "idLab";
+        Buscar.setText("Buscar por ID de Laboratorio");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroHostname(ActionEvent event) {
+        FiltroSeleccionado = "hostname";
+        Buscar.setText("Buscar por Hostname");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroFabricante(ActionEvent event) {
+        FiltroSeleccionado = "fabricante";
+        Buscar.setText("Buscar por Fabricante");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroModelo(ActionEvent event) {
+        FiltroSeleccionado = "modelo";
+        Buscar.setText("Buscar por Modelo");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroMac(ActionEvent event) {
+        FiltroSeleccionado = "mac";
+        Buscar.setText("Buscar por Mac");
+        return FiltroSeleccionado;
+    }
+
+
 
     @FXML
     void txtBuscar(ActionEvent event) {
