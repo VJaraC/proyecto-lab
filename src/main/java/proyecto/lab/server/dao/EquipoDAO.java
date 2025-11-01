@@ -17,7 +17,7 @@ public class EquipoDAO {
     }
 
     public boolean insertarEquipo(Equipo equipo) {
-        String sql = "INSERT INTO equipo (rut, id_lab, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq) " +
+        String sql = "INSERT INTO equipo (id, id_lab, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = conexion.getConnection();

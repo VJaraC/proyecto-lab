@@ -92,11 +92,11 @@
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <MenuButton fx:id="txtEstado" layoutX="371.0" layoutY="201.0" mnemonicParsing="false" onAction="#seleccionarEstado" prefHeight="25.0" prefWidth="259.0" text="Selecciona un estado">
+        <MenuButton fx:id="txtEstado" layoutX="371.0" layoutY="201.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="259.0" text="Selecciona un estado">
             <items>
-                <MenuItem fx:id="disponible" mnemonicParsing="false" text="Disponible" />
-                <MenuItem fx:id="operativo" mnemonicParsing="false" text="Operativo" />
-                <MenuItem fx:id="fueraDeServicio" mnemonicParsing="false" text="Fuera de Servicio" />
+                <MenuItem fx:id="disponible" mnemonicParsing="false" onAction="#seleccionarEstado" text="Disponible" />
+                <MenuItem fx:id="operativo" mnemonicParsing="false" onAction="#seleccionarEstado" text="Operativo" />
+                <MenuItem fx:id="fueraDeServicio" mnemonicParsing="false" onAction="#seleccionarEstado" text="Fuera de Servicio" />
             </items>
         </MenuButton>
         <TextField fx:id="txtIp" layoutX="371.0" layoutY="383.0" prefHeight="26.0" prefWidth="259.0" />
