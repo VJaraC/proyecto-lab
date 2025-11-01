@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
+import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.UsuarioDTO;
 import javafx.event.ActionEvent;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
@@ -167,5 +168,7 @@ public class FormularioEditarUsuarioController {
         }
 
     }
+
+
 }
 

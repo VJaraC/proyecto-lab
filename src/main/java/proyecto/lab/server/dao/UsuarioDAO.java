@@ -1,4 +1,5 @@
 package proyecto.lab.server.dao;
+import org.jetbrains.annotations.NotNull;
 import proyecto.lab.server.config.Conexion;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Rol;
@@ -19,7 +20,7 @@ public class UsuarioDAO {
 
 
     public Usuario insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
-        String sql = "INSERT INTO USUARIO(rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fecha_nac, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario(rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fecha_nac, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
         try (Connection conn = conexion.getConnection();
@@ -34,7 +35,11 @@ public class UsuarioDAO {
             ps.setString(7, user.getContrasena());
             ps.setString(8, user.getCargo());
             ps.setString(9, user.getRol().name());
-            ps.setDate(10, Date.valueOf(user.getFecha_nacimiento()));
+            if(user.getFecha_nac() != null){
+                ps.setDate(10, Date.valueOf(user.getFecha_nac()));
+            } else{
+                ps.setNull(10, Types.DATE);
+            }
             ps.setString(11, user.getTelefono());
 
             int rows = ps.executeUpdate();
@@ -46,232 +51,161 @@ public class UsuarioDAO {
                     }
                 }
             }
-
         } catch (SQLException e) {
-            System.out.println("Error al insertar usuario" + e.getMessage());
-
+            throw AppException.internal("Error al insertar el usuario: " + e.getMessage());
         }
         return user;
     }
 
 
     public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar el nombre de un usuario.
-        String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, estado = ?, rol= ?, email = ?, telefono = ?, contrasena = ?, cargo = ? WHERE id = ?";
+        final String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, email = ?, estado = ?, genero = ?,cargo = ?,  rol= ?, fecha_nac = ? ,telefono = ?  WHERE id = ?";
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
 
             ps.setString(1, user.getNombres());
             ps.setString(2, user.getApellidos());
-            ps.setString(3, user.getEstado());
-            ps.setString(4, user.getRol().name());
-            ps.setString(5, user.getEmail());
-            ps.setString(6, user.getTelefono());
-            ps.setString(7, user.getContrasena());
-            ps.setString(8, user.getCargo());
-            ps.setInt(9, user.getID());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getEstado());
+            ps.setString(5, user.getGenero());
+            ps.setString(6, user.getCargo());
+            ps.setString(7, user.getRol().name());
+
+            if(user.getFecha_nac() != null){
+                ps.setDate(8, Date.valueOf(user.getFecha_nac()));
+            } else{
+                ps.setNull(8, Types.DATE);
+            }
+
+            ps.setString(9, user.getTelefono());
+
+            ps.setInt(10, user.getID());
             int rows = ps.executeUpdate();
 
-            if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
+            if (rows == 1) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
                 return true;
             }
         } catch (SQLException e) {
-            System.out.println("Error al actualizar datos del usuario" + e.getMessage());
-            return false;
+             throw AppException.internal("Error al actualizar usuario" + e.getMessage());
         }
         return false;
     }
 
 
-    public List<Usuario> mostrarUsuarios() { //Función para mostrar los usuarios habilitados en la base de datos.
+    public List<Usuario> mostrarUsuarios() { //Función para mostrar los usuarios en la base de datos.
 
         List<Usuario> usuarios = new ArrayList<>();
-        final String sql = "SELECT id, rut, nombres, apellidos, estado, cargo , rol FROM usuario ";
+        final String sql = "SELECT id, rut, nombres, apellidos, email, estado, genero, cargo, rol , fecha_nac, telefono FROM usuario";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String rut = rs.getString("rut");
-                String nombres = rs.getString("nombres");
-                String apellidos = rs.getString("apellidos");
-                String email = rs.getString("email");
-                String estado = rs.getString("estado");
-                String genero = rs.getString("genero");
-                String cargo = rs.getString("cargo");
-                LocalDate fechaNacimiento = rs.getObject("fecha_nacimiento", LocalDate.class);
-                String telefono = rs.getString("telefono");
-                String rolStr = rs.getString("rol");
-
-                Rol rol = Rol.valueOf(rolStr.toUpperCase());
-                usuarios.add(new Usuario(id, rut, nombres, apellidos, email,estado, genero, cargo , rol , fechaNacimiento, telefono));
+               usuarios.add(mapRowUsuario(rs));
             }
             return usuarios;
         } catch (SQLException e) {
-            System.out.println("Error al listar usuarios" + e.getMessage());
+            throw AppException.internal("Error al mostrar usuarios " + e.getMessage());
         }
-        return usuarios;
     }
 
 
-    //implementar mapearUsuarios
     public Usuario buscarUsuarioPorID(int id) {
-        Usuario usuario = null;
-        final String sql = "SELECT id, rut, nombres, apellidos, email, estado, genero,  cargo, rol , fecha_nac, telefono FROM usuario WHERE id = ?";
+        final String sql = " SELECT id, rut, nombres, apellidos, email, estado, genero, cargo, rol, fecha_nac, telefono FROM usuario WHERE id = ? ";
+
         try (Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()){
+            try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    int id2 = rs.getInt("id");
-                    String rut = rs.getString("rut");
-                    String nombres = rs.getString("nombres");
-                    String apellidos = rs.getString("apellidos");
-                    String email = rs.getString("email");
-                    String estado = rs.getString("estado");
-                    String genero = rs.getString("genero");
-                    String cargo = rs.getString("cargo");
-
-                    String rolStr = rs.getString("rol");
-                    Rol rol = null;
-                    if(rolStr != null && !rolStr.isBlank()){
-                        rol = Rol.valueOf(rolStr.toUpperCase());
-                    } else{
-                        rol = Rol.MONITOR;
-                    }
-
-                    LocalDate fechaNacimiento = rs.getObject("fecha_nac", LocalDate.class);
-                    String telefono = rs.getString("telefono");
-
-
-                    usuario = new Usuario(id2 ,rut, nombres, apellidos, email, estado, genero,cargo, rol, fechaNacimiento, telefono);
+                    return mapRowUsuario(rs);
                 }
             }
-            return usuario;
-        }catch (SQLException e){
-            System.err.printf("SQL Error al buscar usuario por ID : state=%s code= %d msg= %s%n", e.getSQLState(), e.getErrorCode(), e.getMessage());
-        }
-        return usuario;
-    }
+            throw AppException.notFound("Usuario no encontrado.");
 
+        } catch (SQLException e) {
+            throw AppException.internal("Error al buscar usuario por ID: " + e.getMessage());
+        }
+    }
 
     //implementar mapearUsuarios.
     public Usuario buscarUsuarioPorRut(String rut) {
-        String sql = "SELECT id, rut, nombres, apellidos, email , estado, genero , contrasena, cargo, rol, fecha_nac, telefono FROM usuario WHERE rut = ?";
+        final String sql = "SELECT id, rut, nombres, apellidos, email , estado, genero , cargo, rol, fecha_nac, telefono FROM usuario WHERE rut = ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, rut);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    java.sql.Date sqlDate = rs.getDate("fecha_nac");
-                    java.time.LocalDate fechaNacimiento = (sqlDate != null ? sqlDate.toLocalDate() : null);
-
-                    String rolStr = rs.getString("rol");
-                    Rol rol = null;
-                    if(rolStr != null && !rolStr.isBlank()){
-                        try{
-                            rol = Rol.valueOf(rolStr.toUpperCase());
-                        } catch (IllegalArgumentException e){
-                            rol = Rol.MONITOR;
-                        }
-                    } else{
-                        rol = Rol.MONITOR;
-                    }
-                    return new Usuario(
-                            rs.getInt("id"),
-                            rs.getString("rut"),
-                            rs.getString("nombres"),
-                            rs.getString("apellidos"),
-                            rs.getString("email"),
-                            rs.getString("estado"),
-                            rs.getString("genero"),
-                            rs.getString("contrasena"),
-                            rs.getString("cargo"),
-                            rol,
-                            fechaNacimiento,
-                            rs.getString("telefono")
-                    );
+                    return mapRowUsuario(rs);
                 }
-                return null;
             }
+            // No hay fila.
+            throw AppException.notFound("No se encontró al usuario.");
+
         } catch (SQLException e) {
             throw AppException.internal("Error al buscar usuario por RUT: " + e.getMessage());
         }
     }
 
-
-    //se le pasa un resultset (resultados de una consulta generada) para poder traducirlas (mapearlas) a un objeto usuario el cual será ingresado a una lista para tener facil acceso a los objetos.
-    //modificarla.
-    private List<Usuario> mapearUsuarios(ResultSet rs) {
+    public List<Usuario> buscarUsuarios(String nombre, String apellidos, String estado, String genero,
+                                        String cargo, LocalDate fechaNac, String telefono) {
         List<Usuario> usuarios = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String rut = rs.getString("rut");
-                String nombres = rs.getString("nombres");
-                String apellidos = rs.getString("apellidos");
-                String email = rs.getString("email");
-                String estado = rs.getString("estado");
-                String genero = rs.getString("genero");
-                String contrasena = rs.getString("contrasena");
-                String cargo = rs.getString("cargo");
+        StringBuilder sql = new StringBuilder(
+                "SELECT id, rut, nombres, apellidos, email, estado, genero, cargo, rol, fecha_nac, telefono FROM usuario WHERE 1=1"
+        );
+        List<Object> params = new ArrayList<>();
 
-                String rolStr = rs.getString("rol");
-                Rol rol = Rol.MONITOR;
-                if(rolStr != null && !rolStr.isBlank()){
-                    try{
-                        rol = Rol.valueOf(rolStr.toUpperCase());
-                    } catch (IllegalArgumentException ignored){
+        if (nombre != null && !nombre.isBlank()) {
+            sql.append(" AND nombres ILIKE ?");
+            params.add("%" + nombre.trim() + "%");
+        }
+        if (apellidos != null && !apellidos.isBlank()) {
+            sql.append(" AND apellidos ILIKE ?");
+            params.add("%" + apellidos.trim() + "%");
+        }
+        if (estado != null && !estado.isBlank()) {
+            sql.append(" AND estado = ?");
+            params.add(estado.trim().toLowerCase());
+        }
+        if (genero != null && !genero.isBlank()) {
+            sql.append(" AND genero ILIKE ?");
+            params.add("%" + genero.trim() + "%");
+        }
+        if (cargo != null && !cargo.isBlank()) {
+            sql.append(" AND cargo ILIKE ?");
+            params.add("%" + cargo.trim() + "%");
+        }
+        if (telefono != null && !telefono.isBlank()) {
+            sql.append(" AND telefono ILIKE ?");
+            params.add("%" + telefono.trim() + "%");
+        }
+        if (fechaNac != null) {
+            sql.append(" AND fecha_nac = ?");
+            params.add(Date.valueOf(fechaNac));
+        }
 
-                    }
+        sql.append(" ORDER BY apellidos, nombres");
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    usuarios.add(mapRowUsuario(rs));
                 }
-                LocalDate  fechaNacimiento = rs.getObject("fecha_nac", LocalDate.class);
-                String telefono = rs.getString("telefono");
-
-                usuarios.add(new Usuario(id, rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fechaNacimiento, telefono));
             }
         } catch (SQLException e) {
-            throw AppException.internal("Error al mapear usuarios: + e.getMessage()");
+            throw AppException.internal("Error al buscar usuarios: " + e.getMessage());
         }
+
         return usuarios;
     }
-
-
-    public List<Usuario> buscarUsuarioPorNombre(String n) {
-        String sql = "SELECT id, rut, nombres, apellidos,email,estado,genero,cargo,fecha_nac,telefono,rol FROM usuario WHERE nombres ILIKE ? or apellidos ILIKE ?";
-        try (Connection conn = conexion.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)){
-
-            ps.setString(1, "%" + n + "%");
-            ps.setString(2, "%" + n + "%");
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return mapearUsuarios(rs);
-            }
-        }catch (SQLException e) {
-            throw AppException.internal("Error al buscar usuario" + e.getMessage());
-            }
-    }
-
-    public List<Usuario> buscarUsuarioPorEstado(String estado)  {
-        String sql = "SELECT * FROM usuario WHERE estado = ?";
-
-        try (Connection conn = conexion.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, estado);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return mapearUsuarios(rs);
-            }
-        } catch (SQLException e) {
-            throw AppException.internal("Error al buscar usuario: " + e.getMessage());
-        }
-    }
-
 
 
 
@@ -283,6 +217,7 @@ public class UsuarioDAO {
             ps.setString(1, nuevoEstado);
             ps.setInt(2, user.getID());
             int rows = ps.executeUpdate();
+            if (rows == 0) { throw AppException.notFound("No se pudo cambiar el estado."); }
             if (rows > 0) { // Es para actualizar el objeto en memoria y que sea consistente a la BD.
                 user.setEstado(nuevoEstado);
                 return true;
@@ -292,5 +227,68 @@ public class UsuarioDAO {
         }
         return false;
     }
+
+
+    @NotNull
+    private List<Usuario> getUsuarios(String n, String sql) {
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)){
+
+            ps.setString(1, "%" + n + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return mapearUsuarios(rs);
+            }
+        }catch (SQLException e) {
+            throw AppException.internal("Error al buscar usuario" + e.getMessage());
+        }
+    }
+
+    //se le pasa un resultset (resultados de una consulta generada) para poder traducirlas (mapearlas) a un objeto usuario el cual será ingresado a una lista para tener facil acceso a los objetos.
+    //modificarla.
+    private List<Usuario> mapearUsuarios(ResultSet rs) {
+        List<Usuario> usuarios = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                usuarios.add(mapRowUsuario(rs));
+            }
+        } catch (SQLException e) {
+            throw AppException.internal("Error al mapear usuarios: "+ e.getMessage());
+        }
+        return usuarios;
+    }
+
+    private Usuario mapRowUsuario(ResultSet rs) {
+        try {
+            int id = rs.getInt("id");
+            String rut = rs.getString("rut");
+            String nombres = rs.getString("nombres");
+            String apellidos = rs.getString("apellidos");
+            String email = rs.getString("email");
+            String estado = rs.getString("estado");
+            String genero = rs.getString("genero");
+            String cargo = rs.getString("cargo");
+            String telefono = rs.getString("telefono");
+            LocalDate fecha_nac = rs.getObject("fecha_nac", LocalDate.class);
+
+            // Fallback seguro para el rol
+            Rol rol = Rol.MONITOR;
+            String rolStr = rs.getString("rol");
+            if (rolStr != null && !rolStr.isBlank()) {
+                try {
+                    rol = Rol.valueOf(rolStr.trim().toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                    rol = Rol.MONITOR;
+                }
+            }
+
+            return new Usuario(id, rut, nombres, apellidos, email, estado, genero, cargo, rol, fecha_nac, telefono);
+
+        } catch (SQLException e) {
+            throw AppException.internal("Error al mapear fila de usuario: " + e.getMessage());
+        }
+    }
+
+
 
 }

@@ -1,0 +1,354 @@
+package proyecto.lab.client.controllers;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import proyecto.lab.client.application.AppContext;
+import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.dto.EquipoUpdateDTO;
+
+import java.io.IOException;
+
+public class ViewEquiposController {
+
+    @FXML
+    void AbrirFormularioRegistrarEquipo(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/FormularioRegistrarEquipo.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Registrar un equipo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana principal hasta cerrar
+            stage.showAndWait();
+            ActualizarTablaEquipo();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private SplitMenuButton Buscar;
+
+    private String FiltroSeleccionado;
+
+
+
+    @FXML
+    private MenuItem FiltroEstado;
+
+    @FXML
+    private MenuItem FiltroID;
+
+    @FXML
+    private MenuItem FiltroNumSerie;
+
+    @FXML
+    private MenuItem FiltroIdLab;
+
+    @FXML
+    private MenuItem FiltroHostname;
+
+    @FXML
+    private MenuItem FiltroFabricante;
+
+    @FXML
+    private MenuItem FiltroModelo;
+
+    @FXML
+    private MenuItem FiltroMac;
+
+    @FXML
+    private Label txtUsuarioSesion;
+
+    @FXML
+    private Button btnCerrarSesion;
+
+    @FXML
+    private TextField txtBuscar;
+
+    @FXML
+    private TableColumn<EquipoDTO, String> EstadoTablaEquipo;
+
+    @FXML
+    private TableColumn<EquipoDTO, Integer> IdTablaEquipo;
+
+    @FXML
+    private TableColumn<EquipoDTO, String> NumSerieTablaEquipo;
+
+    @FXML
+    private TableColumn<EquipoDTO, Integer> LabTablaEquipo;
+
+    @FXML
+    private TableColumn<EquipoDTO, Void> AccionTablaEquipo;
+
+    @FXML
+    private TableColumn<EquipoDTO, String> ModeloTablaEquipo;
+
+    @FXML
+    private TableView<EquipoDTO> TablaEquipo;
+
+
+
+    private void ActualizarTablaEquipo(){
+        TablaEquipo.getItems().clear();
+        TablaEquipo.getItems().addAll(AppContext.equipo().listarEquipos());
+        TablaEquipo.refresh();
+    }
+
+    private void LimpiarTablaEquipo(){
+        TablaEquipo.getItems().clear();
+        TablaEquipo.refresh();
+    }
+
+
+    @FXML
+    void initialize(){
+        IdTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("id"));
+        NumSerieTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        LabTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("nombres"));
+        ModeloTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("rut"));
+        EstadoTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
+        configurarColumnaAccion();
+        ActualizarTablaEquipo();
+        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
+
+        for (MenuItem item : Buscar.getItems()) {
+            item.addEventHandler(ActionEvent.ACTION, e -> {
+                Buscar.setText(item.getText());
+                if (!Buscar.getStyleClass().contains("activo")) {
+                    Buscar.getStyleClass().add("activo");
+                }
+                e.consume(); // evita que el evento se propague a otra acción del SplitMenuButton
+            });
+        }}
+
+    private void EditarEquipos(ActionEvent event){
+    }
+
+
+    void AbrirFormularioEditarEquipo(EquipoDTO equipoSeleccionado) {
+        try {
+            EquipoDTO completo = AppContext.equipo().buscarEquipoPorId(equipoSeleccionado.id_equipo());
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/FormularioEditarEquipo.fxml"));
+            Parent root = loader.load();
+            FormularioEditarEquipoController controller = loader.getController();
+            controller.setEquipo(completo);
+
+            Stage stage = new Stage();
+            stage.setTitle("Editar usuario");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana principal hasta cerrar
+            stage.showAndWait();
+            ActualizarTablaEquipo();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void configurarColumnaAccion() {
+        AccionTablaEquipo.setCellFactory(col -> {
+            return new TableCell<EquipoDTO, Void>() {
+                private final Button btn = new Button("Editar");
+                private final HBox box = new HBox(6, btn);
+
+                {
+                    btn.setOnAction(event -> {
+                        EquipoDTO equipo = getTableView().getItems().get(getIndex());
+                        AbrirFormularioEditarEquipo(equipo);
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || getIndex() < 0) {
+                        setGraphic(null);
+                        return;
+                    }
+                    EquipoDTO equipo = getTableView().getItems().get(getIndex());
+                    setGraphic(box);
+                }
+            };
+        });
+
+
+    }
+
+    private EquipoUpdateDTO crearUpdateDTO(EquipoDTO equipo) {
+        int id = equipo.id_equipo();
+        String estado =  equipo.estado();
+        return new EquipoUpdateDTO(id, null, null, estado, null, null, null, null, null);
+    }
+
+
+    @FXML
+    void Buscar(ActionEvent event) {
+        String busqueda = txtBuscar.getText();
+
+        Buscar.getStyleClass().remove("activo");
+        try{
+
+            if (FiltroSeleccionado == null) {
+                alert(Alert.AlertType.WARNING, "Por favor, selecciona un filtro antes de buscar.");
+                return;
+            }
+            switch (FiltroSeleccionado) {
+                    case "estado":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorEstado(busqueda));
+                        break;
+                    case "numSerie":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorNumSerie(busqueda));
+                        break;
+                    case "ID":
+                        Integer idEquipo = null;
+                        if (busqueda != null && !busqueda.isBlank()) {
+                            idEquipo = Integer.valueOf(busqueda);
+                        }
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorId(idEquipo));
+                        break;
+                    case "idLab":
+                        Integer idLab = null;
+                        if (busqueda != null && !busqueda.isBlank()) {
+                            idLab = Integer.valueOf(busqueda);
+                        }
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorIdLab(idLab));
+                        break;
+                    case "hostname":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorHostname(busqueda));
+                        break;
+                    case "fabricante":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorFabricante(busqueda));
+                        break;
+                    case "modelo":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorModelo(busqueda));
+                        break;
+                    case "mac":
+                        LimpiarTablaEquipo();
+                        TablaEquipo.getItems().addAll(AppContext.equipo().buscarEquipoPorMac(busqueda));
+                        break;
+
+
+
+            }
+
+        } catch (RuntimeException ex) {// por validaciones de UsuarioController
+            ActualizarTablaEquipo();
+            alert(Alert.AlertType.ERROR, ex.getMessage());
+        } catch (Exception ex) {
+            alert(Alert.AlertType.ERROR, ex.getMessage());
+        }
+
+    }
+
+    @FXML
+    String FiltroEstado(ActionEvent event) {
+        FiltroSeleccionado = "estado";
+        Buscar.setText("Buscar por Estado");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroID(ActionEvent event) {
+        FiltroSeleccionado = "ID";
+        Buscar.setText("Buscar por ID");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroNumSerie(ActionEvent event) {
+        FiltroSeleccionado = "numSerie";
+        Buscar.setText("Buscar por Numero de Serie");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroIdLab(ActionEvent event) {
+        FiltroSeleccionado = "idLab";
+        Buscar.setText("Buscar por ID de Laboratorio");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroHostname(ActionEvent event) {
+        FiltroSeleccionado = "hostname";
+        Buscar.setText("Buscar por Hostname");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroFabricante(ActionEvent event) {
+        FiltroSeleccionado = "fabricante";
+        Buscar.setText("Buscar por Fabricante");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroModelo(ActionEvent event) {
+        FiltroSeleccionado = "modelo";
+        Buscar.setText("Buscar por Modelo");
+        return FiltroSeleccionado;
+    }
+
+    @FXML
+    String FiltroMac(ActionEvent event) {
+        FiltroSeleccionado = "mac";
+        Buscar.setText("Buscar por Mac");
+        return FiltroSeleccionado;
+    }
+
+
+
+    @FXML
+    void txtBuscar(ActionEvent event) {
+
+    }
+
+
+    @FXML
+    void btnCerrarSesion(ActionEvent event) {
+            AppContext.LimpiarSesion();
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IniciarSesion.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // 4. Reemplazar la escena actual con la de Login
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sistema de Monitoreo - UNAP");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void alert(Alert.AlertType type, String msg) {
+        new Alert(type, msg).showAndWait();
+    }
+
+}
+
+
+

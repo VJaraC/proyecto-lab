@@ -49,10 +49,10 @@ public class UsuarioController {
 
     public UsuarioDTO modificarNombreUsuario(UsuarioUpdateDTO in , String nuevonombre, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
+        int id = in.id();
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevonombre, "Debes ingresar un nombre");
-
-        int id = in.id();
+        validarPositivo(id, "El id es obligatorio");
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, nuevonombre, null, null, null, null, null, null, null);
 
@@ -60,10 +60,10 @@ public class UsuarioController {
     }
     public UsuarioDTO modificarApellidoUsuario(UsuarioUpdateDTO in , String nuevoapellidos, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
+        int id = in.id();
+        validarPositivo(id, "El id es obligatorio");
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevoapellidos, "Debes ingresar apellidos.");
-
-        int id = in.id();
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, nuevoapellidos, null, null, null, null, null, null);
 
@@ -86,10 +86,10 @@ public class UsuarioController {
 
     public UsuarioDTO modificarCorreoUsuario(UsuarioUpdateDTO in , String nuevocorreo, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
+        int id = in.id();
+        validarPositivo(id, "El id es obligatorio");
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevocorreo, "Debes ingresar un correo válido.");
-
-        int id = in.id();
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, nuevocorreo, null, null, null, null);
 
@@ -98,10 +98,10 @@ public class UsuarioController {
 
     public UsuarioDTO modificarTelefonoUsuario(UsuarioUpdateDTO in , String nuevotelefono, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
+        int id = in.id();
+        validarPositivo(id, "El id es obligatorio");
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevotelefono, "Debes ingresar un teléfono válido.");
-
-        int id = in.id();
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, nuevotelefono, null, null, null);
 
@@ -110,10 +110,10 @@ public class UsuarioController {
 
     public UsuarioDTO modificarCargoUsuario(UsuarioUpdateDTO in , String nuevocargo, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
-        validarNoNulo(in, "Datos requeridos");
-        validarTexto(nuevocargo, "Debes ingresar un teléfono válido.");
-
         int id = in.id();
+        validarPositivo(id, "El id es obligatorio");
+        validarNoNulo(in, "Datos requeridos");
+        validarTexto(nuevocargo, "Debes ingresar un cargo válido.");
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, null, null, null, nuevocargo);
 
@@ -122,10 +122,11 @@ public class UsuarioController {
 
     public UsuarioDTO habilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
+        int id = in.id();
+        validarPositivo(id, "El id es obligatorio");
         validarNoNulo(in, "Datos requeridos");
         validarPositivo(in.id(),"ID invalido");
 
-        int id = in.id();
         String estado = EstadoUtils.HABILITADO;
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null, null);
@@ -134,10 +135,10 @@ public class UsuarioController {
 
     public UsuarioDTO deshabilitarUsuario(UsuarioUpdateDTO in, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
-        validarNoNulo(in, "Datos requeridos");
-        validarPositivo(in.id(),"ID invalido");
-
         int id = in.id();
+        validarNoNulo(in, "Datos requeridos");
+        validarPositivo(id,"ID invalido");
+
         String estado = EstadoUtils.DESHABILITADO;
 
         UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null, null);
@@ -146,7 +147,7 @@ public class UsuarioController {
 
     public UsuarioDTO buscarUsuarioPorRUT(String rut, UsuarioDTO auth){
         AuthUtils.requireRole(auth, Rol.ADMIN);
-        validarNoNulo(rut, "El nombre es obligatorio");
+        validarNoNulo(rut, "El RUT es obligatorio");
 
         // Normalizar + Validar DV
         final String rutnormalizado;

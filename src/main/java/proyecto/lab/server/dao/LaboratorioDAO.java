@@ -17,7 +17,7 @@ public class LaboratorioDAO {
         this.conexion = new Conexion(); }
 
     public Laboratorio insertarLaboratorio(Laboratorio laboratorio){
-        String sql = "INSERT INTO laboratorio (id_lab, nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        final String sql = "INSERT INTO laboratorio (nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -25,10 +25,10 @@ public class LaboratorioDAO {
 
             ps.setString(1, laboratorio.getNombre_lab());
             ps.setString(2, laboratorio.getUbicacion());
-            ps.setString(3, laboratorio.getCapacidad_personas());
-            ps.setString(4, laboratorio.getCapacidad_equipo());
+            ps.setInt(3, laboratorio.getCapacidad_personas());
+            ps.setInt(4, laboratorio.getCapacidad_equipo());
             ps.setString(5, laboratorio.getEstado_lab());
-            ps.setDate(6, valueOf(laboratorio.getFecha_registro_lab()));
+            ps.setDate(6, Date.valueOf(laboratorio.getFecha_registro_lab()));
 
             int rows = ps.executeUpdate();
 
@@ -46,17 +46,17 @@ public class LaboratorioDAO {
     }
 
     public boolean actualizarLaboratorio(Laboratorio laboratorio) {
-        String sql = "UPDATE laboratorio SET nombre_lab = ?, ubicacion = ?, capacidad_equipo = ?, estado_lab = ?, fecha_registro_lab = ? WHERE id_lab = ? ";
+        final String sql = "UPDATE laboratorio SET nombre_lab = ?, ubicacion = ?, capacidad_personas = ? ,capacidad_equipo = ?, estado_lab = ?, fecha_registro_lab = ? WHERE id_lab = ? ";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, laboratorio.getNombre_lab());
             ps.setString(2, laboratorio.getUbicacion());
-            ps.setString(3, laboratorio.getCapacidad_personas());
-            ps.setString(4, laboratorio.getCapacidad_equipo());
+            ps.setInt(3, laboratorio.getCapacidad_personas());
+            ps.setInt(4, laboratorio.getCapacidad_equipo());
             ps.setString(5, laboratorio.getEstado_lab());
-            ps.setDate(7, Date.valueOf(laboratorio.getFecha_registro_lab()));
+            ps.setDate(6, Date.valueOf(laboratorio.getFecha_registro_lab()));
             ps.setInt(7, laboratorio.getId_lab());
             int rows = ps.executeUpdate();
 
@@ -71,34 +71,36 @@ public class LaboratorioDAO {
     }
 
     public Laboratorio buscarLaboratorioPorIdlab(int id_lab){
-        Laboratorio laboratorio = null;
-        String sql = "SELECT id_lab, nombre_lab,ubicacion,capacidad_personas,capacidad_equipo,estado_lab,fecha_registro_lab FROM laboratorio  WHERE id_lab = ?";
+        final String sql = "SELECT id_lab, nombre_lab,ubicacion,capacidad_personas,capacidad_equipo,estado_lab,fecha_registro_lab FROM laboratorio  WHERE id_lab = ?";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
                 ps.setInt(1, id_lab);
+
                 try(ResultSet rs = ps.executeQuery()){
-                    if(rs.next()){
-                        laboratorio = new Laboratorio();
-                        laboratorio.setId_lab(rs.getInt("id_lab"));
-                        laboratorio.setNombre_lab(rs.getString("nombre_lab"));
-                        laboratorio.setUbicacion(rs.getString("ubicacion"));
-                        laboratorio.setCapacidad_personas(rs.getString("capacidad_personas"));
-                        laboratorio.setCapacidad_equipo(rs.getString("capacidad_equipo"));
-                        laboratorio.setEstado_lab(rs.getString("estado_lab"));
-                        laboratorio.setFecha_registro_lab(rs.getObject("fecha_registro_lab", LocalDate.class));
+                    if(!rs.next()){
+                        throw AppException.notFound("Laboratorio no encontrado");
                     }
-                }
-                return laboratorio;
-        }catch(SQLException e){
-            System.err.printf("Error al buscar laboratorio: state=%s code= %d msg= %s%n ", e.getSQLState(), e.getErrorCode(), e.getMessage() );
+                        return new Laboratorio(
+                        rs.getInt("id_lab"),
+                        rs.getString("nombre_lab"),
+                        rs.getString("ubicacion"),
+                        rs.getInt("capacidad_personas"),
+                        rs.getInt("capacidad_equipo"),
+                        rs.getString("estado_lab"),
+                        rs.getObject("fecha_registro_lab", LocalDate.class)
+                        );
+                    }
+
+        } catch(SQLException e) {
+            System.err.printf("Error al buscar laboratorio: state=%s code= %d msg= %s%n ", e.getSQLState(), e.getErrorCode(), e.getMessage());
+            throw AppException.internal("Error al buscar laboratorio en la base de datos: " + e.getMessage());
         }
-        return laboratorio;
     }
 
     public List<Laboratorio> buscarLaboratorioPorUbicacion(String ubicacion){
-        String sql = "SELECT id_lab , nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab FROM laboratorio WHERE ubicacion LIKE ?" ;
+        final String sql = "SELECT id_lab , nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab FROM laboratorio WHERE ubicacion LIKE ?" ;
         List<Laboratorio> laboratorios = new ArrayList<>();
 
         try (Connection conn = conexion.getConnection();
@@ -115,7 +117,7 @@ public class LaboratorioDAO {
         return laboratorios;
     }
 
-    public List<Laboratorio> buscarLaboratorioPorNombrelab(String nombre_lab){
+    public List<Laboratorio> buscarLaboratorioPorNombre(String nombre_lab){
         String sql = "SELECT id_lab , nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab FROM laboratorio WHERE nombre_lab ILIKE ?" ;
         List<Laboratorio> laboratorios = new ArrayList<>();
 
@@ -145,8 +147,8 @@ public class LaboratorioDAO {
                 int id_lab = rs.getInt("id_lab");
                 String nombre_lab = rs.getString("nombre_lab");
                 String ubicacion = rs.getString("ubicacion");
-                String capacidad_personas = rs.getString("capacidad_personas");
-                String capacidad_equipo = rs.getString("capacidad_equipo");
+                int capacidad_personas = rs.getInt("capacidad_personas");
+                int capacidad_equipo = rs.getInt("capacidad_equipo");
                 String estado_lab = rs.getString("estado_lab");
                 LocalDate fecha_registro_lab = rs.getDate("fecha_registro_lab").toLocalDate();
                 laboratorios.add(new Laboratorio(id_lab, nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab , fecha_registro_lab));
@@ -184,8 +186,8 @@ public class LaboratorioDAO {
                 int id = rs.getInt("id");
                 String nombre_lab = rs.getString("nombre_lab");
                 String ubicacion = rs.getString("ubicacion");
-                String capacidad_personas = rs.getString("capacidad_personas");
-                String capacidad_equipo = rs.getString("capacidad_equipo");
+                int capacidad_personas = rs.getInt("capacidad_personas");
+                int capacidad_equipo = rs.getInt("capacidad_equipo");
                 String estado_lab = rs.getString("estado_lab");
                 LocalDate fecha_registro_lab = rs.getObject("fecha_registro_lab", LocalDate.class);
 
