@@ -13,11 +13,11 @@ public class Usuario {
     private String contrasena;
     private String cargo;
     private Rol rol;
-    private LocalDate fecha_nacimiento;
+    private LocalDate fecha_nac;
     private String telefono;
 
     //constructor
-    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo, Rol rol, LocalDate fecha_nacimiento, String telefono) {
+    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo, Rol rol, LocalDate fecha_nac, String telefono) {
         this.ID = ID;
         this.rut = rut;
         this.nombres = nombres;
@@ -28,12 +28,12 @@ public class Usuario {
         this.contrasena = contrasena;
         this.cargo = cargo;
         this.rol = rol;
-        this.fecha_nacimiento = fecha_nacimiento;
+        this.fecha_nac = fecha_nac;
         this.telefono = telefono;
     }
 
     //constructor usado en crear usuario
-    public Usuario(String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo,Rol rol, LocalDate fecha_nacimiento, String telefono) {
+    public Usuario(String rut, String nombres, String apellidos, String email, String estado, String genero, String contrasena, String cargo,Rol rol, LocalDate fecha_nac, String telefono) {
         this.rut = rut;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -42,12 +42,12 @@ public class Usuario {
         this.contrasena = contrasena;
         this.cargo = cargo;
         this.rol = rol;
-        this.fecha_nacimiento = fecha_nacimiento;
+        this.fecha_nac = fecha_nac;
         this.telefono = telefono;
         this.email = email;
     }
 
-    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero,String cargo, Rol rol, LocalDate fecha_nacimiento, String telefono) {
+    public Usuario(int ID, String rut, String nombres, String apellidos, String email, String estado, String genero,String cargo, Rol rol, LocalDate fecha_nac, String telefono) {
         this.ID = ID;
         this.rut = rut;
         this.nombres = nombres;
@@ -57,7 +57,7 @@ public class Usuario {
         this.genero = genero;
         this.cargo = cargo;
         this.rol = rol;
-        this.fecha_nacimiento = fecha_nacimiento;
+        this.fecha_nac = fecha_nac;
         this.telefono = telefono;
     }
 
@@ -93,8 +93,8 @@ public class Usuario {
 
     public void setRol(Rol rol) { this.rol = rol; }
 
-    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
-        this.fecha_nacimiento = fecha_nacimiento;
+    public void setFecha_nac(LocalDate fecha_nac) {
+        this.fecha_nac = fecha_nac;
     }
 
     public void setTelefono(String telefono) {
@@ -135,8 +135,8 @@ public class Usuario {
 
     public Rol getRol() { return rol; }
 
-    public LocalDate getFecha_nacimiento() {
-        return fecha_nacimiento;
+    public LocalDate getFecha_nac() {
+        return fecha_nac;
     }
 
     public String getTelefono() {
