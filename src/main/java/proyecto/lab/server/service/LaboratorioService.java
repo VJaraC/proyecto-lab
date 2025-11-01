@@ -84,4 +84,28 @@ public class LaboratorioService {
         return resultados;
     }
 
+    public List<LaboratorioDTO> listarLaboratorios(){
+        try{
+            List<Laboratorio> laboratorios = laboratorioDAO.mostrarLaboratorios();
+            List<LaboratorioDTO> resultados = new ArrayList<>();
+
+            for(Laboratorio u : laboratorios){
+                resultados.add(new LaboratorioDTO(
+                        u.getId_lab(),
+                        u.getNombre_lab(),
+                        u.getUbicacion(),
+                        u.getCapacidad_personas(),
+                        u.getCapacidad_equipo(),
+                        u.getEstado_lab(),
+                        u.getFecha_registro_lab()
+                ));
+            }
+            return resultados;
+        } catch (AppException e) {
+            throw e;
+        }catch (Exception e){
+            throw AppException.internal("Error inesperado al listar laboratorios.");
+        }
+    }
+
 }
