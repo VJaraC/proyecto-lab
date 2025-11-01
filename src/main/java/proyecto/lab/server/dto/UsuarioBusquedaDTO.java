@@ -6,20 +6,20 @@ public class UsuarioBusquedaDTO {
     private Integer id;
     private String rut;
     private String nombre;
+    private String apellidos;
     private String estado;
     private String genero;
     private String cargo;
-    private LocalDate fecha_nacimiento;
+    private LocalDate fecha_nac;
     private String telefono;
 
 
-    public UsuarioBusquedaDTO(int id, String rut, String nombre, String estado) {}
+    public UsuarioBusquedaDTO(int id, String rut, String nombre, String apellidos, String estado, String genero, String cargo, LocalDate fecha_nac, String telefono) {}
 
     public UsuarioBusquedaDTO() {}
 
-
     //getters
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -30,6 +30,8 @@ public class UsuarioBusquedaDTO {
     public String getNombre() {
         return nombre;
     }
+
+    public String getApellidos() {return apellidos;}
 
     public String getEstado() {
         return estado;
@@ -43,8 +45,8 @@ public class UsuarioBusquedaDTO {
         return cargo;
     }
 
-    public LocalDate getFecha_nacimiento() {
-        return fecha_nacimiento;
+    public LocalDate getFecha_nac() {
+        return fecha_nac;
     }
 
     public String getTelefono() {
@@ -66,6 +68,8 @@ public class UsuarioBusquedaDTO {
         this.nombre = nombre;
     }
 
+    public void setApellidos(String apellidos) { this.apellidos = apellidos;}
+
     public void setEstado(String estado) {
         this.estado = estado;
     }
@@ -78,8 +82,8 @@ public class UsuarioBusquedaDTO {
         this.cargo = cargo;
     }
 
-    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
-        this.fecha_nacimiento = fecha_nacimiento;
+    public void setFecha_nac(LocalDate fecha_nac) {
+        this.fecha_nac = fecha_nac;
     }
 
     public void setTelefono(String telefono) {
