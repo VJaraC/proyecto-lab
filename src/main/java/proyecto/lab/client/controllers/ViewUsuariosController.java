@@ -203,7 +203,7 @@ public class ViewUsuariosController {
         int id = usuario.getID();
         String nombres = usuario.getNombres();
         String estado =  usuario.getEstado();
-        return new UsuarioUpdateDTO(id, nombres, null, usuario.getEstado(), null, null, null, null, null);
+        return new UsuarioUpdateDTO(id, nombres, null, usuario.getEstado(), null, null, null, null);
     }
 
 

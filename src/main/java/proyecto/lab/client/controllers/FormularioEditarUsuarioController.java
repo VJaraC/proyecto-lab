@@ -106,10 +106,10 @@ public class FormularioEditarUsuarioController {
             }
 
             if (rolTexto != null && !rolTexto.isBlank()) {
-                Rol rolNuevo = Rol.valueOf(rolTexto.trim().toUpperCase());
+                Rol rolNuevo = Rol.valueOf(rolTexto);
                 if (usuario.getRol() != rolNuevo) {
                     UsuarioUpdateDTO dto = dtoSoloId();
-                    usuario = AppContext.admin().actualizarRolUsuario(dto, AppContext.getUsuarioActual());
+                    usuario = AppContext.admin().actualizarRolUsuario(dto,rolNuevo, AppContext.getUsuarioActual());
                     cambios = true;
                 }
             }
@@ -157,7 +157,7 @@ public class FormularioEditarUsuarioController {
     }
 
     private UsuarioUpdateDTO dtoSoloId() {
-        return new UsuarioUpdateDTO(usuario.getID(), null, null, null, null, null, null, null, null);
+        return new UsuarioUpdateDTO(usuario.getID(), null, null, null, null, null, null, null);
     }
 
 
