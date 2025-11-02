@@ -1,6 +1,5 @@
 package proyecto.lab.server.models;
 import java.time.LocalDate;
-import proyecto.lab.server.dto.LaboratorioDTO;
 
 public class Laboratorio {
     private int id_lab;
