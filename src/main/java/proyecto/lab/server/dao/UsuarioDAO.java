@@ -131,7 +131,7 @@ public class UsuarioDAO {
 
     //implementar mapearUsuarios.
     public Usuario buscarUsuarioPorRut(String rut) {
-        final String sql = "SELECT id, rut, nombres, apellidos, email , estado, genero , cargo, rol, fecha_nac, telefono FROM usuario WHERE rut = ?";
+        final String sql = "SELECT * FROM usuario WHERE rut = ?";
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -258,6 +258,18 @@ public class UsuarioDAO {
         return usuarios;
     }
 
+    private static boolean hasColumn(ResultSet rs, String name) throws SQLException {
+        ResultSetMetaData md = rs.getMetaData();
+        int cols = md.getColumnCount();
+        for (int i = 1; i <= cols; i++) {
+            // usar getColumnLabel para respetar alias del SELECT
+            if (name.equalsIgnoreCase(md.getColumnLabel(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Usuario mapRowUsuario(ResultSet rs) {
         try {
             int id = rs.getInt("id");
@@ -269,8 +281,6 @@ public class UsuarioDAO {
             String genero = rs.getString("genero");
             String cargo = rs.getString("cargo");
             String telefono = rs.getString("telefono");
-            LocalDate fecha_nac = rs.getObject("fecha_nac", LocalDate.class);
-
             // Fallback seguro para el rol
             Rol rol = Rol.MONITOR;
             String rolStr = rs.getString("rol");
@@ -278,16 +288,23 @@ public class UsuarioDAO {
                 try {
                     rol = Rol.valueOf(rolStr.trim().toUpperCase());
                 } catch (IllegalArgumentException ignored) {
-                    rol = Rol.MONITOR;
-                }
+                    rol = Rol.MONITOR; }
+            }
+            LocalDate fecha_nac = rs.getObject("fecha_nac", LocalDate.class);
+            // contrasena es opcional en el SELECT
+            String contrasena = null;
+            if (hasColumn(rs, "contrasena")) {
+                contrasena = rs.getString("contrasena"); // puede seguir siendo null y está bien
             }
 
-            return new Usuario(id, rut, nombres, apellidos, email, estado, genero, cargo, rol, fecha_nac, telefono);
+            return new Usuario(id, rut, nombres, apellidos, email, estado, genero,
+                    contrasena, cargo, rol, fecha_nac, telefono);
 
         } catch (SQLException e) {
             throw AppException.internal("Error al mapear fila de usuario: " + e.getMessage());
         }
     }
+
 
 
 

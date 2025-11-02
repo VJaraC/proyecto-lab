@@ -72,26 +72,6 @@ public class Equipo {
         this.nombreLab = nombreLab;
     }
 
-    //Constructor que recibe un DTO
-    public Equipo(EquipoDTO dto) {
-        this.id_equipo = dto.id_equipo();
-        this.id_admin = dto.id_admin();
-        this.id_lab_equipo = dto.id_lab_equipo();
-        this.hostname = dto.hostname();
-        this.numero_serie = dto.numero_serie();
-        this.fabricante = dto.fabricante();
-        this.estado = dto.estado();
-        this.modelo = dto.modelo();
-        this.mac = dto.mac();
-        this.ip = dto.ip();
-        this.modeloCPU = dto.modeloCPU();
-        this.nucleosCPU = dto.nucleosCPU();
-        this.ramTotal = dto.ramTotal();
-        this.almacenamiento = dto.almacenamiento();
-        this.modeloGPU = dto.modeloGPU();
-        this.fecha_ingreso = dto.fecha_ingreso();
-    }
-
     //Setters
     public void setId_equipo(int id_equipo) {
         this.id_equipo = id_equipo;

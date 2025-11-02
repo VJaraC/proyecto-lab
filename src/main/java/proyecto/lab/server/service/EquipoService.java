@@ -4,8 +4,10 @@ import proyecto.lab.server.dao.EquipoDAO;
 import proyecto.lab.server.dto.EquipoBusquedaDTO;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.EquipoUpdateDTO;
+import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Equipo;
+import proyecto.lab.server.models.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +42,12 @@ public class EquipoService {
         }
 
         //crear el nuevo equipo
-        Equipo equipoNuevo =  new Equipo(equipo); //se le pasa el dto que se le entrego como parametro a la función
+        Equipo equipoNuevo =  toEntity(equipo); //se le pasa el dto que se le entrego como parametro a la función
         boolean insercion = equipoDAO.insertarEquipo(equipoNuevo);
         if(!insercion){
             System.out.println("Error al crear equipo");
         }
-        return new EquipoDTO(equipoNuevo); //se le pasa al dto el equipo (modelo) que se creó
+        return this.toDTO(equipoNuevo); //se le pasa al dto el equipo (modelo) que se creó
     }
 
     //función para hacer la busqueda de mas de un equipo.
@@ -83,7 +85,7 @@ public class EquipoService {
 
         //transforma la lista de Equipo a EquipoDTO
         return resultados.stream()
-                .map(EquipoDTO::new)
+                .map(this::toDTO)
                 .toList();
     }
 
@@ -103,7 +105,7 @@ public class EquipoService {
         else{
             System.out.println("Error al buscar equipo");
         }
-        return new EquipoDTO(equipo);
+        return this.toDTO(equipo);
     }
 
     public EquipoDTO actualizarEquipo(EquipoUpdateDTO dto) {
@@ -175,7 +177,7 @@ public class EquipoService {
         if(!ok){
             throw AppException.badRequest("Error al actualizar equipo");
         }
-        return new EquipoDTO(existente);
+        return this.toDTO(existente);
 
     }
 
@@ -189,5 +191,47 @@ public class EquipoService {
 
     public List<EquipoDTO> listarEquipos() {
         return equipoDAO.listarEquiposDTO();
+    }
+
+    private EquipoDTO toDTO(Equipo equipo){
+        return new EquipoDTO(
+                equipo.getId_equipo(),
+                equipo.getId_admin(),
+                equipo.getId_lab_equipo(),
+                equipo.getHostname(),
+                equipo.getNumero_serie(),
+                equipo.getFabricante(),
+                equipo.getEstado(),
+                equipo.getModelo(),
+                equipo.getMac(),
+                equipo.getIp(),
+                equipo.getModeloCPU(),
+                equipo.getNucleosCPU(),
+                equipo.getRamTotal(),
+                equipo.getAlmacenamiento(),
+                equipo.getModeloGPU(),
+                equipo.getFecha_ingreso()
+        );
+    }
+
+    private Equipo toEntity(EquipoDTO dto){
+        return new Equipo(
+                dto.id_equipo(),
+                dto.id_admin(),
+                dto.id_lab_equipo(),
+                dto.hostname(),
+                dto.numero_serie(),
+                dto.fabricante(),
+                dto.estado(),
+                dto.modelo(),
+                dto.mac(),
+                dto.ip(),
+                dto.modeloCPU(),
+                dto.nucleosCPU(),
+                dto.ramTotal(),
+                dto.almacenamiento(),
+                dto.modeloGPU(),
+                dto.fecha_ingreso()
+        );
     }
 }
