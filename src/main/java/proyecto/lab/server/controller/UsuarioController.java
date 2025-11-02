@@ -76,7 +76,7 @@ public class UsuarioController {
 
         validarNoNulo(in, "Datos requeridos");
         validarPositivo(in.id(), "ID inválido");
-        if (in.rol()== null) throw AppException.badRequest("Debes seleccionar un rol válido.");
+        if (nuevoRol== null) throw AppException.badRequest("Debes seleccionar un rol válido.");
 
         if (auth.getID() == id){
             throw AppException.forbidden("No puedes cambiar tu propio rol.");
