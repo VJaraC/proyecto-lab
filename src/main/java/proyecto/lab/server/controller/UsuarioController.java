@@ -54,7 +54,7 @@ public class UsuarioController {
         validarTexto(nuevonombre, "Debes ingresar un nombre");
         validarPositivo(id, "El id es obligatorio");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, nuevonombre, null, null, null, null, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, nuevonombre, null, null, null, null, null, null);
 
         return usuarioService.actualizarUsuario(dto);
     }
@@ -65,23 +65,34 @@ public class UsuarioController {
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevoapellidos, "Debes ingresar apellidos.");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, nuevoapellidos, null, null, null, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, nuevoapellidos, null, null, null, null, null);
 
         return usuarioService.actualizarUsuario(dto);
     }
 
-    public UsuarioDTO actualizarRolUsuario(UsuarioUpdateDTO in, UsuarioDTO auth ){
+    public UsuarioDTO actualizarRolUsuario(UsuarioUpdateDTO in,Rol nuevoRol, UsuarioDTO auth ){
         AuthUtils.requireRole(auth, Rol.ADMIN);
+        int id = in.id();
 
         validarNoNulo(in, "Datos requeridos");
         validarPositivo(in.id(), "ID inválido");
         if (in.rol()== null) throw AppException.badRequest("Debes seleccionar un rol válido.");
 
-        if (auth.getID() == in.id()){
+        if (auth.getID() == id){
             throw AppException.forbidden("No puedes cambiar tu propio rol.");
         }
 
-        return usuarioService.actualizarUsuario(in);
+        UsuarioUpdateDTO dto= new UsuarioUpdateDTO(
+                in.id(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                nuevoRol
+        );
+        return usuarioService.actualizarUsuario(dto);
     }
 
     public UsuarioDTO modificarCorreoUsuario(UsuarioUpdateDTO in , String nuevocorreo, UsuarioDTO auth){
@@ -91,7 +102,7 @@ public class UsuarioController {
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevocorreo, "Debes ingresar un correo válido.");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, nuevocorreo, null, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, nuevocorreo, null, null, null);
 
         return usuarioService.actualizarUsuario(dto);
     }
@@ -103,7 +114,7 @@ public class UsuarioController {
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevotelefono, "Debes ingresar un teléfono válido.");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, nuevotelefono, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, nuevotelefono, null, null);
 
         return usuarioService.actualizarUsuario(dto);
     }
@@ -115,7 +126,7 @@ public class UsuarioController {
         validarNoNulo(in, "Datos requeridos");
         validarTexto(nuevocargo, "Debes ingresar un cargo válido.");
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, null, null, null, nuevocargo);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, null, null, null, nuevocargo, null);
 
         return usuarioService.actualizarUsuario(dto);
     }
@@ -129,7 +140,7 @@ public class UsuarioController {
 
         String estado = EstadoUtils.HABILITADO;
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null);
         return usuarioService.actualizarUsuario(dto);
     }
 
@@ -141,7 +152,7 @@ public class UsuarioController {
 
         String estado = EstadoUtils.DESHABILITADO;
 
-        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null, null);
+        UsuarioUpdateDTO dto = new UsuarioUpdateDTO(id, null, null, estado, null, null, null, null);
         return usuarioService.actualizarUsuario(dto);
     }
 

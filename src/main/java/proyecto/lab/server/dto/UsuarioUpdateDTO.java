@@ -11,9 +11,8 @@ public record UsuarioUpdateDTO(
     String estado,
     String email,
     String telefono,
-    Rol rol,
-    String contrasena,
-    String cargo
+    String cargo,
+    Rol rol
 )
 {
 }
