@@ -75,9 +75,9 @@ public class FormularioRegistrarEquipoController {
 
     @FXML
     void GuardarEquipo(ActionEvent e)  {
-        Integer idEquipo = null;
+        Integer idEquipo = 1;
         Integer idLab = 1;  // txtIdLab.getText();
-            Integer idUsuario = AppContext.getUsuarioActual().getID();
+        Integer idUsuario = AppContext.getUsuarioActual().getID();
         String hostname = txtHostname.getText();
         String numSerie = txtNumSerie.getText();
         String fabricante = txtFabricante.getText();
