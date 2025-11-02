@@ -8,6 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 //DATA ACCESS OBJECT, se usa para comunicarse directamente con el servidor.
@@ -130,24 +131,42 @@ public class UsuarioDAO {
     }
 
     //implementar mapearUsuarios.
-    public Usuario buscarUsuarioPorRut(String rut) {
-        final String sql = "SELECT * FROM usuario WHERE rut = ?";
+    public Optional<Usuario> buscarUsuarioPorRut(String rut) {
+        final String sql = """
+        SELECT id, rut, nombres, apellidos, email, estado, genero, contrasena, cargo, fecha_nac, telefono, rol
+        FROM usuario WHERE rut = ?
+    """;
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, rut);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return mapRowUsuario(rs);
+                    return Optional.of(mapRowUsuario(rs));
                 }
+                return Optional.empty(); // <— clave: sin excepciones por “no encontrado”
             }
-            // No hay fila.
-            throw AppException.notFound("No se encontró al usuario.");
-
         } catch (SQLException e) {
             throw AppException.internal("Error al buscar usuario por RUT: " + e.getMessage());
         }
     }
+
+    public boolean existeUsuarioPorRut(String rut) {
+        final String sql = "SELECT 1 FROM usuario WHERE rut = ? LIMIT 1";
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, rut);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+
+        } catch (SQLException e) {
+            throw AppException.internal("Error verificando existencia por RUT: " + e.getMessage());
+        }
+    }
+
+
 
     public List<Usuario> buscarUsuarios(String nombre, String apellidos, String estado, String genero,
                                         String cargo, LocalDate fechaNac, String telefono) {
@@ -258,16 +277,22 @@ public class UsuarioDAO {
         return usuarios;
     }
 
-    private static boolean hasColumn(ResultSet rs, String name) throws SQLException {
-        ResultSetMetaData md = rs.getMetaData();
-        int cols = md.getColumnCount();
-        for (int i = 1; i <= cols; i++) {
-            // usar getColumnLabel para respetar alias del SELECT
-            if (name.equalsIgnoreCase(md.getColumnLabel(i))) {
-                return true;
+    private static boolean hasColumn(ResultSet rs, String name) {
+        try {
+            ResultSetMetaData md = rs.getMetaData();
+            int cols = md.getColumnCount();
+
+            for (int i = 1; i <= cols; i++) {
+                // usar getColumnLabel para respetar alias del SELECT
+                if (name.equalsIgnoreCase(md.getColumnLabel(i))) {
+                    return true;
+                }
             }
+            return false;
+
+        } catch (SQLException e) {
+            throw AppException.internal("Error al verificar la columna '" + name + "': " + e.getMessage());
         }
-        return false;
     }
 
     private Usuario mapRowUsuario(ResultSet rs) {
@@ -304,8 +329,4 @@ public class UsuarioDAO {
             throw AppException.internal("Error al mapear fila de usuario: " + e.getMessage());
         }
     }
-
-
-
-
 }

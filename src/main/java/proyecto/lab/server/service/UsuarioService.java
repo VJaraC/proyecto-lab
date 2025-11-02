@@ -62,8 +62,9 @@ public class UsuarioService {
 
         try {
             rutNormalizado= RutUtils.normalizarRut(user.getRut());
+
             if(existsByRut(rutNormalizado)){
-                throw AppException.badRequest("Ya existe un usuario registrado con ese RUT.");
+                throw AppException.conflict("Ya existe un usuario registrado con ese RUT.");
             }
 
             //hashear contraseña
@@ -236,18 +237,20 @@ public class UsuarioService {
         final String normalizado;
         try {
             normalizado = RutUtils.normalizarRut(rut);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e){
             throw AppException.badRequest(e.getMessage());
         }
-        Usuario u = usuariodao.buscarUsuarioPorRut(normalizado);
-        if (u == null) throw AppException.notFound("Usuario no encontrado");
-        return u;
+
+        return usuariodao.buscarUsuarioPorRut(normalizado)
+                .orElseThrow(() -> AppException.notFound("Usuario no encontrado"));
     }
+
 
     private boolean existsByRut(String rut){
         String normalizado = RutUtils.normalizarRut(rut);
-        return usuariodao.buscarUsuarioPorRut(normalizado) != null;
+        return usuariodao.existeUsuarioPorRut(normalizado);
     }
+
 
     private Usuario requireById(Integer id) {
         if (id == null || id <= 0) {
