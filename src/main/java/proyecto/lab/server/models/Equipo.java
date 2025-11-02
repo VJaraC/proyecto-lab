@@ -5,7 +5,7 @@ import proyecto.lab.server.dto.EquipoDTO;
 import java.time.LocalDate;
 
 public class Equipo {
-    private int id_equipo;
+    private Integer id_equipo;
     private int id_admin;
     private int id_lab_equipo;
     private String hostname;
@@ -29,7 +29,7 @@ public class Equipo {
 
 
     // Constructor
-    public Equipo(int id_equipo, int id_admin, int id_lab_equipo, String hostname, String numero_serie,
+    public Equipo(Integer id_equipo, int id_admin, int id_lab_equipo, String hostname, String numero_serie,
                   String fabricante, String estado, String modelo, String mac, String ip, String modeloCPU,
                   String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU, LocalDate fecha_ingreso) {
         this.id_equipo = id_equipo;
@@ -50,7 +50,7 @@ public class Equipo {
         this.fecha_ingreso = fecha_ingreso;
     }
 
-    public Equipo(int id_equipo, int id_admin, int id_lab_equipo, String hostname, String numero_serie,
+    public Equipo(Integer id_equipo, int id_admin, int id_lab_equipo, String hostname, String numero_serie,
                   String fabricante, String estado, String modelo, String mac, String ip, String modeloCPU,
                   String nucleosCPU, String ramTotal, String almacenamiento, String modeloGPU, LocalDate fecha_ingreso, String nombreLab) {
         this.id_equipo = id_equipo;

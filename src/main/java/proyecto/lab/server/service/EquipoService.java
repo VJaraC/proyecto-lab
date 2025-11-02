@@ -215,23 +215,47 @@ public class EquipoService {
     }
 
     private Equipo toEntity(EquipoDTO dto){
-        return new Equipo(
-                dto.id_equipo(),
-                dto.id_admin(),
-                dto.id_lab_equipo(),
-                dto.hostname(),
-                dto.numero_serie(),
-                dto.fabricante(),
-                dto.estado(),
-                dto.modelo(),
-                dto.mac(),
-                dto.ip(),
-                dto.modeloCPU(),
-                dto.nucleosCPU(),
-                dto.ramTotal(),
-                dto.almacenamiento(),
-                dto.modeloGPU(),
-                dto.fecha_ingreso()
-        );
+        if (dto.id_equipo() == null) {
+            // CREAR
+            return new Equipo(
+                    null,
+                    dto.id_admin(),
+                    dto.id_lab_equipo(),
+                    dto.hostname(),
+                    dto.numero_serie(),
+                    dto.fabricante(),
+                    dto.estado(),
+                    dto.modelo(),
+                    dto.mac(),
+                    dto.ip(),
+                    dto.modeloCPU(),
+                    dto.nucleosCPU(),
+                    dto.ramTotal(),
+                    dto.almacenamiento(),
+                    dto.modeloGPU(),
+                    dto.fecha_ingreso()
+            );
+        } else {
+            // ACTUALIZAR / CARGAR
+            return new Equipo(
+                    dto.id_equipo(),
+                    dto.id_admin(),
+                    dto.id_lab_equipo(),
+                    dto.hostname(),
+                    dto.numero_serie(),
+                    dto.fabricante(),
+                    dto.estado(),
+                    dto.modelo(),
+                    dto.mac(),
+                    dto.ip(),
+                    dto.modeloCPU(),
+                    dto.nucleosCPU(),
+                    dto.ramTotal(),
+                    dto.almacenamiento(),
+                    dto.modeloGPU(),
+                    dto.fecha_ingreso()
+            );
+        }
     }
+
 }

@@ -21,10 +21,9 @@ public class Main {
         EquipoDAO equipoDAO = new EquipoDAO();
         EquipoService equipoService = new EquipoService(equipoDAO);
         EquipoController equipoController = new EquipoController(equipoService);
-
-        EquipoUpdateDTO dtoUpdate = new EquipoUpdateDTO(1, null, null, null, null, null, null, null, null);
-        equipoController.habilitarEquipo(dtoUpdate);
-
+        LocalDate fecha = LocalDate.of(1995, 5, 23);
+        EquipoDTO equipoDTO = new EquipoDTO(1, 1, "Equipo_4", "377", "lenovo", "disponible", "lenovo", "333222111", "132.32.1.3", "intel", "8", "1000", "10000", "amd", fecha);
+        equipoController.crearEquipo(equipoDTO);
         //EquipoBusquedaDTO filtrosBusqueda = new EquipoBusquedaDTO(null, null, null, null, "12341234", null, null, null, null, null, null);
         //List<EquipoDTO> resultados = equipoController.buscarEquipoPorFabricante("Lenovo");
         //EquipoDTO resultado = null; //equipoController.buscarEquipoPorId(1);
