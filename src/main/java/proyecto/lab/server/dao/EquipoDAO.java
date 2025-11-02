@@ -17,7 +17,7 @@ public class EquipoDAO {
     }
 
     public boolean insertarEquipo(Equipo equipo) {
-        String sql = "INSERT INTO equipo (rut, id_lab, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq) " +
+        String sql = "INSERT INTO equipo (id, id_lab, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = conexion.getConnection();
@@ -79,13 +79,13 @@ public class EquipoDAO {
             int filas = ps.executeUpdate();
             if (filas > 0) {
                 System.out.println("Equipo actualizado exitosamente");
-            } else {
-                System.out.println("No se encontró un equipo con ese ID");
+                return true;
             }
+            System.out.println("No se encontró un equipo con ese ID");
         } catch (SQLException e) {
             System.out.println("Error al actualizar equipo: " + e.getMessage());
         }
-        return true;
+        return false;
     }
 
     //tratar de hacer una funcion que se le pase un rs y esta la transforme a un objeto. Hacer el mapear equipo en otra función que tome la función anterior y las agregue a una lista.
@@ -162,7 +162,7 @@ public class EquipoDAO {
     }
 
     public List<Equipo> buscarEquipoPorIdLab(int id_lab){
-        String sql = "SELECT * FROM equipo WHERE id_equipo = ?";
+        String sql = "SELECT * FROM equipo WHERE id_lab = ?";
 
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -194,7 +194,7 @@ public class EquipoDAO {
     }
 
     public List<Equipo> buscarPorFechaIngreso(LocalDate fechaIngreso) {
-        String sql =  "SELECT * FROM equipo WHERE ip = ?";
+        String sql =  "SELECT * FROM equipo WHERE fecha_ingreso_eq = ?";
 
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -225,7 +225,7 @@ public class EquipoDAO {
     }
 
     public List<Equipo> buscarEquipoPorModelo(String hostname) {
-        String sql = "SELECT * FROM equipo WHERE hostname = ?";
+        String sql = "SELECT * FROM equipo WHERE modelo = ?";
 
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -288,7 +288,7 @@ public class EquipoDAO {
     }
 
     public List<Equipo> buscarPorEstado(String Estado) {
-        String sql =  "SELECT * FROM equipo WHERE estado = ?";
+        String sql =  "SELECT * FROM equipo WHERE estado_equipo = ?";
 
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
