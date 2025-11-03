@@ -24,10 +24,9 @@ public class UsuarioDAO {
         final String sql = """
         INSERT INTO usuario (rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fecha_nac, telefono)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        RETURNING id
     """;
         try (Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, user.getRut());
             ps.setString(2, user.getNombres());

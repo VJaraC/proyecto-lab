@@ -17,11 +17,10 @@ public class LaboratorioDAO {
         final String sql = """
     INSERT INTO laboratorio (nombre_lab, ubicacion, capacidad_personas, capacidad_equipo, estado_lab, fecha_registro_lab)
     VALUES (?, ?, ?, ?, ?, ?)
-    RETURNING id_lab
 """;
 
         try (Connection conn = conexion.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, lab.getNombre_lab());
             ps.setString(2, lab.getUbicacion());

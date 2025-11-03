@@ -18,7 +18,7 @@ public class LaboratorioService {
     }
 
     public LaboratorioDTO crearLaboratorio(LaboratorioDTO lab) {
-        if (lab.id_lab() > 0) {
+        if ((lab.id_lab() != null && lab.id_lab() > 0)) {
             throw AppException.badRequest("No debes enviar ID al crear el laboratorio"); // validaciones
         }
         if(lab.nombre_lab() == null || lab.nombre_lab().trim().isEmpty()) {
@@ -66,12 +66,16 @@ public class LaboratorioService {
     public List<LaboratorioDTO> buscarLaboratorios(LaboratorioBusquedaDTO in) {
         if (in == null) throw AppException.badRequest("Solicitud inválida.");
 
+        Integer capPObj = in.getCapacidad_personas();
+        Integer capEObj = in.getCapacidad_equipo();
+        int capP = (capPObj == null) ? 0 : capPObj;
+        int capE = (capEObj == null) ? 0 : capEObj;
+
         boolean tieneFiltro =
                 (in.getNombre_lab() != null && !in.getNombre_lab().isBlank()) ||
                         (in.getEstado_lab() != null && !in.getEstado_lab().isBlank()) ||
                         (in.getUbicacion() != null && !in.getUbicacion().isBlank()) ||
-                        (in.getCapacidad_equipo() > 0 ) ||
-                        (in.getCapacidad_personas() > 0 ) ||
+                        (capE > 0) || (capP > 0) ||
                         (in.getFecha_registro_lab() != null);
 
         if (!tieneFiltro)
@@ -80,8 +84,8 @@ public class LaboratorioService {
         List<Laboratorio> laboratorios = laboratorioDAO.buscarLaboratorios(
                 in.getNombre_lab(),
                 in.getUbicacion(),
-                in.getCapacidad_personas(),
-                in.getCapacidad_equipo(),
+                capP,
+                capE,
                 in.getEstado_lab(),
                 in.getFecha_registro_lab()
         );

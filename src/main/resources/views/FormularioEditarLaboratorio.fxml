@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioRegistrarEquipoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioEditarLaboratorioController">
     <children>
         <Label layoutX="242.0" layoutY="25.0" text="Editar Laboratorio" textFill="#062040">
             <font>
@@ -18,7 +18,7 @@
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <Button id="BotonGuardarUsuario" fx:id="BotonActualizarLaboratorio" layoutX="276.0" layoutY="279.0" mnemonicParsing="false" onAction="#ActualizarLaboratorio" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Actualizar">
+        <Button id="BotonGuardarUsuario" fx:id="BotonActualizarLaboratorio" layoutX="276.0" layoutY="279.0" mnemonicParsing="false" onAction="#GuardarActualizarLaboratorio" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Actualizar">
             <font>
                 <Font name="Product Sans Bold" size="18.0" />
             </font>
