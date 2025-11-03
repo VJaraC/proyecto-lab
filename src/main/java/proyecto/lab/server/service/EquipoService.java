@@ -1,10 +1,7 @@
 package proyecto.lab.server.service;
 
 import proyecto.lab.server.dao.EquipoDAO;
-import proyecto.lab.server.dto.EquipoBusquedaDTO;
-import proyecto.lab.server.dto.EquipoDTO;
-import proyecto.lab.server.dto.EquipoUpdateDTO;
-import proyecto.lab.server.dto.UsuarioDTO;
+import proyecto.lab.server.dto.*;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Equipo;
 import proyecto.lab.server.models.Usuario;
@@ -258,4 +255,7 @@ public class EquipoService {
         }
     }
 
+    public EquipoCountDTO obtenerResumenEstados(Integer idLab) {
+        return equipoDAO.contarEquiposResumen(idLab);
+    }
 }

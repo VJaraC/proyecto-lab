@@ -1,5 +1,6 @@
 package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
+import proyecto.lab.server.dto.EquipoCountDTO;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Usuario;
@@ -387,5 +388,39 @@ public class EquipoDAO {
         }
         return lista;
     }
+
+    //funcion para obtener la cantidad de equipos por estado (exclusivo postgresql por "filter")
+    public EquipoCountDTO contarEquiposResumen(Integer idLab) {
+        String base = """
+        SELECT
+          COUNT(*) FILTER (WHERE estado_equipo = 'disponible')       AS disponibles,
+          COUNT(*) FILTER (WHERE estado_equipo = 'operativo')        AS operativos,
+          COUNT(*) FILTER (WHERE estado_equipo = 'fuera de servicio') AS fuera_servicio,
+          COUNT(*)                                                  AS total
+        FROM equipo
+    """;
+        String sql = (idLab == null) ? base : base + " WHERE id_lab = ?";
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (idLab != null) ps.setInt(1, idLab);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new EquipoCountDTO(
+                            rs.getLong("disponibles"),
+                            rs.getLong("operativos"),
+                            rs.getLong("fuera_servicio"),
+                            rs.getLong("total")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar equipos por estado", e);
+        }
+        return new EquipoCountDTO(0,0,0,0);
+    }
+
 
 }

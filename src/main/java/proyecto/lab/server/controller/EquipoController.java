@@ -201,4 +201,13 @@ public class EquipoController {
     }
 
 
+    public EquipoCountDTO countEquipo(){
+        return equipoService.obtenerResumenEstados(null);
+    }
+
+    public EquipoCountDTO countEquipoPorLab(Integer idLab){
+        validarPositivo(idLab,"ID de Laboratorio invalido");
+        return equipoService.obtenerResumenEstados(idLab);
+    }
+
 }
