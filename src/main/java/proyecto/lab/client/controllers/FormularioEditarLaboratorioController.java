@@ -37,21 +37,12 @@ public class FormularioEditarLaboratorioController {
     @FXML
     private TextField txtCapacidadPersonas;
 
-    @FXML
-    private MenuButton txtEstado;
 
     @FXML
     private TextField txtNombre;
 
     @FXML
     private TextField txtUbicacion;
-
-    @FXML
-    void seleccionarEstado(ActionEvent event) {
-        MenuItem item = (MenuItem) event.getSource();
-        txtEstado.setText(item.getText());
-    }
-
 
 
     @FXML
@@ -60,7 +51,6 @@ public class FormularioEditarLaboratorioController {
         String ubicacion = txtUbicacion.getText();
         Integer capacidad_personas = Integer.valueOf(txtCapacidadPersonas.getText());
         Integer capacidad_equipos = Integer.valueOf(txtCapacidadEquipos.getText());
-        String estado_lab = txtEstado.getText();
 
         boolean cambios = false;
 
@@ -120,7 +110,6 @@ public class FormularioEditarLaboratorioController {
 
     private void cargarCampos() {
         txtNombre.setText(laboratorio.nombre_lab());
-        txtEstado.setText(laboratorio.estado_lab());
         txtUbicacion.setText(laboratorio.ubicacion());
         txtCapacidadPersonas.setText(String.valueOf(laboratorio.capacidad_personas()));
         txtCapacidadEquipos.setText(String.valueOf(laboratorio.capacidad_equipo()));
