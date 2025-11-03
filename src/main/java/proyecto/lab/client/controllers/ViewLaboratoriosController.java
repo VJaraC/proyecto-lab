@@ -14,8 +14,11 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.dto.LaboratorioUpdateDTO;
+import proyecto.lab.server.dto.UsuarioDTO;
+import proyecto.lab.server.dto.UsuarioUpdateDTO;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class ViewLaboratoriosController {
 
@@ -96,7 +99,7 @@ public class ViewLaboratoriosController {
 
     private void ActualizarTablaLaboratorio(){
         TablaLaboratorio.getItems().clear();
-        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().listaLab());
+        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().listarLaboratorios(AppContext.getUsuarioActual()));
         TablaLaboratorio.refresh();
     }
 
@@ -130,7 +133,7 @@ public class ViewLaboratoriosController {
 
     void AbrirFormularioEditarLaboratorio(LaboratorioDTO LaboratorioSeleccionado) {
         try {
-            LaboratorioDTO completo = AppContext.laboratorio().buscarLaboratorioPorId(LaboratorioSeleccionado.id_Laboratorio());
+            LaboratorioDTO completo = AppContext.laboratorio().buscarLaboratorioPorId(LaboratorioSeleccionado.id_lab(),AppContext.getUsuarioActual());
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/FormularioEditarLaboratorio.fxml"));
             Parent root = loader.load();
@@ -154,11 +157,29 @@ public class ViewLaboratoriosController {
             return new TableCell<LaboratorioDTO, Void>() {
                 private final Button btn = new Button("Editar");
                 private final HBox box = new HBox(6, btn);
+                private final Button btnDeshabilitar = new Button("Deshabilitar");
+                private final Button btnHabilitar = new Button("Habilitar");
 
                 {
                     btn.setOnAction(event -> {
                         LaboratorioDTO Laboratorio = getTableView().getItems().get(getIndex());
                         AbrirFormularioEditarLaboratorio(Laboratorio);
+                    });
+
+
+                    btnDeshabilitar.setOnAction(event -> {
+                        LaboratorioDTO labDeshabilitar = getTableView().getItems().get(getIndex());
+                        LaboratorioUpdateDTO labUpdateDTO = crearUpdateDTO(labDeshabilitar);
+                        AppContext.laboratorio().deshabilitarLaboratorio(labUpdateDTO, AppContext.getUsuarioActual());
+                        ActualizarTablaLaboratorio();
+
+                    });
+
+                    btnHabilitar.setOnAction(event -> {
+                        LaboratorioDTO labHabilitar = getTableView().getItems().get(getIndex());
+                        LaboratorioUpdateDTO labUpdateDTO = crearUpdateDTO(labHabilitar);
+                        AppContext.laboratorio().habilitarLaboratorio(labUpdateDTO, AppContext.getUsuarioActual());
+                        ActualizarTablaLaboratorio();
                     });
                 }
 
@@ -192,31 +213,33 @@ public class ViewLaboratoriosController {
             switch (FiltroSeleccionado) {
                     case "estado":
                         LimpiarTablaLaboratorio();
-                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorEstado(busqueda));
+                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratoriosPorEstado(busqueda,AppContext.getUsuarioActual()));
                         break;
                     case "nombre":
                         LimpiarTablaLaboratorio();
-                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorNombre(busqueda));
+                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorNombre(busqueda,AppContext.getUsuarioActual()));
                         break;
                     case "ID":
-                        Integer idLaboratorio = null;
+                        Integer idLaboratorioBuscar = null;
                         if (busqueda != null && !busqueda.isBlank()) {
-                            idLaboratorio = Integer.valueOf(busqueda);
+                            idLaboratorioBuscar = Integer.valueOf(busqueda);
                         }
                         LimpiarTablaLaboratorio();
-                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorId(idLaboratorio));
+                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorId(idLaboratorioBuscar,AppContext.getUsuarioActual()));
                         break;
                     case "ubicacion":
                         LimpiarTablaLaboratorio();
-                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorUbicacion(busqueda));
+                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratoriosPorUbicacion(busqueda,AppContext.getUsuarioActual()));
                         break;
                     case "capacidadPersonas":
                         LimpiarTablaLaboratorio();
-                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorCapacidadPersonas(busqueda));
+                        Integer capacidadPersonas = Integer.valueOf(busqueda);
+                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratoriosPorCapacidades(capacidadPersonas,null, AppContext.getUsuarioActual()));
                         break;
                     case "capacidadEquipos":
                         LimpiarTablaLaboratorio();
-                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorCapacidadEquipos(busqueda));
+                        Integer capacidadEquipos = Integer.valueOf(busqueda);
+                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratoriosPorCapacidades(null, capacidadEquipos, AppContext.getUsuarioActual()));
                         break;
             }
 
@@ -299,6 +322,16 @@ public class ViewLaboratoriosController {
 
     private void alert(Alert.AlertType type, String msg) {
         new Alert(type, msg).showAndWait();
+    }
+
+    private LaboratorioUpdateDTO crearUpdateDTO(LaboratorioDTO lab) {
+        int id = lab.id_lab();
+        String nombre_lab = lab.nombre_lab();
+        String ubicacion = lab.ubicacion();
+        Integer capacidad_personas= lab.capacidad_personas();
+        Integer capacidad_equipos = lab.capacidad_equipo();
+        String estado_lab = lab.estado_lab();
+        return new LaboratorioUpdateDTO(id,nombre_lab,ubicacion,capacidad_personas,capacidad_equipos,estado_lab);
     }
 
 }
