@@ -18,7 +18,7 @@ public class LaboratorioService {
     }
 
     public LaboratorioDTO crearLaboratorio(LaboratorioDTO lab) {
-        if (lab.id_lab() > 0) {
+        if ((lab.id_lab() != null && lab.id_lab() > 0)) {
             throw AppException.badRequest("No debes enviar ID al crear el laboratorio"); // validaciones
         }
         if(lab.nombre_lab() == null || lab.nombre_lab().trim().isEmpty()) {

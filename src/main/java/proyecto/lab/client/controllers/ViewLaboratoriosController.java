@@ -111,11 +111,11 @@ public class ViewLaboratoriosController {
 
     @FXML
     void initialize(){
-        IdTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("id"));
-        NombreTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        IdTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("id_lab"));
+        NombreTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("nombre_lab"));
         UbicacionTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("ubicacion"));
-        CapacidadEquiposTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("capacidadEquipos"));
-        EstadoTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        CapacidadEquiposTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("capacidad_equipo"));
+        EstadoTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("estado_lab"));
         configurarColumnaAccion();
         ActualizarTablaLaboratorio();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
@@ -190,7 +190,12 @@ public class ViewLaboratoriosController {
                         setGraphic(null);
                         return;
                     }
-                    LaboratorioDTO Laboratorio = getTableView().getItems().get(getIndex());
+                    LaboratorioDTO laboratorio = getTableView().getItems().get(getIndex());
+                    if ("habilitado".equals(laboratorio.estado_lab())) {
+                        box.getChildren().setAll(btn, btnDeshabilitar);
+                    } else {
+                        box.getChildren().setAll(btn, btnHabilitar);
+                    }
                     setGraphic(box);
                 }
             };

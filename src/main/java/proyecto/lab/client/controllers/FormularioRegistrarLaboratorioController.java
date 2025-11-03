@@ -49,11 +49,10 @@ public class FormularioRegistrarLaboratorioController {
         String ubicacion = txtUbicacion.getText();
         Integer capacidad_personas = Integer.valueOf(txtCapacidadPersonas.getText());
         Integer capacidad_equipos = Integer.valueOf(txtCapacidadEquipos.getText());
-        String estado = txtEstado.getText();
         LocalDate fechaIngreso = LocalDate.now();
 
         try {
-            LaboratorioDTO in = new LaboratorioDTO(null,nombre_lab, ubicacion, capacidad_personas, capacidad_equipos, estado, fechaIngreso);
+            LaboratorioDTO in = new LaboratorioDTO(nombre_lab, ubicacion, capacidad_personas, capacidad_equipos, fechaIngreso);
             LaboratorioDTO creado = AppContext.laboratorio().crearLaboratorio(in,AppContext.getUsuarioActual());  // 💾 BD a través del server
 
             alert(Alert.AlertType.INFORMATION, "Laboratorio registrado: " + creado.nombre_lab());
