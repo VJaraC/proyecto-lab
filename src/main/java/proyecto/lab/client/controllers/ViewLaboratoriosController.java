@@ -1,5 +1,7 @@
 package proyecto.lab.client.controllers;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,11 +16,8 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.dto.LaboratorioUpdateDTO;
-import proyecto.lab.server.dto.UsuarioDTO;
-import proyecto.lab.server.dto.UsuarioUpdateDTO;
 
 import java.io.IOException;
-import java.time.LocalDate;
 
 public class ViewLaboratoriosController {
 
@@ -50,7 +49,7 @@ public class ViewLaboratoriosController {
     private TableColumn<LaboratorioDTO, Void> AccionTablaLaboratorio;
 
     @FXML
-    private TableColumn<LaboratorioDTO, String> CapacidadEquiposTablaLaboratorio;
+    private TableColumn<LaboratorioDTO, Integer> CapacidadEquiposTablaLaboratorio;
 
     @FXML
     private TableColumn<LaboratorioDTO, String> EstadoTablaLaboratorio;
@@ -110,15 +109,21 @@ public class ViewLaboratoriosController {
 
 
     @FXML
-    void initialize(){
-        IdTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("id_lab"));
-        NombreTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("nombre_lab"));
-        UbicacionTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("ubicacion"));
-        CapacidadEquiposTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("capacidad_equipo"));
-        EstadoTablaLaboratorio.setCellValueFactory(new PropertyValueFactory<>("estado_lab"));
+    void initialize() {
+        IdTablaLaboratorio.setCellValueFactory(cd ->
+                new ReadOnlyObjectWrapper<>(cd.getValue().id_lab()));
+        NombreTablaLaboratorio.setCellValueFactory(cd ->
+                new ReadOnlyStringWrapper(cd.getValue().nombre_lab()));
+        UbicacionTablaLaboratorio.setCellValueFactory(cd ->
+                new ReadOnlyStringWrapper(cd.getValue().ubicacion()));
+        CapacidadEquiposTablaLaboratorio.setCellValueFactory(cd ->
+                new ReadOnlyObjectWrapper<>(cd.getValue().capacidad_equipo()));
+        EstadoTablaLaboratorio.setCellValueFactory(cd ->
+                new ReadOnlyStringWrapper(cd.getValue().estado_lab()));
+
         configurarColumnaAccion();
         ActualizarTablaLaboratorio();
-        txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
+        txtUsuarioSesion.setText(AppContext.getUsuarioActual().getNombres());
 
         for (MenuItem item : Buscar.getItems()) {
             item.addEventHandler(ActionEvent.ACTION, e -> {
