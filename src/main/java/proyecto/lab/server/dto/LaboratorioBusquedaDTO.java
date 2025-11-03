@@ -6,12 +6,12 @@ public class LaboratorioBusquedaDTO {
     private Integer id_lab;
     private String nombre_lab;
     private String ubicacion;
-    private String capacidad_personas;
-    private String capacidad_equipo;
+    private Integer capacidad_personas;
+    private Integer capacidad_equipo;
     private String estado_lab;
     private LocalDate fecha_registro_lab;
 
-    public LaboratorioBusquedaDTO(int id_lab, String nombre_lab, String ubicacion, String estado_lab) {}
+    public LaboratorioBusquedaDTO(int id_lab, String nombre_lab, String ubicacion, Integer capacidad_personas, Integer capacidad_equipo, String estado_lab) {}
 
     public LaboratorioBusquedaDTO() {}
 
@@ -28,11 +28,11 @@ public class LaboratorioBusquedaDTO {
         return ubicacion;
     }
 
-    public String getCapacidad_personas() {
+    public Integer getCapacidad_personas() {
         return capacidad_personas;
     }
 
-    public String getCapacidad_equipo() {
+    public Integer getCapacidad_equipo() {
         return capacidad_equipo;
     }
 
@@ -57,11 +57,11 @@ public class LaboratorioBusquedaDTO {
         this.ubicacion = ubicacion;
     }
 
-    public void setCapacidad_personas(String capacidad_personas) {
+    public void setCapacidad_personas(Integer capacidad_personas) {
         this.capacidad_personas = capacidad_personas;
     }
 
-    public void setCapacidad_equipo(String capacidad_equipo) {
+    public void setCapacidad_equipo(Integer capacidad_equipo) {
         this.capacidad_equipo = capacidad_equipo;
     }
 
