@@ -192,7 +192,7 @@
 //            switch (FiltroSeleccionado) {
 //                    case "estado":
 //                        LimpiarTablaLaboratorio();
-//                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratorioPorEstado(busqueda));
+//                        TablaLaboratorio.getItems().addAll(AppContext.laboratorio().buscarLaboratoriosPorEstado(busqueda));
 //                        break;
 //                    case "nombre":
 //                        LimpiarTablaLaboratorio();
