@@ -18,14 +18,15 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-//        EquipoDAO equipoDAO = new EquipoDAO();
-//        EquipoService equipoService = new EquipoService(equipoDAO);
-//        EquipoController equipoController = new EquipoController(equipoService);
+        EquipoDAO equipoDAO = new EquipoDAO();
+        EquipoService equipoService = new EquipoService(equipoDAO);
+        EquipoController equipoController = new EquipoController(equipoService);
         LocalDate fecha = LocalDate.of(1995, 5, 23);
 //        EquipoDTO equipoDTO = new EquipoDTO(1, 1, "Equipo_4", "377", "lenovo", "disponible", "lenovo", "333222111", "132.32.1.3", "intel", "8", "1000", "10000", "amd", fecha);
-//        equipoController.crearEquipo(equipoDTO);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(1, 1, null, null, null, null, null, null, null, null);
+        equipoController.cambiarLabEquipo(dto, 2);
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        /*UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioService usuarioService = new UsuarioService(usuarioDAO);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
         Rol rol = Rol.valueOf("ADMIN");

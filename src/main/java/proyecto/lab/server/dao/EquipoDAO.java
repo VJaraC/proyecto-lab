@@ -62,19 +62,20 @@ public class EquipoDAO {
 
 
     public Boolean actualizarEquipo(Equipo equipo) {
-        String sql = "UPDATE equipo SET hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_eq = ?";
+        String sql = "UPDATE equipo SET id_lab = ?, hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_eq = ?";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, equipo.getHostname());
-            ps.setString(2, equipo.getEstado());
-            ps.setString(3, equipo.getIp());
-            ps.setString(4, equipo.getModeloCPU());
-            ps.setString(5, equipo.getNucleosCPU());
-            ps.setString(6, equipo.getRamTotal());
-            ps.setString(7, equipo.getAlmacenamiento());
-            ps.setString(8, equipo.getModeloGPU());
-            ps.setInt(9, equipo.getId_equipo());
+            ps.setInt(1, equipo.getId_lab_equipo());
+            ps.setString(2, equipo.getHostname());
+            ps.setString(3, equipo.getEstado());
+            ps.setString(4, equipo.getIp());
+            ps.setString(5, equipo.getModeloCPU());
+            ps.setString(6, equipo.getNucleosCPU());
+            ps.setString(7, equipo.getRamTotal());
+            ps.setString(8, equipo.getAlmacenamiento());
+            ps.setString(9, equipo.getModeloGPU());
+            ps.setInt(10, equipo.getId_equipo());
 
 
             int filas = ps.executeUpdate();

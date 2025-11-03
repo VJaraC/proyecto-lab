@@ -112,6 +112,14 @@ public class EquipoService {
             throw AppException.badRequest("Equipo no existe");
         }
 
+        if(dto.id_lab_equipo() != null){
+            Integer nuevoLab = dto.id_lab_equipo();
+            if(nuevoLab.equals(existente.getId_lab_equipo())){
+                throw AppException.badRequest("El equipo ya pertenece al laboratorio" + existente.getId_lab_equipo());
+            }
+            existente.setId_lab_equipo(nuevoLab);
+        }
+
         if(dto.hostname() != null){
             String nuevoHostname = dto.hostname().trim();
             if(nuevoHostname.equals(existente.getHostname().trim())){
