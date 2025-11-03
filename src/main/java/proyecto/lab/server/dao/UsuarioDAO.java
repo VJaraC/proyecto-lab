@@ -21,11 +21,13 @@ public class UsuarioDAO {
 
 
     public Usuario insertarUsuario(Usuario user) { //funcion para insertar un usuario en la base de datos. Se le pasa un objeto del tipo Usuario para ingresar datos.
-        String sql = "INSERT INTO usuario(rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fecha_nac, telefono) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-
+        final String sql = """
+        INSERT INTO usuario (rut, nombres, apellidos, email, estado, genero, contrasena, cargo, rol, fecha_nac, telefono)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        RETURNING id
+    """;
         try (Connection conn = conexion.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, user.getRut());
             ps.setString(2, user.getNombres());
@@ -59,7 +61,7 @@ public class UsuarioDAO {
     }
 
 
-    public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar el nombre de un usuario.
+    public boolean actualizarUsuario(Usuario user)  {  //Función para actualizar un usuario-
         final String sql = "UPDATE usuario SET nombres = ?, apellidos = ?, email = ?, estado = ?, genero = ?,cargo = ?,  rol= ?, fecha_nac = ? ,telefono = ?  WHERE id = ?";
         try(Connection conn = conexion.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
@@ -185,7 +187,7 @@ public class UsuarioDAO {
             params.add("%" + apellidos.trim() + "%");
         }
         if (estado != null && !estado.isBlank()) {
-            sql.append(" AND estado = ?");
+            sql.append(" AND estado ILIKE ?");
             params.add(estado.trim().toLowerCase());
         }
         if (genero != null && !genero.isBlank()) {
@@ -247,35 +249,6 @@ public class UsuarioDAO {
         return false;
     }
 
-
-    @NotNull
-    private List<Usuario> getUsuarios(String n, String sql) {
-        try (Connection conn = conexion.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)){
-
-            ps.setString(1, "%" + n + "%");
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return mapearUsuarios(rs);
-            }
-        }catch (SQLException e) {
-            throw AppException.internal("Error al buscar usuario" + e.getMessage());
-        }
-    }
-
-    //se le pasa un resultset (resultados de una consulta generada) para poder traducirlas (mapearlas) a un objeto usuario el cual será ingresado a una lista para tener facil acceso a los objetos.
-    //modificarla.
-    private List<Usuario> mapearUsuarios(ResultSet rs) {
-        List<Usuario> usuarios = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                usuarios.add(mapRowUsuario(rs));
-            }
-        } catch (SQLException e) {
-            throw AppException.internal("Error al mapear usuarios: "+ e.getMessage());
-        }
-        return usuarios;
-    }
 
     private static boolean hasColumn(ResultSet rs, String name) {
         try {
