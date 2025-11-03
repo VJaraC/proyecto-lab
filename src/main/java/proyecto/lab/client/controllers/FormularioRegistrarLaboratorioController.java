@@ -54,10 +54,10 @@ public class FormularioRegistrarLaboratorioController {
         LocalDate fechaIngreso = LocalDate.now();
 
         try {
-            //LaboratorioDTO in = new LaboratorioDTO(id_lab, idUsuario, nombre_lab, ubicacion, capacidad_personas, capacidad_equipos, estado, fechaIngreso);
-            //LaboratorioDTO creado = AppContext.laboratorio().crearLaboratorio(in);  // 💾 BD a través del server
+            LaboratorioDTO in = new LaboratorioDTO(id_lab, idUsuario, nombre_lab, ubicacion, capacidad_personas, capacidad_equipos, estado, fechaIngreso);
+            LaboratorioDTO creado = AppContext.laboratorio().crearLaboratorio(in);  // 💾 BD a través del server
 
-            //alert(Alert.AlertType.INFORMATION, "Laboratorio registrado: " + creado.nombre_lab());
+            alert(Alert.AlertType.INFORMATION, "Laboratorio registrado: " + creado.nombre_lab());
             cerrar(e);
 
         } catch (RuntimeException ex) { // por validaciones de EquipoController

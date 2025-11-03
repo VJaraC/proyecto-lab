@@ -68,33 +68,33 @@ public class FormularioEditarLaboratorioController {
             if ((laboratorio.nombre_lab() == null && nombre_lab != null) ||
                     (laboratorio.nombre_lab() != null && !laboratorio.nombre_lab().equals(nombre_lab))) {
                 LaboratorioUpdateDTO dto = dtoSoloId();
-             //laboratorio = AppContext.laboratorio().modificarNombre(dto, nombre_lab);
+                laboratorio = AppContext.laboratorio().modificarNombre(dto, nombre_lab);
                 cambios = true;
             }
 
             if ((laboratorio.ubicacion() == null && ubicacion != null) ||
                     (laboratorio.ubicacion() != null && !laboratorio.ubicacion().equals(ubicacion))) {
                 LaboratorioUpdateDTO dto = dtoSoloId();
-                //laboratorio = AppContext.laboratorio().modificarUbicacion(dto, ubicacion);
+                laboratorio = AppContext.laboratorio().modificarUbicacion(dto, ubicacion);
                 cambios = true;
             }
 
             if (!Objects.equals(laboratorio.capacidad_personas(), capacidad_personas)) {
                 LaboratorioUpdateDTO dto = dtoSoloId();
-                //laboratorio = AppContext.laboratorio().modificarCapacidadPersonas(dto, capacidad_personas);
+                laboratorio = AppContext.laboratorio().modificarCapacidadPersonas(dto, capacidad_personas);
                 cambios = true;
             }
 
             if (!Objects.equals(laboratorio.capacidad_equipo(), capacidad_equipos)) {
                 LaboratorioUpdateDTO dto = dtoSoloId();
-                //laboratorio = AppContext.laboratorio().modificarCapacidadEquipos(dto, capacidad_equipos);
+                laboratorio = AppContext.laboratorio().modificarCapacidadEquipos(dto, capacidad_equipos);
                 cambios = true;
             }
 
             if ((laboratorio.estado_lab() == null && estado_lab != null) ||
                     (laboratorio.estado_lab() != null && !laboratorio.estado_lab().equals(estado_lab))) {
                 LaboratorioUpdateDTO dto = dtoSoloId();
-                //laboratorio = AppContext.laboratorio().modificarEstado(dto, estado_lab);
+                laboratorio = AppContext.laboratorio().modificarEstado(dto, estado_lab);
                 cambios = true;
             }
 
@@ -104,7 +104,7 @@ public class FormularioEditarLaboratorioController {
                 return;
             }
 
-            //alert(Alert.AlertType.INFORMATION, "laboratorio ID: " + laboratorio.id_laboratorio() + "modificado correctamente");
+            alert(Alert.AlertType.INFORMATION, "laboratorio ID: " + laboratorio.id_laboratorio() + "modificado correctamente");
             cerrar(event);
 
         } catch (RuntimeException ex) {
