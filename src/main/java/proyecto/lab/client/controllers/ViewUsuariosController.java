@@ -56,6 +56,9 @@ public class ViewUsuariosController {
     private MenuItem FiltroEstado;
 
     @FXML
+    private MenuItem FiltroRUT;
+
+    @FXML
     private MenuItem FiltroID;
 
     @FXML
@@ -118,7 +121,18 @@ public class ViewUsuariosController {
                 }
                 e.consume(); // evita que el evento se propague a otra acción del SplitMenuButton
             });
-        }}
+        }
+
+        TablaEstudiantes.setRowFactory(tv -> {
+            TableRow<UsuarioDTO> row = new TableRow<>();
+            row.setOnMouseClicked(ev -> {
+                if (ev.getClickCount() == 2 && !row.isEmpty()) {
+                    AbrirVistaDetalladaUsuario(row.getItem());
+                }
+            });
+            return row;
+        });
+    }
 
     private void EditarUsuarios(ActionEvent event){
     }
@@ -149,12 +163,19 @@ public class ViewUsuariosController {
     private void configurarColumnaAccion() {
         AccionTablaEstudiantes.setCellFactory(col -> {
             return new TableCell<UsuarioDTO, Void>() {
+                private final Button btnVer = new Button("Ver");
                 private final Button btn = new Button("Editar");
                 private final Button btnDeshabilitar = new Button("Deshabilitar");
                 private final Button btnHabilitar = new Button("Habilitar");
                 private final HBox box = new HBox(6, btn);
 
                 {
+
+                    btnVer.setOnAction(e -> {
+                        UsuarioDTO usuario = getTableView().getItems().get(getIndex());
+                        AbrirVistaDetalladaUsuario(usuario);
+                    });
+
                     btn.setOnAction(event -> {
                         UsuarioDTO usuario = getTableView().getItems().get(getIndex());
                         AbrirFormularioEditarUsuario(usuario);
@@ -187,9 +208,9 @@ public class ViewUsuariosController {
                     UsuarioDTO usuario = getTableView().getItems().get(getIndex());
 
                     if ("habilitado".equals(usuario.getEstado())) {
-                        box.getChildren().setAll(btn, btnDeshabilitar);
+                        box.getChildren().setAll(btnVer, btn, btnDeshabilitar);
                     } else {
-                        box.getChildren().setAll(btn, btnHabilitar);
+                        box.getChildren().setAll(btnVer, btn, btnHabilitar);
                     }
                     setGraphic(box);
                 }
@@ -236,6 +257,11 @@ public class ViewUsuariosController {
                         LimpiarTablaEstudiantes();
                         TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorId(id,AppContext.getUsuarioActual()));
                         break;
+                    case "rut":
+                        LimpiarTablaEstudiantes();
+                        TablaEstudiantes.getItems().addAll(AppContext.admin().buscarUsuarioPorRUT(busqueda,AppContext.getUsuarioActual()));
+                        break;
+
             }
 
         } catch (RuntimeException ex) {// por validaciones de UsuarioController
@@ -245,6 +271,23 @@ public class ViewUsuariosController {
             alert(Alert.AlertType.ERROR, ex.getMessage());
         }
 
+    }
+
+    private void AbrirVistaDetalladaUsuario(UsuarioDTO usuarioSeleccionado) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ViewDetalladaUsuarioSeleccionado.fxml"));
+            Parent root = loader.load();
+            ViewDetalladaUsuarioSeleccionadoController controller = loader.getController();
+            controller.setUsuario(usuarioSeleccionado);
+            Stage stage = new Stage();
+            stage.setTitle("Detalle del usuario");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @FXML
@@ -267,6 +310,14 @@ public class ViewUsuariosController {
         Buscar.setText("Buscar por Nombre");
         return FiltroSeleccionado;
     }
+
+    @FXML
+        String FiltroRUT(ActionEvent event) {
+        FiltroSeleccionado = "rut";
+        Buscar.setText("Buscar por RUT");
+        return FiltroSeleccionado;
+    }
+
 
     @FXML
     void txtBuscar(ActionEvent event) {

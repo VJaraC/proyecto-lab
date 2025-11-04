@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.dto.LaboratorioUpdateDTO;
+import proyecto.lab.server.dto.UsuarioDTO;
 
 import java.io.IOException;
 
@@ -133,7 +134,36 @@ public class ViewLaboratoriosController {
                 }
                 e.consume(); // evita que el evento se propague a otra acción del SplitMenuButton
             });
-        }}
+        }
+
+        TablaLaboratorio.setRowFactory(tv -> {
+            TableRow<LaboratorioDTO> row = new TableRow<>();
+            row.setOnMouseClicked(ev -> {
+                if (ev.getClickCount() == 2 && !row.isEmpty()) {
+                    AbrirVistaDetalladaLaboratorio(row.getItem());
+                }
+            });
+            return row;
+        });
+    }
+
+
+    private void AbrirVistaDetalladaLaboratorio(LaboratorioDTO labSeleccionado) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ViewDetalladaLabSeleccionado.fxml"));
+            Parent root = loader.load();
+            ViewDetalladaLabSeleccionadoController controller = loader.getController();
+            controller.setLab(labSeleccionado);
+            Stage stage = new Stage();
+            stage.setTitle("Detalle del laboratorio");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     void AbrirFormularioEditarLaboratorio(LaboratorioDTO LaboratorioSeleccionado) {
@@ -161,11 +191,17 @@ public class ViewLaboratoriosController {
         AccionTablaLaboratorio.setCellFactory(col -> {
             return new TableCell<LaboratorioDTO, Void>() {
                 private final Button btn = new Button("Editar");
+                private final Button btnVer = new Button("Ver");
                 private final HBox box = new HBox(6, btn);
                 private final Button btnDeshabilitar = new Button("Deshabilitar");
                 private final Button btnHabilitar = new Button("Habilitar");
 
                 {
+                    btnVer.setOnAction(event -> {
+                        LaboratorioDTO Laboratorio = getTableView().getItems().get(getIndex());
+                        AbrirVistaDetalladaLaboratorio(Laboratorio);
+                    });
+
                     btn.setOnAction(event -> {
                         LaboratorioDTO Laboratorio = getTableView().getItems().get(getIndex());
                         AbrirFormularioEditarLaboratorio(Laboratorio);
@@ -197,9 +233,9 @@ public class ViewLaboratoriosController {
                     }
                     LaboratorioDTO laboratorio = getTableView().getItems().get(getIndex());
                     if ("habilitado".equals(laboratorio.estado_lab())) {
-                        box.getChildren().setAll(btn, btnDeshabilitar);
+                        box.getChildren().setAll(btnVer,btn, btnDeshabilitar);
                     } else {
-                        box.getChildren().setAll(btn, btnHabilitar);
+                        box.getChildren().setAll(btnVer,btn, btnHabilitar);
                     }
                     setGraphic(box);
                 }
