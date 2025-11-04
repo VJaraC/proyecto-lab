@@ -22,12 +22,12 @@
          </font>
       </Label>
       <TextField fx:id="txtRUT" layoutX="55.0" layoutY="200.0" prefHeight="26.0" prefWidth="259.0" />
-      <Label layoutX="369.0" layoutY="450.0" text="Contraseña">
+      <Label layoutX="369.0" layoutY="353.0" text="Contraseña">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtContrasena" layoutX="369.0" layoutY="491.0" prefHeight="26.0" prefWidth="259.0" />
+      <TextField fx:id="txtContrasena" layoutX="369.0" layoutY="383.0" prefHeight="26.0" prefWidth="259.0" />
       <Button id="BotonGuardarUsuario" fx:id="BotonGuardarUsuario" layoutX="276.0" layoutY="584.0" mnemonicParsing="false" onAction="#GuardarUsuario" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Guardar">
          <font>
             <Font name="Product Sans Bold" size="18.0" />
@@ -56,12 +56,12 @@
           <MenuItem fx:id="GeneroMasculino" mnemonicParsing="false" onAction="#seleccionarGenero" text="Masculino" />
         </items>
       </MenuButton>
-      <Label layoutX="55.0" layoutY="259.0" text="Cargo">
+      <Label layoutX="309.0" layoutY="454.0" text="Cargo">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtCargo" layoutX="55.0" layoutY="290.0" prefHeight="26.0" prefWidth="259.0" />
+      <TextField fx:id="txtCargo" layoutX="201.0" layoutY="485.0" prefHeight="26.0" prefWidth="259.0" />
       <Label layoutX="368.0" layoutY="259.0" text="Fecha de Nacimiento">
          <font>
             <Font name="Product Sans" size="16.0" />
@@ -74,8 +74,8 @@
          </font>
       </Label>
       <TextField fx:id="txtTelefono" layoutX="55.0" layoutY="383.0" prefHeight="26.0" prefWidth="259.0" />
-      <TextField fx:id="txtCorreo" layoutX="55.0" layoutY="491.0" prefHeight="26.0" prefWidth="259.0" />
-      <Label layoutX="57.0" layoutY="460.0" text="Correo">
+      <TextField fx:id="txtCorreo" layoutX="55.0" layoutY="290.0" prefHeight="26.0" prefWidth="259.0" />
+      <Label layoutX="53.0" layoutY="259.0" text="Correo">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>

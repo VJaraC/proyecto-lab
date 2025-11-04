@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 public class ViewInicioController{
 
@@ -23,6 +24,9 @@ public class ViewInicioController{
 
     @FXML
     private Label txtUsuarioSesion;
+
+    @FXML
+    private Label txtFecha;
 
 @FXML
 void btnCerrarSesion(ActionEvent event) {
@@ -46,5 +50,7 @@ void btnCerrarSesion(ActionEvent event) {
     @FXML
     void initialize(){;
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
+        txtFecha.setText(LocalDate.now().toString());
+
         }
 }
