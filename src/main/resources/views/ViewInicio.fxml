@@ -65,7 +65,24 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="506.0" layoutY="328.0" prefHeight="110.0" prefWidth="312.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css" />
+            <AnchorPane layoutX="506.0" layoutY="328.0" prefHeight="110.0" prefWidth="312.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css">
+               <children>
+                  <ImageView fitHeight="53.0" fitWidth="59.0" layoutX="22.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icono_alerta.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="123.0" layoutY="24.0" prefHeight="30.0" prefWidth="174.0" text="Alertas activas" textFill="#062040">
+                     <font>
+                        <Font name="Product Sans Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="163.0" layoutY="55.0" prefHeight="30.0" prefWidth="67.0" text="00 " textFill="#062040">
+                     <font>
+                        <Font name="Product Sans Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children></AnchorPane>
             <AnchorPane layoutX="292.0" layoutY="150.0" prefHeight="94.0" prefWidth="258.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css">
                <children>
                   <ImageView fitHeight="53.0" fitWidth="59.0" layoutX="12.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
@@ -104,7 +121,25 @@
                   </Label>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="506.0" layoutY="463.0" prefHeight="110.0" prefWidth="312.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css" />
+            <AnchorPane layoutX="506.0" layoutY="463.0" prefHeight="110.0" prefWidth="312.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css">
+               <children>
+                  <Label layoutX="142.0" layoutY="47.0" />
+                  <Label fx:id="txtFecha" layoutX="84.0" layoutY="24.0" prefHeight="30.0" prefWidth="174.0" text="Fecha" textFill="#062040">
+                     <font>
+                        <Font name="Product Sans Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="77.0" layoutY="65.0" prefHeight="30.0" prefWidth="182.0" text="Servidor Operativo" textFill="#062040">
+                     <font>
+                        <Font name="Product Sans Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="23.0" fitWidth="22.0" layoutX="43.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/icono_correcto.png" />
+                     </image>
+                  </ImageView>
+               </children></AnchorPane>
             <Label layoutX="35.0" layoutY="283.0" text="Actividad Reciente" textFill="#062040">
                <font>
                   <Font name="Product Sans Bold" size="24.0" />
@@ -112,7 +147,7 @@
             </Label>
             <Label layoutX="25.0" layoutY="90.0" prefHeight="23.0" prefWidth="764.0" text="Bienvenido al Sistema de Monitoreo UNAP. Aquí tienes una visión general de la situación actual." textFill="#000000bb">
                <font>
-                  <Font name="Product Sans" size="18.0" />
+                  <Font name="Product Sans" size="16.0" />
                </font>
             </Label>
             </children>
