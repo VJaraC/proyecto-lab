@@ -54,7 +54,7 @@
                   <Insets left="30.0" />
                </padding>
             </TextField>
-            <Button id="BotonCrearUsuario" layoutX="21.0" layoutY="137.0" mnemonicParsing="false" onAction="#AbrirFormularioRegistrarEquipo" prefHeight="36.0" prefWidth="144.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Registrar Equipo">
+            <Button id="BotonCrearUsuario" fx:id="BotonRegistrarEquipo" layoutX="21.0" layoutY="137.0" mnemonicParsing="false" onAction="#AbrirFormularioRegistrarEquipo" prefHeight="36.0" prefWidth="144.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Registrar Equipo">
                <font>
                   <Font name="Product Sans Bold" size="14.0" />
                </font>

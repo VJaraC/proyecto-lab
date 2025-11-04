@@ -119,7 +119,7 @@ public class EquipoDAO {
                 java.sql.Date sqlDate = rs.getDate("fecha_ingreso_eq");
                 java.time.LocalDate fecha_ingreso_eq = (sqlDate != null ? sqlDate.toLocalDate() : null);
 
-                return new Equipo(id_equipo, id_lab, id_admin, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq);
+                return new Equipo(id_equipo, id_admin, id_lab,    hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq);
             }
         } catch (SQLException e) {
             System.out.println("Error al buscar equipo: " + e.getMessage());
@@ -328,7 +328,7 @@ public class EquipoDAO {
                 java.sql.Date sqlDate = rs.getDate("fecha_ingreso_eq");
                 java.time.LocalDate fecha_ingreso_eq = (sqlDate != null ? sqlDate.toLocalDate() : null);
 
-                equipos.add(new Equipo(id, id_lab, id_admin, hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq));
+                equipos.add(new Equipo(    id, id_admin,  id_lab,  hostname, numero_serie, fabricante_pc, estado_equipo, modelo, mac, ip, cpu_modelo, cpu_nucleos, ram_total, almacenamiento, gpu_modelo, fecha_ingreso_eq));
             }
         }
 
@@ -364,8 +364,8 @@ public class EquipoDAO {
             while (rs.next()) {
                 lista.add(new EquipoDTO(
                         rs.getInt("id_eq"),
-                        rs.getInt("id_lab"),
                         rs.getInt("id"),
+                        rs.getInt("id_lab"),
                         rs.getString("hostname"),
                         rs.getString("numero_serie"),
                         rs.getString("fabricante_pc"),

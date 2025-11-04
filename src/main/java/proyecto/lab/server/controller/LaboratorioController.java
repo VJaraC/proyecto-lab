@@ -105,7 +105,7 @@ public class LaboratorioController {
     }
 
     public LaboratorioDTO buscarLaboratorioPorId(Integer id, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN, Rol.MONITOR);
         validarNoNulo(id, "El id es obligatorio");
         validarPositivo(id, "ID invalido");
 
@@ -115,7 +115,7 @@ public class LaboratorioController {
     }
 
     public List<LaboratorioDTO> buscarLaboratorioPorNombre(String nombre, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN, Rol.MONITOR);
         validarTexto(nombre, "El nombre es obligatorio");
         LaboratorioBusquedaDTO filtros = new LaboratorioBusquedaDTO();
         filtros.setNombre_lab(nombre);
@@ -123,7 +123,7 @@ public class LaboratorioController {
     }
 
     public List<LaboratorioDTO> buscarLaboratoriosPorUbicacion(String ubicacion, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN, Rol.MONITOR);
         validarTexto(ubicacion, "La ubicación es obligatoria");
 
         LaboratorioBusquedaDTO filtros = new LaboratorioBusquedaDTO();
@@ -132,7 +132,7 @@ public class LaboratorioController {
     }
 
     public List<LaboratorioDTO> buscarLaboratoriosPorEstado(String estado, UsuarioDTO auth){
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN, Rol.MONITOR);
         validarNoNulo(estado, "El estado es obligatorio");
         validarEstado(estado, "El estado debe ser habilitado o deshabilitado");
 
@@ -142,7 +142,7 @@ public class LaboratorioController {
     }
 
     public List<LaboratorioDTO> buscarLaboratoriosPorCapacidades(Integer capPersonas, Integer capEquipos, UsuarioDTO auth) {
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN, Rol.MONITOR);
         LaboratorioBusquedaDTO filtros = new LaboratorioBusquedaDTO();
         if (capPersonas != null) {
             if (capPersonas <= 0) throw AppException.badRequest("capacidad de personas inválida");
@@ -159,15 +159,16 @@ public class LaboratorioController {
         return laboratorioService.buscarLaboratorios(filtros);
     }
     public List<LaboratorioDTO> buscarLaboratoriosPorFecha(LocalDate fecha, UsuarioDTO auth) {
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         validarNoNulo(fecha, "La fecha es obligatoria");
 
         LaboratorioBusquedaDTO filtros = new LaboratorioBusquedaDTO();
         filtros.setFecha_registro_lab(fecha);
         return laboratorioService.buscarLaboratorios(filtros);
     }
+
     public List<LaboratorioDTO> listarLaboratorios(UsuarioDTO auth) {
-        AuthUtils.requireRole(auth, Rol.ADMIN);
+        AuthUtils.requireRole(auth, Rol.ADMIN,Rol.MONITOR);
         return laboratorioService.listarLaboratorios();
     }
 

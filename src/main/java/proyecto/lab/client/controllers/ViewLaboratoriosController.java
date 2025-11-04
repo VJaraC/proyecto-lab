@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.dto.LaboratorioUpdateDTO;
-import proyecto.lab.server.dto.UsuarioDTO;
+import proyecto.lab.server.models.Rol;
 
 import java.io.IOException;
 
@@ -45,6 +45,9 @@ public class ViewLaboratoriosController {
     private SplitMenuButton Buscar;
 
     private String FiltroSeleccionado;
+
+    @FXML
+    private Button BotonRegistrarLaboratorio;
 
     @FXML
     private TableColumn<LaboratorioDTO, Void> AccionTablaLaboratorio;
@@ -126,6 +129,12 @@ public class ViewLaboratoriosController {
         ActualizarTablaLaboratorio();
         txtUsuarioSesion.setText(AppContext.getUsuarioActual().getNombres());
 
+        boolean esAdmin = AppContext.getUsuarioActual().getRol() == Rol.ADMIN;
+        if (!esAdmin && BotonRegistrarLaboratorio != null) {
+            BotonRegistrarLaboratorio.setVisible(false);
+            BotonRegistrarLaboratorio.setManaged(false); // colapsa el espacio
+        }
+
         for (MenuItem item : Buscar.getItems()) {
             item.addEventHandler(ActionEvent.ACTION, e -> {
                 Buscar.setText(item.getText());
@@ -188,61 +197,65 @@ public class ViewLaboratoriosController {
     }
 
     private void configurarColumnaAccion() {
-        AccionTablaLaboratorio.setCellFactory(col -> {
-            return new TableCell<LaboratorioDTO, Void>() {
-                private final Button btn = new Button("Editar");
-                private final Button btnVer = new Button("Ver");
-                private final HBox box = new HBox(6, btn);
-                private final Button btnDeshabilitar = new Button("Deshabilitar");
-                private final Button btnHabilitar = new Button("Habilitar");
+        AccionTablaLaboratorio.setCellFactory(col -> new TableCell<>() {
+            private final Button btnVer = new Button("Ver");
+            private final Button btnEditar = new Button("Editar");
+            private final Button btnDeshabilitar = new Button("Deshabilitar");
+            private final Button btnHabilitar = new Button("Habilitar");
+            private final HBox box = new HBox(6);
 
-                {
-                    btnVer.setOnAction(event -> {
-                        LaboratorioDTO Laboratorio = getTableView().getItems().get(getIndex());
-                        AbrirVistaDetalladaLaboratorio(Laboratorio);
-                    });
+            {
+                btnVer.setOnAction(e -> {
+                    LaboratorioDTO lab = getTableView().getItems().get(getIndex());
+                    AbrirVistaDetalladaLaboratorio(lab);
+                });
 
-                    btn.setOnAction(event -> {
-                        LaboratorioDTO Laboratorio = getTableView().getItems().get(getIndex());
-                        AbrirFormularioEditarLaboratorio(Laboratorio);
-                    });
+                btnEditar.setOnAction(e -> {
+                    LaboratorioDTO lab = getTableView().getItems().get(getIndex());
+                    AbrirFormularioEditarLaboratorio(lab);
+                });
 
+                btnDeshabilitar.setOnAction(e -> {
+                    LaboratorioDTO lab = getTableView().getItems().get(getIndex());
+                    LaboratorioUpdateDTO dto = crearUpdateDTO(lab);
+                    AppContext.laboratorio().deshabilitarLaboratorio(dto, AppContext.getUsuarioActual());
+                    getTableView().refresh();
+                    ActualizarTablaLaboratorio();
+                });
 
-                    btnDeshabilitar.setOnAction(event -> {
-                        LaboratorioDTO labDeshabilitar = getTableView().getItems().get(getIndex());
-                        LaboratorioUpdateDTO labUpdateDTO = crearUpdateDTO(labDeshabilitar);
-                        AppContext.laboratorio().deshabilitarLaboratorio(labUpdateDTO, AppContext.getUsuarioActual());
-                        ActualizarTablaLaboratorio();
+                btnHabilitar.setOnAction(e -> {
+                    LaboratorioDTO lab = getTableView().getItems().get(getIndex());
+                    LaboratorioUpdateDTO dto = crearUpdateDTO(lab);
+                    AppContext.laboratorio().habilitarLaboratorio(dto, AppContext.getUsuarioActual());
+                    getTableView().refresh();
+                    ActualizarTablaLaboratorio();
+                });
+            }
 
-                    });
-
-                    btnHabilitar.setOnAction(event -> {
-                        LaboratorioDTO labHabilitar = getTableView().getItems().get(getIndex());
-                        LaboratorioUpdateDTO labUpdateDTO = crearUpdateDTO(labHabilitar);
-                        AppContext.laboratorio().habilitarLaboratorio(labUpdateDTO, AppContext.getUsuarioActual());
-                        ActualizarTablaLaboratorio();
-                    });
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getIndex() < 0) {
+                    setGraphic(null);
+                    return;
                 }
 
-                @Override
-                protected void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || getIndex() < 0) {
-                        setGraphic(null);
-                        return;
-                    }
-                    LaboratorioDTO laboratorio = getTableView().getItems().get(getIndex());
-                    if ("habilitado".equals(laboratorio.estado_lab())) {
-                        box.getChildren().setAll(btnVer,btn, btnDeshabilitar);
+                boolean esAdmin = AppContext.getUsuarioActual().getRol() == Rol.ADMIN;
+                LaboratorioDTO lab = getTableView().getItems().get(getIndex());
+
+                if (esAdmin) {
+                    if ("habilitado".equalsIgnoreCase(lab.estado_lab())) {
+                        box.getChildren().setAll(btnVer, btnEditar, btnDeshabilitar);
                     } else {
-                        box.getChildren().setAll(btnVer,btn, btnHabilitar);
+                        box.getChildren().setAll(btnVer, btnEditar, btnHabilitar);
                     }
-                    setGraphic(box);
+                } else {
+                    // MONITOR: solo puede ver
+                    box.getChildren().setAll(btnVer);
                 }
-            };
+                setGraphic(box);
+            }
         });
-
-
     }
 
     @FXML

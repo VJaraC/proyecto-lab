@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import proyecto.lab.server.models.Rol;
 
 public class BaseLayoutController {
 
@@ -32,6 +33,8 @@ public class BaseLayoutController {
     private AnchorPane anchorLateral;
 
     private Button activeButton;
+
+
 
     @FXML
     public void initialize() {

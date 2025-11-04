@@ -16,9 +16,7 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.EquipoUpdateDTO;
-import proyecto.lab.server.dto.LaboratorioDTO;
-import proyecto.lab.server.models.Equipo;
-
+import proyecto.lab.server.models.Rol;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -48,7 +46,8 @@ public class ViewEquiposController {
 
     private String FiltroSeleccionado;
 
-
+    @FXML
+    private Button BotonRegistrarEquipo;
 
     @FXML
     private MenuItem FiltroEstado;
@@ -140,6 +139,12 @@ public class ViewEquiposController {
         EstadoTablaEquipo.setCellValueFactory(cd ->
                 new ReadOnlyStringWrapper(cd.getValue().estado()));
 
+        boolean esAdmin = AppContext.getUsuarioActual().getRol() == Rol.ADMIN;
+        if (!esAdmin && BotonRegistrarEquipo != null) {
+            BotonRegistrarEquipo.setVisible(false);
+            BotonRegistrarEquipo.setManaged(false); // colapsa el espacio
+        }
+
         configurarColumnaAccion();
         ActualizarTablaEquipo();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
@@ -205,46 +210,50 @@ public class ViewEquiposController {
     }
 
     private void configurarColumnaAccion() {
-        AccionTablaEquipo.setCellFactory(col -> {
-            return new TableCell<EquipoDTO, Void>() {
-                private final Button btn = new Button("Editar");
-                private final HBox box = new HBox(6, btn);
-                private final Button btnVer = new Button("Ver");
+        AccionTablaEquipo.setCellFactory(col -> new TableCell<>() {
+            private final Button btnVer = new Button("Ver");
+            private final Button btnEditar = new Button("Editar");
+            private final HBox box = new HBox(6);
 
-                {
-                    btnVer.setOnAction(event -> {
-                        EquipoDTO equipo = getTableView().getItems().get(getIndex());
-                        AbrirVistaDetalladaEquipo(equipo);
-                    });
-
-
-                    btn.setOnAction(event -> {
-                        EquipoDTO equipo = getTableView().getItems().get(getIndex());
-                        AbrirFormularioEditarEquipo(equipo);
-                    });
-                }
-
-                @Override
-                protected void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || getIndex() < 0) {
-                        setGraphic(null);
-                        return;
-                    }
+            {
+                btnVer.setOnAction(e -> {
                     EquipoDTO equipo = getTableView().getItems().get(getIndex());
-                    box.getChildren().setAll(btnVer,btn);
-                    setGraphic(box);
+                    AbrirVistaDetalladaEquipo(equipo);
+                });
+
+                btnEditar.setOnAction(e -> {
+                    EquipoDTO equipo = getTableView().getItems().get(getIndex());
+                    AbrirFormularioEditarEquipo(equipo);
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getIndex() < 0) {
+                    setGraphic(null);
+                    return;
                 }
-            };
+
+                boolean esAdmin = AppContext.getUsuarioActual().getRol() == Rol.ADMIN;
+
+                if (esAdmin) {
+                    // ADMIN: puede ver y editar
+                    box.getChildren().setAll(btnVer, btnEditar);
+                } else {
+                    // MONITOR: solo puede ver
+                    box.getChildren().setAll(btnVer);
+                }
+
+                setGraphic(box);
+            }
         });
-
-
     }
 
     private EquipoUpdateDTO crearUpdateDTO(EquipoDTO equipo) {
         int id = equipo.id_equipo();
         String estado =  equipo.estado();
-        return new EquipoUpdateDTO(id, null, null, estado, null, null, null, null, null);
+        return new EquipoUpdateDTO(id, null,null, null, estado, null, null, null, null, null);
     }
 
 

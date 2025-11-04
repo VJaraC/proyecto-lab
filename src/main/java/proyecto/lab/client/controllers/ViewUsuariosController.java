@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.dto.UsuarioUpdateDTO;
+import proyecto.lab.server.models.Rol;
 import proyecto.lab.server.models.Usuario;
 import proyecto.lab.client.application.AppContext;
 
@@ -48,6 +49,8 @@ public class ViewUsuariosController {
     private SplitMenuButton Buscar;
 
     private String FiltroSeleccionado;
+
+    @FXML private Button BotonCrearUsuario;
 
     @FXML
     private TableColumn<UsuarioDTO, String> ApellidosTablaEstudiantes;
@@ -113,6 +116,14 @@ public class ViewUsuariosController {
         ActualizarTablaEstudiantes();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
 
+        boolean esAdmin = AppContext.getUsuarioActual().getRol() == Rol.ADMIN;
+        if (!esAdmin && BotonCrearUsuario != null) {
+            BotonCrearUsuario.setVisible(false);
+            BotonCrearUsuario.setManaged(false); // colapsa el espacio
+        }
+
+
+
         for (MenuItem item : Buscar.getItems()) {
             item.addEventHandler(ActionEvent.ACTION, e -> {
                 Buscar.setText(item.getText());
@@ -161,63 +172,61 @@ public class ViewUsuariosController {
     }
 
     private void configurarColumnaAccion() {
-        AccionTablaEstudiantes.setCellFactory(col -> {
-            return new TableCell<UsuarioDTO, Void>() {
-                private final Button btnVer = new Button("Ver");
-                private final Button btn = new Button("Editar");
-                private final Button btnDeshabilitar = new Button("Deshabilitar");
-                private final Button btnHabilitar = new Button("Habilitar");
-                private final HBox box = new HBox(6, btn);
+        AccionTablaEstudiantes.setCellFactory(col -> new TableCell<>() {
+            private final Button btnVer = new Button("Ver");
+            private final Button btnEditar = new Button("Editar");
+            private final Button btnDeshabilitar = new Button("Deshabilitar");
+            private final Button btnHabilitar = new Button("Habilitar");
+            private final HBox box = new HBox(6);
 
-                {
+            {
+                btnVer.setOnAction(e -> {
+                    UsuarioDTO u = getTableView().getItems().get(getIndex());
+                    AbrirVistaDetalladaUsuario(u);
+                });
+                btnEditar.setOnAction(e -> {
+                    UsuarioDTO u = getTableView().getItems().get(getIndex());
+                    AbrirFormularioEditarUsuario(u);
+                });
+                btnDeshabilitar.setOnAction(e -> {
+                    UsuarioDTO u = getTableView().getItems().get(getIndex());
+                    UsuarioUpdateDTO dto = crearUpdateDTO(u);
+                    AppContext.admin().deshabilitarUsuario(dto, AppContext.getUsuarioActual());
+                    getTableView().refresh();
+                });
+                btnHabilitar.setOnAction(e -> {
+                    UsuarioDTO u = getTableView().getItems().get(getIndex());
+                    UsuarioUpdateDTO dto = crearUpdateDTO(u);
+                    AppContext.admin().habilitarUsuario(dto, AppContext.getUsuarioActual());
+                    getTableView().refresh();
+                });
+            }
 
-                    btnVer.setOnAction(e -> {
-                        UsuarioDTO usuario = getTableView().getItems().get(getIndex());
-                        AbrirVistaDetalladaUsuario(usuario);
-                    });
-
-                    btn.setOnAction(event -> {
-                        UsuarioDTO usuario = getTableView().getItems().get(getIndex());
-                        AbrirFormularioEditarUsuario(usuario);
-                    });
-
-                    btnDeshabilitar.setOnAction(event -> {
-                        UsuarioDTO usuarioDeshabilitar = getTableView().getItems().get(getIndex());
-                        UsuarioUpdateDTO usuarioUpdateDTO = crearUpdateDTO(usuarioDeshabilitar);
-                        AppContext.admin().deshabilitarUsuario(usuarioUpdateDTO,AppContext.getUsuarioActual());
-                        ActualizarTablaEstudiantes();
-
-                    });
-
-                    btnHabilitar.setOnAction(event -> {
-                        UsuarioDTO usuario = getTableView().getItems().get(getIndex());
-                        UsuarioUpdateDTO usuarioUpdateDTO = crearUpdateDTO(usuario);
-                        AppContext.admin().habilitarUsuario(usuarioUpdateDTO,AppContext.getUsuarioActual());
-                        ActualizarTablaEstudiantes();
-                    });
-
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getIndex() < 0) {
+                    setGraphic(null);
+                    return;
                 }
 
-                @Override
-                protected void updateItem(Void item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || getIndex() < 0) {
-                        setGraphic(null);
-                        return;
-                    }
-                    UsuarioDTO usuario = getTableView().getItems().get(getIndex());
+                boolean esAdmin = AppContext.getUsuarioActual().getRol() == Rol.ADMIN;
+                UsuarioDTO usuario = getTableView().getItems().get(getIndex());
 
-                    if ("habilitado".equals(usuario.getEstado())) {
-                        box.getChildren().setAll(btnVer, btn, btnDeshabilitar);
+                if (!esAdmin) {
+                    // MONITOR: solo puede ver
+                    box.getChildren().setAll(btnVer);
+                } else {
+                    // ADMIN: ver + editar + habilitar/deshabilitar
+                    if ("habilitado".equalsIgnoreCase(usuario.getEstado())) {
+                        box.getChildren().setAll(btnVer, btnEditar, btnDeshabilitar);
                     } else {
-                        box.getChildren().setAll(btnVer, btn, btnHabilitar);
+                        box.getChildren().setAll(btnVer, btnEditar, btnHabilitar);
                     }
-                    setGraphic(box);
                 }
-            };
+                setGraphic(box);
+            }
         });
-
-
     }
 
     private UsuarioUpdateDTO crearUpdateDTO(UsuarioDTO usuario) {

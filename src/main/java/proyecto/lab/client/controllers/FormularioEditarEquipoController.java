@@ -9,9 +9,11 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.*;
 import proyecto.lab.server.dto.EquipoDTO;
+import proyecto.lab.server.models.Equipo;
 import proyecto.lab.server.models.Rol;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class FormularioEditarEquipoController {
     private EquipoDTO equipo;
@@ -74,7 +76,8 @@ public class FormularioEditarEquipoController {
         String nucleos = txtNucleos.getText();
         String ram = txtRam.getText();
         String almacenamiento = txtAlmacenamiento.getText();
-        //LaboratorioDTO labSel = txtIdLab.getValue();
+        LaboratorioDTO labSel = txtIdLab.getValue();
+        Integer idLabSeleccionado = labSel.id_lab();
 
         boolean cambios = false;
 
@@ -135,10 +138,11 @@ public class FormularioEditarEquipoController {
                 cambios = true;
             }
 
-            //if ((equipo.id_lab_equipo() == null && idLab != null)) ||
-            //(equipo.id_lab_equipo() != null && !equipo.id_lab_equipo().equals(idLab){
-            //
-            //}
+            if (!Objects.equals(equipo.id_lab_equipo(), idLabSeleccionado)) {
+                EquipoUpdateDTO dto = dtoSoloId();
+                equipo = AppContext.equipo().cambiarLabEquipo(dto,idLabSeleccionado);
+                cambios = true;
+            }
 
 
             if (!cambios) {
@@ -187,7 +191,7 @@ public class FormularioEditarEquipoController {
     }
 
     private EquipoUpdateDTO dtoSoloId() {
-        return new EquipoUpdateDTO(equipo.id_equipo(), null, null, null, null, null, null, null, null);
+        return new EquipoUpdateDTO(equipo.id_equipo(),null, null, null, null, null, null, null, null, null);
     }
 
 
