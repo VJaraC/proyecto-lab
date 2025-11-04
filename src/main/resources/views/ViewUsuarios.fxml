@@ -62,6 +62,7 @@
             <SplitMenuButton fx:id="Buscar" layoutX="328.0" layoutY="80.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" styleClass="btnFiltro" stylesheets="@../css/ViewUsuarios.css" text="Escoge un filtro" textAlignment="CENTER">
               <items>
                   <MenuItem fx:id="FiltroID" mnemonicParsing="false" onAction="#FiltroID" styleClass="filtro" text="Buscar por ID" />
+                  <MenuItem fx:id="FiltroRUT" mnemonicParsing="false" onAction="#FiltroRUT" styleClass="filtro" text="Buscar por RUT" />
                 <MenuItem fx:id="FiltroNombre" mnemonicParsing="false" onAction="#FiltroNombre" styleClass="filtro" text="Buscar por Nombre" />
                 <MenuItem fx:id="FiltroEstado" mnemonicParsing="false" onAction="#FiltroEstado" styleClass="filtro" text="Buscar por Estado" />
               </items>

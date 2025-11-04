@@ -39,14 +39,14 @@
                   </AnchorPane>
                </children>
             </AnchorPane>
-            <TableView id="Tabla" fx:id="TablaLaboratorio" layoutX="21.0" layoutY="196.0" prefHeight="415.0" prefWidth="809.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
+            <TableView id="Tabla" fx:id="TablaLaboratorio" layoutX="21.0" layoutY="196.0" prefHeight="415.0" prefWidth="820.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
               <columns>
-                <TableColumn fx:id="IdTablaLaboratorio" editable="false" prefWidth="53.0" styleClass="ColumnaTabla" text="ID" />
-                  <TableColumn fx:id="NombreTablaLaboratorio" editable="false" prefWidth="136.8000259399414" styleClass="ColumnaTabla" text="Nombre" />
-                <TableColumn fx:id="UbicacionTablaLaboratorio" editable="false" prefWidth="182.40003967285156" styleClass="ColumnaTabla" text="Ubicacion" />
-                  <TableColumn fx:id="CapacidadEquiposTablaLaboratorio" editable="false" minWidth="0.0" prefWidth="171.19992065429688" styleClass="ColumnaTabla" text="Capacidad de Equipos" />
-                  <TableColumn fx:id="EstadoTablaLaboratorio" editable="false" prefWidth="130.4000244140625" sortable="false" styleClass="ColumnaTabla" text="Estado" />
-                  <TableColumn fx:id="AccionTablaLaboratorio" editable="false" prefWidth="139.20001220703125" styleClass="ColumnaTabla" text="Acción" />
+                <TableColumn fx:id="IdTablaLaboratorio" editable="false" prefWidth="40.79998588562012" styleClass="ColumnaTabla" text="ID" />
+                  <TableColumn fx:id="NombreTablaLaboratorio" editable="false" prefWidth="136.80005645751953" styleClass="ColumnaTabla" text="Nombre" />
+                <TableColumn fx:id="UbicacionTablaLaboratorio" editable="false" prefWidth="168.800048828125" styleClass="ColumnaTabla" text="Ubicacion" />
+                  <TableColumn fx:id="CapacidadEquiposTablaLaboratorio" editable="false" minWidth="0.0" prefWidth="165.59994506835938" styleClass="ColumnaTabla" text="Capacidad de Equipos" />
+                  <TableColumn fx:id="EstadoTablaLaboratorio" editable="false" prefWidth="106.4000244140625" sortable="false" styleClass="ColumnaTabla" text="Estado" />
+                  <TableColumn fx:id="AccionTablaLaboratorio" editable="false" prefWidth="203.99993896484375" styleClass="ColumnaTabla" text="Acción" />
               </columns>
             </TableView>
             <TextField fx:id="txtBuscar" layoutX="21.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar..." styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
