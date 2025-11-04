@@ -1,5 +1,6 @@
 package proyecto.lab.client.controllers;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -76,7 +77,8 @@ public class FormularioRegistrarEquipoController {
     @FXML
     void GuardarEquipo(ActionEvent e)  {
         Integer idEquipo = 1;
-        Integer idLab = 1;  // txtIdLab.getText();
+        LaboratorioDTO labSel = txtIdLab.getValue();
+        int idLab = labSel.id_lab();
         Integer idUsuario = AppContext.getUsuarioActual().getID();
         String hostname = txtHostname.getText();
         String numSerie = txtNumSerie.getText();
@@ -106,6 +108,31 @@ public class FormularioRegistrarEquipoController {
         }
     }
 
+    @FXML
+    void initialize() {
+        // 1) Cargar items desde el backend
+        var labs = AppContext.laboratorio().listarLaboratorios(AppContext.getUsuarioActual());
+        txtIdLab.setItems(FXCollections.observableArrayList(labs));
+
+        // 2) Cómo se muestran en el desplegable
+        txtIdLab.setCellFactory(cb -> new ListCell<>() {
+            @Override
+            protected void updateItem(LaboratorioDTO item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.nombre_lab() + " (ID " + item.id_lab() + ")");
+            }
+        });
+
+        // 3) Cómo se muestra el seleccionado en el botón del ComboBox
+        txtIdLab.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(LaboratorioDTO item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.nombre_lab() + " (ID " + item.id_lab() + ")");
+            }
+        });
+    }
+
 
     @FXML
     void Cancelar(ActionEvent e) { cerrar(e); }
@@ -115,6 +142,8 @@ public class FormularioRegistrarEquipoController {
         st.close();
 
     }
+
+
 
     private void alert(Alert.AlertType type, String msg) {
         new Alert(type, msg).showAndWait();

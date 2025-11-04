@@ -18,7 +18,8 @@ public class FormularioEditarEquipoController {
 
     public void setEquipo(EquipoDTO equipo) {
         this.equipo = equipo;
-        if (txtModeloCpu != null) {
+        if (labsCargados) {
+            seleccionarLabActual();
             cargarCampos();
         }
     }
@@ -33,7 +34,7 @@ public class FormularioEditarEquipoController {
     private TextField txtHostname;
 
     @FXML
-    private ChoiceBox<LaboratorioDTO> txtIdLab;
+    private ComboBox<LaboratorioDTO> txtIdLab;
 
     @FXML
     private TextField txtIp;
@@ -177,19 +178,10 @@ public class FormularioEditarEquipoController {
         txtAlmacenamiento.setText(equipo.almacenamiento());
         txtEstado.setText(equipo.estado());
 
-        //var labs = AppContext.laboratorio().listarLaboratorios();
-        //txtIdLab.setItems(FXCollections.observableArrayList(labs));
 
-        // Pre-relleno por id
-        //if (equipo != null && equipo.id_lab_equipo() != null) {
-        //    labs.stream()
-        //            .filter(l -> l.id_lab() == equipo.id_lab_equipo())
-        //            .findFirst()
-        //            .ifPresent(chLab::setValue);
-        //}
     }
     @FXML
-    void estadoSeleccionado(ActionEvent event) {
+    void seleccionarEstado(ActionEvent event) {
         MenuItem item = (MenuItem) event.getSource();
         txtEstado.setText(item.getText());
     }
@@ -199,12 +191,47 @@ public class FormularioEditarEquipoController {
     }
 
 
+
+    private boolean labsCargados = false;
+
     @FXML
     void initialize() {
-        if (equipo != null) {
-            cargarCampos();
-        }
+        // 1) Cargar labs
+        var labs = AppContext.laboratorio().listarLaboratorios(AppContext.getUsuarioActual());
+        txtIdLab.setItems(FXCollections.observableArrayList(labs));
 
+        // 2) Mostrar “Nombre (ID …)” en el desplegable y en el botón
+        txtIdLab.setCellFactory(cb -> new ListCell<>() {
+            @Override protected void updateItem(LaboratorioDTO item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.nombre_lab() + " (ID " + item.id_lab() + ")");
+            }
+        });
+        txtIdLab.setButtonCell(new ListCell<>() {
+            @Override protected void updateItem(LaboratorioDTO item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty || item == null ? null : item.nombre_lab() + " (ID " + item.id_lab() + ")");
+            }
+        });
+
+        labsCargados = true;
+
+        // 3) Si el equipo ya está seteado, preselecciona aquí
+        if (equipo != null) {
+            seleccionarLabActual();
+            cargarCampos();  // por si quieres rellenar otros campos
+        }
+    }
+
+    private void seleccionarLabActual() {
+        if (equipo == null || txtIdLab.getItems() == null) return;
+        int idActual = equipo.id_lab_equipo();
+        for (LaboratorioDTO lab : txtIdLab.getItems()) {
+            if (lab.id_lab() == idActual) {
+                txtIdLab.setValue(lab);
+                break;
+            }
+        }
     }
 
 }
