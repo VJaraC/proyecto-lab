@@ -1,10 +1,7 @@
 package proyecto.lab.server.service;
 
 import proyecto.lab.server.dao.EquipoDAO;
-import proyecto.lab.server.dto.EquipoBusquedaDTO;
-import proyecto.lab.server.dto.EquipoDTO;
-import proyecto.lab.server.dto.EquipoUpdateDTO;
-import proyecto.lab.server.dto.UsuarioDTO;
+import proyecto.lab.server.dto.*;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Equipo;
 import proyecto.lab.server.models.Usuario;
@@ -113,6 +110,14 @@ public class EquipoService {
 
         if(existente == null){
             throw AppException.badRequest("Equipo no existe");
+        }
+
+        if(dto.id_lab_equipo() != null){
+            Integer nuevoLab = dto.id_lab_equipo();
+            if(nuevoLab.equals(existente.getId_lab_equipo())){
+                throw AppException.badRequest("El equipo ya pertenece al laboratorio" + existente.getId_lab_equipo());
+            }
+            existente.setId_lab_equipo(nuevoLab);
         }
 
         if(dto.hostname() != null){
@@ -258,4 +263,7 @@ public class EquipoService {
         }
     }
 
+    public EquipoCountDTO obtenerResumenEstados(Integer idLab) {
+        return equipoDAO.contarEquiposResumen(idLab);
+    }
 }

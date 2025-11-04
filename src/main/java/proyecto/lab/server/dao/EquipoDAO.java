@@ -1,5 +1,6 @@
 package proyecto.lab.server.dao;
 import proyecto.lab.server.config.Conexion;
+import proyecto.lab.server.dto.EquipoCountDTO;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.exceptions.AppException;
 import proyecto.lab.server.models.Usuario;
@@ -61,19 +62,20 @@ public class EquipoDAO {
 
 
     public Boolean actualizarEquipo(Equipo equipo) {
-        String sql = "UPDATE equipo SET hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_eq = ?";
+        String sql = "UPDATE equipo SET id_lab = ?, hostname = ?, estado_equipo = ?, ip = ?, cpu_modelo = ?, cpu_nucleos = ?, ram_total = ?, almacenamiento = ?, gpu_modelo = ? WHERE id_eq = ?";
 
         try (Connection conn = conexion.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, equipo.getHostname());
-            ps.setString(2, equipo.getEstado());
-            ps.setString(3, equipo.getIp());
-            ps.setString(4, equipo.getModeloCPU());
-            ps.setString(5, equipo.getNucleosCPU());
-            ps.setString(6, equipo.getRamTotal());
-            ps.setString(7, equipo.getAlmacenamiento());
-            ps.setString(8, equipo.getModeloGPU());
-            ps.setInt(9, equipo.getId_equipo());
+            ps.setInt(1, equipo.getId_lab_equipo());
+            ps.setString(2, equipo.getHostname());
+            ps.setString(3, equipo.getEstado());
+            ps.setString(4, equipo.getIp());
+            ps.setString(5, equipo.getModeloCPU());
+            ps.setString(6, equipo.getNucleosCPU());
+            ps.setString(7, equipo.getRamTotal());
+            ps.setString(8, equipo.getAlmacenamiento());
+            ps.setString(9, equipo.getModeloGPU());
+            ps.setInt(10, equipo.getId_equipo());
 
 
             int filas = ps.executeUpdate();
@@ -387,5 +389,39 @@ public class EquipoDAO {
         }
         return lista;
     }
+
+    //funcion para obtener la cantidad de equipos por estado (exclusivo postgresql por "filter")
+    public EquipoCountDTO contarEquiposResumen(Integer idLab) {
+        String base = """
+        SELECT
+          COUNT(*) FILTER (WHERE estado_equipo = 'disponible')       AS disponibles,
+          COUNT(*) FILTER (WHERE estado_equipo = 'operativo')        AS operativos,
+          COUNT(*) FILTER (WHERE estado_equipo = 'fuera de servicio') AS fuera_servicio,
+          COUNT(*)                                                  AS total
+        FROM equipo
+    """;
+        String sql = (idLab == null) ? base : base + " WHERE id_lab = ?";
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (idLab != null) ps.setInt(1, idLab);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new EquipoCountDTO(
+                            rs.getLong("disponibles"),
+                            rs.getLong("operativos"),
+                            rs.getLong("fuera_servicio"),
+                            rs.getLong("total")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar equipos por estado", e);
+        }
+        return new EquipoCountDTO(0,0,0,0);
+    }
+
 
 }

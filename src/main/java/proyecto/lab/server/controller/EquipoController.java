@@ -92,12 +92,22 @@ public class EquipoController {
 
 
     //funciones para modificar el equipo
+
+    public EquipoDTO cambiarLabEquipo(EquipoUpdateDTO in, Integer idLab){
+        validarNoNulo(idLab, "Id Laboratorio requerido");
+
+        int id = in.id();
+
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, idLab, null, null, null, null, null, null, null, null);
+        return equipoService.actualizarEquipo(dto);
+    }
+
     public EquipoDTO modificarHostname(EquipoUpdateDTO in, String hostname){
         validarTexto(hostname, "Ingresar Hostname válido");
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, hostname, null, null, null, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, hostname, null, null, null, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -106,7 +116,7 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, ip, null, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, null, ip, null, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -115,7 +125,7 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, modeloCPU, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, null, null, modeloCPU, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -124,7 +134,7 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, NucleosCPU, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, null, null, null, NucleosCPU, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -133,7 +143,7 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, null, ramTotal, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, null, null, null, null, ramTotal, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -142,7 +152,7 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, null, null, almacenamiento, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, null, null, null, null, null, almacenamiento, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -151,7 +161,7 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, null, null, null, null, null, null, modeloGPU);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, null, null, null, null, null, null, modeloGPU);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -163,7 +173,7 @@ public class EquipoController {
 
         int id = in.id();
         String estado = "fuera de servicio"; //revisar el estado
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, estado, null, null, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -173,7 +183,7 @@ public class EquipoController {
 
         int id = in.id();
         String estado = "disponible"; //revisar el estado
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, estado, null, null, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -184,7 +194,7 @@ public class EquipoController {
 
         int id = in.id();
         String estado = "operativo"; //revisar el estado
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, estado, null, null, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
@@ -196,9 +206,18 @@ public class EquipoController {
 
         int id = in.id();
 
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null, estado, null, null, null, null, null, null);
+        EquipoUpdateDTO dto = new EquipoUpdateDTO(id, null,null, estado, null, null, null, null, null, null);
         return equipoService.actualizarEquipo(dto);
     }
 
+
+    public EquipoCountDTO countEquipo(){
+        return equipoService.obtenerResumenEstados(null);
+    }
+
+    public EquipoCountDTO countEquipoPorLab(Integer idLab){
+        validarPositivo(idLab,"ID de Laboratorio invalido");
+        return equipoService.obtenerResumenEstados(idLab);
+    }
 
 }
