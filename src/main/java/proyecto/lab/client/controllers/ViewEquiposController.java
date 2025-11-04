@@ -1,5 +1,7 @@
 package proyecto.lab.client.controllers;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +16,11 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.EquipoUpdateDTO;
+import proyecto.lab.server.dto.LaboratorioDTO;
+import proyecto.lab.server.models.Equipo;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ViewEquiposController {
 
@@ -88,7 +93,7 @@ public class ViewEquiposController {
     private TableColumn<EquipoDTO, String> NumSerieTablaEquipo;
 
     @FXML
-    private TableColumn<EquipoDTO, Integer> LabTablaEquipo;
+    private TableColumn<EquipoDTO, String> LabTablaEquipo;
 
     @FXML
     private TableColumn<EquipoDTO, Void> AccionTablaEquipo;
@@ -115,11 +120,26 @@ public class ViewEquiposController {
 
     @FXML
     void initialize(){
-        IdTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("id"));
-        NumSerieTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        LabTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("nombres"));
-        ModeloTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("rut"));
-        EstadoTablaEquipo.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
+        IdTablaEquipo.setCellValueFactory(cd ->
+                new ReadOnlyObjectWrapper<>(cd.getValue().id_equipo()));
+
+        NumSerieTablaEquipo.setCellValueFactory(cd ->
+                new ReadOnlyStringWrapper(cd.getValue().numero_serie()));
+
+        // Muestra nombre del lab si viene; si no, al menos el ID de lab
+        LabTablaEquipo.setCellValueFactory(cd -> {
+            var e = cd.getValue();
+            String texto = Optional.ofNullable(e.nombreLab())
+                    .orElse("ID " + e.id_lab_equipo());
+            return new ReadOnlyStringWrapper(texto);
+        });
+
+        ModeloTablaEquipo.setCellValueFactory(cd ->
+                new ReadOnlyStringWrapper(cd.getValue().modelo()));
+
+        EstadoTablaEquipo.setCellValueFactory(cd ->
+                new ReadOnlyStringWrapper(cd.getValue().estado()));
+
         configurarColumnaAccion();
         ActualizarTablaEquipo();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
@@ -132,9 +152,34 @@ public class ViewEquiposController {
                 }
                 e.consume(); // evita que el evento se propague a otra acción del SplitMenuButton
             });
-        }}
+        }
 
-    private void EditarEquipos(ActionEvent event){
+        TablaEquipo.setRowFactory(tv -> {
+            TableRow<EquipoDTO> row = new TableRow<>();
+            row.setOnMouseClicked(ev -> {
+                if (ev.getClickCount() == 2 && !row.isEmpty()) {
+                    AbrirVistaDetalladaEquipo(row.getItem());
+                }
+            });
+            return row;
+        });
+    }
+
+    private void AbrirVistaDetalladaEquipo(EquipoDTO equipoSeleccionado) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ViewDetalladaEquipoSeleccionado.fxml"));
+            Parent root = loader.load();
+            ViewDetalladaEquipoSeleccionadoController controller = loader.getController();
+            controller.setEquipo(equipoSeleccionado);
+            Stage stage = new Stage();
+            stage.setTitle("Detalle del Equipo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -148,7 +193,7 @@ public class ViewEquiposController {
             controller.setEquipo(completo);
 
             Stage stage = new Stage();
-            stage.setTitle("Editar usuario");
+            stage.setTitle("Editar Equipo");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL); // bloquea la ventana principal hasta cerrar
             stage.showAndWait();
@@ -164,8 +209,15 @@ public class ViewEquiposController {
             return new TableCell<EquipoDTO, Void>() {
                 private final Button btn = new Button("Editar");
                 private final HBox box = new HBox(6, btn);
+                private final Button btnVer = new Button("Ver");
 
                 {
+                    btnVer.setOnAction(event -> {
+                        EquipoDTO equipo = getTableView().getItems().get(getIndex());
+                        AbrirVistaDetalladaEquipo(equipo);
+                    });
+
+
                     btn.setOnAction(event -> {
                         EquipoDTO equipo = getTableView().getItems().get(getIndex());
                         AbrirFormularioEditarEquipo(equipo);
@@ -180,6 +232,7 @@ public class ViewEquiposController {
                         return;
                     }
                     EquipoDTO equipo = getTableView().getItems().get(getIndex());
+                    box.getChildren().setAll(btnVer,btn);
                     setGraphic(box);
                 }
             };
