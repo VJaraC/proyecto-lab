@@ -1,68 +1,105 @@
 package proyecto.lab;
 
 import proyecto.lab.server.controller.EquipoController;
+import proyecto.lab.server.controller.LaboratorioController;
 import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dao.EquipoDAO;
+import proyecto.lab.server.dao.LaboratorioDAO;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.*;
 import proyecto.lab.server.models.Rol;
 import proyecto.lab.server.service.EquipoService;
+import proyecto.lab.server.service.LaboratorioService;
 import proyecto.lab.server.service.UsuarioService;
 
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
+        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        UsuarioService usuarioService =  new UsuarioService(usuarioDAO);
+        UsuarioController usuarioController = new UsuarioController(usuarioService);
 
         EquipoDAO equipoDAO = new EquipoDAO();
         EquipoService equipoService = new EquipoService(equipoDAO);
         EquipoController equipoController = new EquipoController(equipoService);
-        LocalDate fecha = LocalDate.of(1995, 5, 23);
-//        EquipoDTO equipoDTO = new EquipoDTO(1, 1, "Equipo_4", "377", "lenovo", "disponible", "lenovo", "333222111", "132.32.1.3", "intel", "8", "1000", "10000", "amd", fecha);
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(1, 1, null, null, null, null, null, null, null, null);
-        equipoController.cambiarLabEquipo(dto, 2);
 
-        /*UsuarioDAO usuarioDAO = new UsuarioDAO();
-        UsuarioService usuarioService = new UsuarioService(usuarioDAO);
-        UsuarioController usuarioController = new UsuarioController(usuarioService);
-        Rol rol = Rol.valueOf("ADMIN");
-        UsuarioDTO auth = new UsuarioDTO(1,"20.921.970-0","Daniza Michelle","Peso Paredes","pesodaniza@gmail.com","habilitado","femenino","TI",rol,fecha,"971313911");
-        UsuarioLoginDTO usuarioLoginDTO = new UsuarioLoginDTO("21.243.169-9","Victor Rolando","Jara Cespedes","masculino","vito123","TI",fecha,"964031692","vitoimportante2@gmail.com");
-        usuarioController.crearUsuario(usuarioLoginDTO,auth);
+        LaboratorioDAO laboratorioDAO = new LaboratorioDAO();
+        LaboratorioService laboratorioService = new LaboratorioService(laboratorioDAO);
+        LaboratorioController  laboratorioController = new LaboratorioController(laboratorioService);
 
-        //EquipoBusquedaDTO filtrosBusqueda = new EquipoBusquedaDTO(null, null, null, null, "12341234", null, null, null, null, null, null);
-        //List<EquipoDTO> resultados = equipoController.buscarEquipoPorFabricante("Lenovo");
-        //EquipoDTO resultado = null; //equipoController.buscarEquipoPorId(1);
-        /*if(resultado != null){
-            System.out.println("=== Equipo ===");
-            System.out.println("ID: " + resultado.id_equipo());
-            System.out.println("Nombre laboratorio: " + resultado.nombreLab());
-            System.out.println("Nombre: " + resultado.hostname());
-            System.out.println("Numero de serie: " + resultado.numero_serie());
-            System.out.println("Fabricante: " + resultado.fabricante());
-            System.out.println("Estado: " + resultado.estado());
-            System.out.println("modelo: " + resultado.modelo());
-            System.out.println("-----------------------------");
-        }else {
-            for (EquipoDTO equipo : resultados) {
-                System.out.println("=== Equipo ===");
-                System.out.println("ID: " + equipo.id_equipo());
-                System.out.println("Nombre laboratorio: " + equipo.nombreLab());
-                System.out.println("Nombre: " + equipo.hostname());
-                System.out.println("Numero de serie: " + equipo.numero_serie());
-                System.out.println("Fabricante: " + equipo.fabricante());
-                System.out.println("Estado: " + equipo.estado());
-                System.out.println("modelo: " + equipo.modelo());
-                System.out.println("-----------------------------");
-            }
-        }*/
+        ServerSocket serverSocket = new ServerSocket(12345);
+        System.out.println("Servidor escuchando en el puerto: " +  serverSocket.getLocalPort());
+        while (true) {
+            Socket socket = serverSocket.accept();
+            handleRequest(socket, usuarioController, equipoController, laboratorioController);
 
-
-
+        }
 
     }
+    enum Action { LOGIN, INSERT_METRIC, GET_METRICS, LIST_USERS, LIST_EQUIPOS, UNKNOWN }
+    //funcion que maneja las solicitudes
+    private static void handleRequest(Socket socket, UsuarioController usuarioController, EquipoController equipoController, LaboratorioController laboratorioController) throws IOException {
+        try(socket;
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //lee datos que llegan desde el cliente
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true)) { //envia datos hacia el cliente
+
+            //leer el mensaje
+            String payload = leerDesdeSocket(in);
+            //detectar la accion para ser enviada posteriormente a su respectivo controlador
+            Action action = detectarTipoSolicitud(payload);
+            //validad y extraer datos en un DTO de entrada
+            Object requestDTO = validarYExtraerDatos(payload, action);
+
+            Object result;
+            switch (action) {
+                case LOGIN -> result = usuarioController.iniciarSesion((UsuarioLoginDTO) requestDTO);
+                default -> result = error("ACCION_DESCONOCIDA", "Acción no soportada");
+            }
+        }
+    }
+
+    private static String leerDesdeSocket(BufferedReader in) throws IOException {
+        String line = in.readLine();
+        if (line == null || line.isBlank()) throw new IOException();
+        return line.trim();
+    }
+
+    private static Action detectarTipoSolicitud(String json) {
+        //accion que llega desde el json que envia el cliente. El servidor solo la recibe, ahora la está procesando
+        if(json.contains("\"action\":\"login\"")) return Action.LOGIN;
+        if(json.contains("\"action\":\"list_users\"")) return Action.LIST_USERS;
+        return Action.UNKNOWN;
+    }
+
+    //funcion para contruir el DTO de entrada
+    private static Object validarYExtraerDatos(String json, Action action) {
+        switch (action) {
+            case LOGIN -> {
+                //aqui se deben recuperar los datos del json que llega desde el cliente y ya fue procesado por las demas funcioens (json)
+                String rut = "";
+                String password = "";
+                return new UsuarioLoginDTO(rut, password);
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
+    static Map<String,Object> error(String code, String message) {
+        Map<String,Object> m = new HashMap<>();
+        m.put("errorCode", code);
+        m.put("message", message);
+        return m;
+    }
 }
+
