@@ -1,5 +1,9 @@
 package proyecto.lab;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+
 import proyecto.lab.server.controller.EquipoController;
 import proyecto.lab.server.controller.LaboratorioController;
 import proyecto.lab.server.controller.UsuarioController;
@@ -24,6 +28,8 @@ import java.util.Map;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    private static final Gson GSON = new Gson();
+
     public static void main(String[] args) throws SQLException, IOException {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioService usuarioService =  new UsuarioService(usuarioDAO);
@@ -66,6 +72,9 @@ public class Main {
                 default -> result = error("ACCION_DESCONOCIDA", "Acción no soportada");
             }
         }
+        catch (IOException | JsonSyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     private static String leerDesdeSocket(BufferedReader in) throws IOException {
@@ -85,9 +94,10 @@ public class Main {
     private static Object validarYExtraerDatos(String json, Action action) {
         switch (action) {
             case LOGIN -> {
+                JsonObject obj = GSON.fromJson(json, JsonObject.class);
                 //aqui se deben recuperar los datos del json que llega desde el cliente y ya fue procesado por las demas funcioens (json)
-                String rut = "";
-                String password = "";
+                String rut = obj.get("rut").getAsString();
+                String password = obj.get("password").getAsString(); //desde el json del cliente debe llegar como password
                 return new UsuarioLoginDTO(rut, password);
             }
             default -> {
