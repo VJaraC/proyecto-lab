@@ -9,41 +9,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioEditarEquipoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="676.0" styleClass="fondo" stylesheets="@../css/Formularios.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioEditarEquipoController">
    <children>
-      <Label layoutX="276.0" layoutY="28.0" text="Editar Equipo" textFill="#062040">
-         <font>
-            <Font name="CoreMellow-Bold" size="24.0" />
-         </font>
-      </Label>
       <Label layoutX="371.0" layoutY="288.0" text="Nucleos de CPU">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
       <TextField fx:id="txtNucleos" layoutX="369.0" layoutY="330.0" prefHeight="26.0" prefWidth="259.0" />
-      <Button id="BotonGuardarUsuario" fx:id="BotonActualizarEquipo" layoutX="283.0" layoutY="635.0" mnemonicParsing="false" onAction="#GuardarActualizarEquipo" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Actualizar">
+      <Button id="BotonGuardarUsuario" fx:id="BotonActualizarEquipo" layoutX="248.0" layoutY="632.0" mnemonicParsing="false" onAction="#GuardarActualizarEquipo" prefHeight="46.0" prefWidth="193.0" styleClass="boton" stylesheets="@../css/Formularios.css" text="Actualizar Equipo">
          <font>
             <Font name="Product Sans Bold" size="18.0" />
          </font>
       </Button>
-      <Label layoutX="55.0" layoutY="91.0" text="Laboratorio">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="51.0" layoutY="192.0" text="Hostname">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
       <TextField fx:id="txtModeloCpu" layoutX="52.0" layoutY="330.0" prefHeight="26.0" prefWidth="259.0" />
       <Label layoutX="52.0" layoutY="288.0" text="Modelo de CPU">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtHostname" layoutX="51.0" layoutY="230.0" prefHeight="26.0" prefWidth="259.0" />
       <Label layoutX="51.0" layoutY="396.0" text="Modelo de GPU">
          <font>
             <Font name="Product Sans" size="16.0" />
@@ -56,30 +40,59 @@
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <Label layoutX="326.0" layoutY="511.0" text="RAM ">
+      <Label layoutX="51.0" layoutY="509.0" text="RAM ">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="txtRam" layoutX="215.0" layoutY="554.0" prefHeight="26.0" prefWidth="259.0" />
-      <Label layoutX="369.0" layoutY="91.0" text="Estado">
+      <TextField fx:id="txtRam" layoutX="52.0" layoutY="529.0" prefHeight="26.0" prefWidth="259.0" />
+      <TextField fx:id="txtIp" layoutX="414.0" layoutY="578.0" prefHeight="26.0" prefWidth="259.0" />
+      <Label layoutX="421.0" layoutY="555.0" text="IP">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
       </Label>
-      <MenuButton fx:id="txtEstado" layoutX="369.0" layoutY="134.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="259.0" text="Selecciona un estado">
-        <items>
-          <MenuItem fx:id="disponible" mnemonicParsing="false" onAction="#seleccionarEstado" text="Disponible" />
-            <MenuItem fx:id="operativo" mnemonicParsing="false" onAction="#seleccionarEstado" text="Operativo" />
-          <MenuItem fx:id="fueraDeServicio" mnemonicParsing="false" onAction="#seleccionarEstado" text="Fuera de Servicio" />
-        </items>
-      </MenuButton>
-      <TextField fx:id="txtIp" layoutX="369.0" layoutY="230.0" prefHeight="26.0" prefWidth="259.0" />
-      <Label layoutX="371.0" layoutY="192.0" text="IP">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="txtIdLab" layoutX="55.0" layoutY="134.0" prefHeight="26.0" prefWidth="253.0" />
+      <AnchorPane layoutY="-2.0" prefHeight="91.0" prefWidth="676.0" styleClass="fondo_titulo" stylesheets="@../css/Formularios.css">
+         <children>
+            <Label alignment="CENTER" layoutX="219.0" layoutY="20.0" prefHeight="52.0" prefWidth="238.0" text="Editar Equipo" textFill="WHITE">
+               <font>
+                  <Font name="CoreMellow-Bold" size="32.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="37.0" layoutY="110.0" prefHeight="172.0" prefWidth="603.0" styleClass="tarjeta" stylesheets="@../css/Formularios.css">
+         <children>
+            <Label alignment="CENTER" layoutX="12.0" layoutY="-11.0" prefHeight="23.0" prefWidth="206.0" style="-fx-background-color: white;" text="Datos Administrativos" textFill="#404040">
+               <font>
+                  <Font name="Product Sans Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="22.0" layoutY="36.0" text="Hostname">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtHostname" layoutX="22.0" layoutY="60.0" prefHeight="26.0" prefWidth="259.0" styleClass="campo" stylesheets="@../css/Formularios.css" />
+            <Label layoutX="304.0" layoutY="36.0" text="Laboratorio">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="txtIdLab" layoutX="304.0" layoutY="60.0" prefHeight="26.0" prefWidth="253.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+            <Label layoutX="266.0" layoutY="103.0" text="Estado">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <MenuButton fx:id="txtEstado" layoutX="172.0" layoutY="129.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="259.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" text="Selecciona un estado">
+              <items>
+                <MenuItem fx:id="disponible" mnemonicParsing="false" onAction="#seleccionarEstado" text="Disponible" />
+                  <MenuItem fx:id="operativo" mnemonicParsing="false" onAction="#seleccionarEstado" text="Operativo" />
+                <MenuItem fx:id="fueraDeServicio" mnemonicParsing="false" onAction="#seleccionarEstado" text="Fuera de Servicio" />
+              </items>
+            </MenuButton>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
