@@ -1,0 +1,116 @@
+/* language=JavaFX CSS */
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat Bold";
+    src: url("../fonts/Montserrat-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Core Mellow";
+    src: url("../fonts/Core-Mellow-Regular.otf");
+}
+
+@font-face {
+    font-family: "Core Mellow Bold";
+    src: url("../fonts/Core-Mellow-Bold.otf");
+}
+
+@font-face {
+    font-family: "Product Sans";
+    src: url("../fonts/Product-Sans-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Product Sans Bold";
+    src: url("../fonts/Product-Sans-Bold.ttf");
+}
+
+.fondo{
+    -fx-background-color: #ffffff;
+}
+
+.campo{
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-border-width: 1px;
+    -fx-border-color: rgb(217, 217, 217);
+    -fx-border-radius: 5;
+}
+
+.campo-seleccion{
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 4);
+}
+
+.tarjeta{
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-border-color: rgb(217, 217, 217);
+}
+
+
+.campo-seleccion:focused{
+    -fx-effect: dropshadow(three-pass-box, rgba(81, 163, 246, 0.4), 10, 0, 0, 0);
+}
+
+.fondo_titulo{
+    -fx-background-image: url("../images/fondo_titulo.png");
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+}
+
+.campo:focused {
+    -fx-background-color: white;
+    -fx-border-color: rgb(84, 144, 255);
+    -fx-border-width: 1px;
+}
+
+.boton{
+    -fx-background-color: #4177ff;
+    -fx-background-radius: 25px;
+    -fx-text-fill: white;
+}
+
+.boton:hover{
+    -fx-background-color: #2864ff;
+    -fx-cursor:hand;
+
+}
+
+.tarjeta:focused{
+    -fx-border-color: #2864ff;
+}
+
+.botonAlternativo{
+    -fx-background-color: #ffffff;
+    -fx-border-radius: 25px;
+    -fx-border-width: 1px;
+    -fx-border-color: #4177ff;
+    -fx-text-fill: #4177ff;
+}
+
+.tarjetaAlternativo:hover{
+    -fx-cursor:hand;
+    -fx-background-color: rgb(84, 144, 255);
+}
+
+.datepicker .text-field{
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 4);
+    -fx-border-color: white;
+}
+
+.datepicker .arrow-button{
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 4);
+    -fx-border-color: white;
+}
+
+.datepicker{
+    -fx-background-color: rgb(255, 255, 255);
+
+}

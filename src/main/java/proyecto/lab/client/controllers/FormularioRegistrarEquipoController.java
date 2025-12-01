@@ -5,12 +5,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.LaboratorioDTO;
-import proyecto.lab.server.dto.UsuarioDTO;
-import proyecto.lab.server.dto.UsuarioLoginDTO;
 
 import java.time.LocalDate;
 
@@ -18,6 +18,15 @@ public class FormularioRegistrarEquipoController {
 
     @FXML
     private Button BotonGuardarEquipo;
+
+    @FXML
+    private AnchorPane contenedorParte1;
+
+    @FXML
+    private AnchorPane contenedorParte2;
+
+    @FXML
+    private AnchorPane contenedorParte3;
 
     @FXML
     private TextField txtAlmacenamiento;
@@ -110,6 +119,9 @@ public class FormularioRegistrarEquipoController {
 
     @FXML
     void initialize() {
+        // 0) Configuración inicial diseño
+        MostrarParte1();
+
         // 1) Cargar items desde el backend
         var labs = AppContext.laboratorio().listarLaboratorios(AppContext.getUsuarioActual());
         txtIdLab.setItems(FXCollections.observableArrayList(labs));
@@ -135,6 +147,57 @@ public class FormularioRegistrarEquipoController {
 
 
     @FXML
+    void Siguiente(ActionEvent event){
+        if(contenedorParte1.isVisible()){
+            if(txtFabricante.getText().isEmpty() || txtIdLab.getValue() == null || txtEstado.getText() == null || txtModelo.getText() == null || txtNumSerie.getText() == null || txtHostname.getText() == null){
+                alert(Alert.AlertType.WARNING, "Por favor complete todos los campos antes de continuar.");
+            }
+            else{
+                MostrarParte2();
+            }
+        }
+        else{
+            if(txtModeloCpu.getText().isEmpty() || txtNucleos.getText().isEmpty() || txtRam.getText().isEmpty() || txtAlmacenamiento.getText().isEmpty() || txtModeloGpu.getText().isEmpty()){
+                alert(Alert.AlertType.WARNING, "Por favor complete todos los campos antes de continuar.");
+            }
+            else{
+                MostrarParte3();
+            }
+
+        }
+    }
+
+    @FXML
+    void Atras(ActionEvent event){
+        if(contenedorParte2.isVisible()){
+            MostrarParte1();
+        }
+        else{
+            MostrarParte2();
+        }
+    }
+
+
+    void MostrarParte1() {
+        contenedorParte1.setVisible(true);
+        contenedorParte2.setVisible(false);
+        contenedorParte3.setVisible(false);
+    }
+
+    void MostrarParte2() {
+        contenedorParte1.setVisible(false);
+        contenedorParte2.setVisible(true);
+        contenedorParte3.setVisible(false);
+    }
+
+    void MostrarParte3() {
+        contenedorParte1.setVisible(false);
+        contenedorParte2.setVisible(false);
+        contenedorParte3.setVisible(true);
+    }
+
+
+    @FXML
     void Cancelar(ActionEvent e) { cerrar(e); }
 
     private void cerrar(ActionEvent e) {
@@ -148,5 +211,7 @@ public class FormularioRegistrarEquipoController {
     private void alert(Alert.AlertType type, String msg) {
         new Alert(type, msg).showAndWait();
     }
+
+
 
 }
