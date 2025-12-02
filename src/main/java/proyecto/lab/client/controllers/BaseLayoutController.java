@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import proyecto.lab.server.models.Rol;
 
@@ -44,7 +45,10 @@ public class BaseLayoutController {
 
     private void loadView(String fxmlPath) {
         try {
-            Node view = FXMLLoader.load(getClass().getResource(fxmlPath));
+            Region view = FXMLLoader.load(getClass().getResource(fxmlPath));
+            view.prefWidthProperty().bind(ContentArea.widthProperty());
+            view.prefHeightProperty().bind(ContentArea.heightProperty());
+
             ContentArea.getChildren().setAll(view);
 
         } catch (Exception e) {

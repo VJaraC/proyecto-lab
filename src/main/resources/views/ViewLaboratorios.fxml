@@ -12,54 +12,34 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="625.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewLaboratoriosController">
+<StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1004.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewLaboratoriosController">
    <children>
       <AnchorPane prefHeight="637.0" prefWidth="858.0">
          <children>
-            <AnchorPane prefHeight="74.0" prefWidth="846.0">
-               <children>
-                  <Label layoutX="14.0" layoutY="7.0" text="Laboratorios" textFill="#062040">
-                     <font>
-                        <Font name="CoreMellow-Bold" size="36.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane id="PanelCredencial" layoutX="556.0" layoutY="14.0" prefHeight="20.0" prefWidth="275.0" styleClass="PanelCredencial" stylesheets="@../css/BaseLayout.css">
-                     <children>
-                        <Button id="BotonCerrarSesion" fx:id="btnCerrarSesion" layoutX="160.0" mnemonicParsing="false" onAction="#btnCerrarSesion" prefHeight="28.0" prefWidth="114.0" styleClass="BotonCerrarSesion" stylesheets="@../css/BaseLayout.css" text="Cerrar Sesión">
-                           <font>
-                              <Font name="Product Sans" size="14.0" />
-                           </font>
-                        </Button>
-                        <Label fx:id="txtUsuarioSesion" layoutX="34.0" layoutY="7.0" prefHeight="15.0" prefWidth="126.0" text="Usuario">
-                           <font>
-                              <Font name="Product Sans Bold" size="12.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
-            <TableView id="Tabla" fx:id="TablaLaboratorio" layoutX="21.0" layoutY="196.0" prefHeight="415.0" prefWidth="820.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
+            <TableView id="Tabla" fx:id="TablaLaboratorio" layoutX="35.0" layoutY="198.0" prefHeight="419.0" prefWidth="934.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
               <columns>
                 <TableColumn fx:id="IdTablaLaboratorio" editable="false" prefWidth="40.79998588562012" styleClass="ColumnaTabla" text="ID" />
-                  <TableColumn fx:id="NombreTablaLaboratorio" editable="false" prefWidth="136.80005645751953" styleClass="ColumnaTabla" text="Nombre" />
-                <TableColumn fx:id="UbicacionTablaLaboratorio" editable="false" prefWidth="168.800048828125" styleClass="ColumnaTabla" text="Ubicacion" />
-                  <TableColumn fx:id="CapacidadEquiposTablaLaboratorio" editable="false" minWidth="0.0" prefWidth="165.59994506835938" styleClass="ColumnaTabla" text="Capacidad de Equipos" />
-                  <TableColumn fx:id="EstadoTablaLaboratorio" editable="false" prefWidth="106.4000244140625" sortable="false" styleClass="ColumnaTabla" text="Estado" />
-                  <TableColumn fx:id="AccionTablaLaboratorio" editable="false" prefWidth="203.99993896484375" styleClass="ColumnaTabla" text="Acción" />
+                  <TableColumn fx:id="NombreTablaLaboratorio" editable="false" prefWidth="195.20001983642578" styleClass="ColumnaTabla" text="Nombre" />
+                <TableColumn fx:id="UbicacionTablaLaboratorio" editable="false" prefWidth="203.20001220703125" styleClass="ColumnaTabla" text="Ubicacion" />
+                  <TableColumn fx:id="CapacidadEquiposTablaLaboratorio" editable="false" minWidth="0.0" prefWidth="182.39999389648438" styleClass="ColumnaTabla" text="Capacidad de Equipos" />
+                  <TableColumn fx:id="EstadoTablaLaboratorio" editable="false" prefWidth="122.39996337890625" sortable="false" styleClass="ColumnaTabla" text="Estado" />
+                  <TableColumn fx:id="AccionTablaLaboratorio" editable="false" prefWidth="192.800048828125" styleClass="ColumnaTabla" text="Acción" />
               </columns>
             </TableView>
-            <TextField fx:id="txtBuscar" layoutX="21.0" layoutY="80.0" onAction="#txtBuscar" prefHeight="26.0" prefWidth="276.0" promptText="Buscar..." styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
+            <TextField fx:id="txtBuscar" layoutX="35.0" layoutY="86.0" onAction="#txtBuscar" prefHeight="30.0" prefWidth="276.0" promptText="Buscar..." styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
                <padding>
                   <Insets left="30.0" />
                </padding>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </TextField>
-            <Button id="BotonCrearUsuario" fx:id="BotonRegistrarLaboratorio" layoutX="21.0" layoutY="137.0" mnemonicParsing="false" onAction="#AbrirFormularioRegistrarLaboratorio" prefHeight="36.0" prefWidth="168.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Registrar Laboratorio">
+            <Button id="BotonCrearUsuario" fx:id="BotonRegistrarLaboratorio" layoutX="35.0" layoutY="139.0" mnemonicParsing="false" onAction="#AbrirFormularioRegistrarLaboratorio" prefHeight="36.0" prefWidth="168.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Registrar Laboratorio">
                <font>
                   <Font name="Product Sans Bold" size="14.0" />
                </font>
             </Button>
-            <SplitMenuButton fx:id="Buscar" layoutX="328.0" layoutY="80.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" styleClass="btnFiltro" stylesheets="@../css/ViewUsuarios.css" text="Escoge un filtro" textAlignment="CENTER">
+            <SplitMenuButton fx:id="Buscar" layoutX="328.0" layoutY="86.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="30.0" prefWidth="200.0" styleClass="btnFiltro" stylesheets="@../css/ViewUsuarios.css" text="Escoge un filtro" textAlignment="CENTER">
               <items>
                   <MenuItem fx:id="FiltroID" mnemonicParsing="false" onAction="#FiltroID" styleClass="filtro" text="Buscar por ID" />
                 <MenuItem fx:id="FiltroNombre" mnemonicParsing="false" onAction="#FiltroNombre" styleClass="filtro" text="Buscar por Nombre" />
@@ -68,7 +48,33 @@
                   <MenuItem fx:id="FiltroCapacidadPersonas" mnemonicParsing="false" onAction="#FiltroCapacidadPersonas" styleClass="filtro" text="Buscar por Capacidad de Personas" />
                   <MenuItem fx:id="FiltroCapacidadEquipos" mnemonicParsing="false" onAction="#FiltroCapacidadEquipos" styleClass="filtro" text="Buscar por Capacidad de Equipos" />
               </items>
+               <font>
+                  <Font size="14.0" />
+               </font>
             </SplitMenuButton>
+            <AnchorPane prefHeight="73.0" prefWidth="1004.0" styleClass="fondo-banner" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="@../css/ViewInicio.css">
+               <children>
+                  <AnchorPane id="PanelCredencial" layoutX="680.0" layoutY="17.0" prefHeight="38.0" prefWidth="294.0" style="-fx-background-radius: 10;" styleClass="PanelCredencial" stylesheets="@../css/BaseLayout.css">
+                     <children>
+                        <Button id="BotonCerrarSesion" fx:id="btnCerrarSesion" layoutX="172.0" layoutY="5.0" mnemonicParsing="false" onAction="#btnCerrarSesion" prefHeight="28.0" prefWidth="114.0" styleClass="BotonCerrarSesion" stylesheets="@../css/BaseLayout.css" text="Cerrar Sesión">
+                           <font>
+                              <Font name="Product Sans" size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="txtUsuarioSesion" layoutX="14.0" layoutY="10.0" prefHeight="18.0" prefWidth="146.0" text="Usuario" textFill="WHITE">
+                           <font>
+                              <Font name="Product Sans Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="23.0" layoutY="15.0" text="Laboratorios" textFill="WHITE">
+                     <font>
+                        <Font name="CoreMellow-Bold" size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>
