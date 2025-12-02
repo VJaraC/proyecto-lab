@@ -118,15 +118,39 @@ public record AgentConfig(
             while (networks.hasMoreElements()) {
                 NetworkInterface net = networks.nextElement();
                 byte[] mac = net.getHardwareAddress();
-                if (mac != null && mac.length > 0 && !net.isLoopback() && net.isUp()) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < mac.length; i++) {
-                        sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
-                    }
-                    return sb.toString();
+
+                // 1. Validaciones básicas
+                if (mac == null || mac.length == 0 || net.isLoopback() || !net.isUp()) {
+                    continue;
                 }
+
+                // 2. FILTRO DE ADAPTADORES VIRTUALES
+                // Obtenemos el nombre para analizarlo
+                String display = net.getDisplayName().toLowerCase();
+                String name = net.getName().toLowerCase();
+
+                // Lista negra de palabras clave de adaptadores virtuales
+                if (display.contains("virtual") || display.contains("vmware") ||
+                        display.contains("vbox") || display.contains("host-only") ||
+                        display.contains("vpn") || display.contains("docker") ||
+                        display.contains("container") || display.contains("pseudo") ||
+                        display.contains("teredo") || display.contains("wsl")) {
+                    continue; // Saltamos este adaptador, es falso
+                }
+
+                // (Opcional) Preferir Ethernet o Wi-Fi explícitamente si quieres ser más estricto
+                // if (!display.contains("ethernet") && !display.contains("wi-fi") && !display.contains("wireless")) continue;
+
+                // 3. Si pasó el filtro, es una tarjeta física real
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < mac.length; i++) {
+                    sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+                }
+                return sb.toString();
             }
         } catch (Exception e) { e.printStackTrace(); }
+
+        // Retorno por defecto si no encuentra nada
         return "00-00-00-00-00-00";
     }
 }
