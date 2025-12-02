@@ -172,4 +172,11 @@ public class LaboratorioController {
         return laboratorioService.listarLaboratorios();
     }
 
+    public int contarLaboratoriosSesionActiva(){
+        return laboratorioService.contarLaboratoriosSesionActiva();
+    }
+
+    public int contarLaboratoriosActivos(){
+        return laboratorioService.contarLaboratoriosActivos();
+    }
 }

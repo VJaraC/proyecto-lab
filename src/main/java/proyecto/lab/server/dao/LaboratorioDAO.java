@@ -245,5 +245,21 @@ public class LaboratorioDAO {
         return 0;
     }
 
+    public int contarLabActivos(){
+        String sql = "SELECT count(id_lab) as cantidad_lab_disponibles FROM laboratorio WHERE TRIM(estado_lab) <> 'deshabilitado'";
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al contar laboratorios activos", e);
+        }
+        return 0;
+    }
+
 }
 

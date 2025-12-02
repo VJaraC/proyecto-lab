@@ -219,5 +219,13 @@ public class LaboratorioService {
         return true;
     }
 
+    public int contarLaboratoriosSesionActiva(){
+        return laboratorioDAO.contarLabSesionesActivas();
+    }
+
+    public int contarLaboratoriosActivos(){
+        return laboratorioDAO.contarLabActivos();
+    }
+
 
 }
