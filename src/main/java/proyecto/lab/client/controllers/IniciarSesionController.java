@@ -42,6 +42,11 @@ public class IniciarSesionController {
             var stage = (Stage) IniciarSesionBtn.getScene().getWindow();
             stage.setTitle("Sistema de Monitoreo - UNAP");
             stage.setScene(new Scene(root));
+            stage.setMinWidth(1274);
+            stage.setMaxWidth(1274);
+            stage.setMinHeight(650);
+            stage.setMaxHeight(650);
+            stage.setResizable(false);
             stage.show();
 
         }catch(RuntimeException ex){
