@@ -43,6 +43,7 @@ public class App extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/views/IniciarSesion.fxml"));
         stage.setTitle("Sistema de Monitoreo - UNAP");
         stage.setScene(new Scene(root));
+        stage.setResizable(false);
         stage.show();
     }
 
