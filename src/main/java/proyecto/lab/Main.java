@@ -1,12 +1,15 @@
 package proyecto.lab;
 
 import proyecto.lab.server.controller.EquipoController;
+import proyecto.lab.server.controller.SesionController;
 import proyecto.lab.server.controller.UsuarioController;
 import proyecto.lab.server.dao.EquipoDAO;
+import proyecto.lab.server.dao.SesionDAO;
 import proyecto.lab.server.dao.UsuarioDAO;
 import proyecto.lab.server.dto.*;
 import proyecto.lab.server.models.Rol;
 import proyecto.lab.server.service.EquipoService;
+import proyecto.lab.server.service.SesionService;
 import proyecto.lab.server.service.UsuarioService;
 
 import java.sql.SQLException;
@@ -18,10 +21,18 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        EquipoDAO equipoDAO = new EquipoDAO();
+        SesionDAO sesionDAO = new SesionDAO();
+        SesionService sesionService = new SesionService(sesionDAO);
+        SesionController sesionController = new SesionController(sesionService);
+        List<SesionHoraDTO> lista = sesionController.obtenerSesionesPorHora();
+        System.out.println(lista.get(10));
+
+
+        /*EquipoDAO equipoDAO = new EquipoDAO();
         EquipoService equipoService = new EquipoService(equipoDAO);
         EquipoController equipoController = new EquipoController(equipoService);
-        System.out.println(equipoController.contarEquiposActivos());
+        System.out.println(equipoController.contarEquiposActivos());*/
+
 
         /*UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioService usuarioService = new UsuarioService(usuarioDAO);
