@@ -58,7 +58,7 @@
 }
 
 .PanelCredencial{
-    -fx-border-color: #062040;
+    -fx-border-color: #ffffff;
     -fx-background-color: rgba(255, 255, 255, 0.57);
     -fx-border-radius: 8;
 }
@@ -72,8 +72,9 @@
 .BotonCerrarSesion:hover{
     -fx-background:none;
     -fx-border-style: none;
-    -fx-text-fill:black;
+    -fx-text-fill: #d00000;
     -fx-underline: true;
+    -fx-font-weight: bold;
     -fx-cursor: hand;
 }
 
