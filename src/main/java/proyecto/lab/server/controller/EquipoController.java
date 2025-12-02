@@ -220,4 +220,12 @@ public class EquipoController {
         return equipoService.obtenerResumenEstados(idLab);
     }
 
+    public int contarEquipoSesionActiva(){
+        return equipoService.contarEquipoSesionActiva();
+    }
+
+    public int contarEquiposActivos(){
+        return equipoService.contarEquiposActivos();
+    }
+
 }

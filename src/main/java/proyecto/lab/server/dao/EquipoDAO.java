@@ -424,4 +424,39 @@ public class EquipoDAO {
     }
 
 
+    public int contarEquiposSesionActiva() {
+        String sql = "SELECT count(s.id_eq) as cantidad_equipos_sesiones_activas FROM equipo JOIN sesion as s on equipo.id_eq=s.id_eq WHERE s.estado_sesion='ACTIVA'";
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al contar equipos por sesion activa", e);
+        }
+
+        return 0;
+    }
+
+    public int contarEquiposActivos(){
+        String sql = "SELECT COUNT(*) FROM EQUIPO WHERE TRIM(ESTADO_EQUIPO) <> 'FUERA DE SERVICIO'";
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al contar equipos activos", e);
+        }
+        return 0;
+    }
+
+
 }

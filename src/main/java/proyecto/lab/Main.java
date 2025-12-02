@@ -18,22 +18,19 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        /*EquipoDAO equipoDAO = new EquipoDAO();
+        EquipoDAO equipoDAO = new EquipoDAO();
         EquipoService equipoService = new EquipoService(equipoDAO);
         EquipoController equipoController = new EquipoController(equipoService);
-        LocalDate fecha = LocalDate.of(1995, 5, 23);
-//        EquipoDTO equipoDTO = new EquipoDTO(1, 1, "Equipo_4", "377", "lenovo", "disponible", "lenovo", "333222111", "132.32.1.3", "intel", "8", "1000", "10000", "amd", fecha);
-        EquipoUpdateDTO dto = new EquipoUpdateDTO(1, 1, null, null, null, null, null, null, null, null);
-        equipoController.cambiarLabEquipo(dto, 2);*/
+        System.out.println(equipoController.contarEquiposActivos());
 
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
+        /*UsuarioDAO usuarioDAO = new UsuarioDAO();
         UsuarioService usuarioService = new UsuarioService(usuarioDAO);
         UsuarioController usuarioController = new UsuarioController(usuarioService);
         Rol rol = Rol.valueOf("ADMIN");
         LocalDate fecha = LocalDate.of(2001, 12, 5);
         UsuarioDTO auth = new UsuarioDTO(1,"20.921.970-0","Daniza Michelle","Peso Paredes","pesodaniza@gmail.com","habilitado","femenino","TI",rol,fecha,"971313911");
         UsuarioLoginDTO usuarioLoginDTO = new UsuarioLoginDTO("21.243.169-9","Victor Rolando","Jara Cespedes","masculino","vito123","TI",fecha,"964031692","vitoimportante2@gmail.com");
-        usuarioController.crearUsuario(usuarioLoginDTO,auth);
+        usuarioController.crearUsuario(usuarioLoginDTO,auth);*/
 
         //EquipoBusquedaDTO filtrosBusqueda = new EquipoBusquedaDTO(null, null, null, null, "12341234", null, null, null, null, null, null);
         //List<EquipoDTO> resultados = equipoController.buscarEquipoPorFabricante("Lenovo");

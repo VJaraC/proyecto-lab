@@ -266,4 +266,12 @@ public class EquipoService {
     public EquipoCountDTO obtenerResumenEstados(Integer idLab) {
         return equipoDAO.contarEquiposResumen(idLab);
     }
+
+    public int contarEquipoSesionActiva(){
+        return equipoDAO.contarEquiposSesionActiva();
+    }
+
+    public int contarEquiposActivos(){
+        return equipoDAO.contarEquiposActivos();
+    }
 }

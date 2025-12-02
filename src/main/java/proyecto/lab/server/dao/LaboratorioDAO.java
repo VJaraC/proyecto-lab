@@ -224,6 +224,26 @@ public class LaboratorioDAO {
         }
     }
 
+    public int contarLabSesionesActivas(){
+        String sql = "SELECT count(DISTINCT l.id_lab) as cantidad_labs_activos\n" +
+                "FROM laboratorio as l\n" +
+                "    JOIN equipo as e ON e.id_lab=l.id_lab\n" +
+                "    JOIN sesion as s ON s.id_eq=e.id_eq\n" +
+                "                WHERE s.estado_sesion='ACTIVA'";
+
+        try(Connection conn = conexion.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()){
+
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        }
+        catch(SQLException e){
+            throw new RuntimeException("Error al contar laboratorio con sesion activa", e);
+        }
+        return 0;
+    }
 
 }
 
