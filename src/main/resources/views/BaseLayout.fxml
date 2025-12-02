@@ -14,9 +14,9 @@
 <HBox stylesheets="@../css/BaseLayout.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.BaseLayoutController">
 
    <children>
-      <VBox prefHeight="650.0" prefWidth="270.0">
+      <VBox prefWidth="270.0" HBox.hgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="anchorLateral" prefHeight="650.0" prefWidth="275.0" styleClass="anchorLateral" stylesheets="@../css/BaseLayout.css">
+            <AnchorPane fx:id="anchorLateral" minHeight="650.0" prefWidth="273.0" styleClass="anchorLateral" VBox.vgrow="ALWAYS" stylesheets="@../css/BaseLayout.css">
                <children>
                   <Pane id="FondoLogoUnap" layoutX="24.0" layoutY="23.0" prefHeight="164.0" prefWidth="222.0" styleClass="FondoLogoUnap" stylesheets="@../css/BaseLayout.css">
                      <children>
@@ -32,17 +32,22 @@
                         <Font name="Product Sans" size="18.0" />
                      </font>
                   </Button>
-                  <Button id="BotonLab" fx:id="BotonLaboratorios" layoutX="2.0" layoutY="339.0" mnemonicParsing="false" onAction="#GoLaboratorios" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Laboratorios" textFill="WHITE">
+                  <Button id="BotonLab" fx:id="BotonLaboratorios" layoutX="2.0" layoutY="391.0" mnemonicParsing="false" onAction="#GoLaboratorios" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Laboratorios" textFill="WHITE">
                      <font>
                         <Font name="Product Sans" size="18.0" />
                      </font>
                   </Button>
-                  <Button id="BotonEquipo" fx:id="BotonEquipos" layoutX="2.0" layoutY="388.0" mnemonicParsing="false" onAction="#GoEquipos" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Equipos" textFill="WHITE">
+                  <Button id="BotonEquipo" fx:id="BotonEquipos" layoutX="2.0" layoutY="440.0" mnemonicParsing="false" onAction="#GoEquipos" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Equipos" textFill="WHITE">
                      <font>
                         <Font name="Product Sans" size="18.0" />
                      </font>
                   </Button>
-                  <Button id="BotonUsuarios" fx:id="BotonUsuarios" layoutX="1.0" layoutY="438.0" mnemonicParsing="false" onAction="#GoUsuarios" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Usuarios" textFill="WHITE">
+                  <Button id="BotonUsuarios" fx:id="BotonUsuarios" layoutX="1.0" layoutY="490.0" mnemonicParsing="false" onAction="#GoUsuarios" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Usuarios" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button id="BotonReportes" fx:id="BotonReportes" layoutX="1.0" layoutY="539.0" mnemonicParsing="false" onAction="#GoReportes" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Reportes" textFill="WHITE">
                      <font>
                         <Font name="Product Sans" size="18.0" />
                      </font>
@@ -52,7 +57,7 @@
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Button id="BotonReportes" fx:id="BotonReportes" layoutX="1.0" layoutY="487.0" mnemonicParsing="false" onAction="#GoReportes" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Reportes" textFill="WHITE">
+                  <Button id="BotonLab" fx:id="BotonTiempoReal" layoutX="6.0" layoutY="340.0" mnemonicParsing="false" onAction="#GoTiempoReal" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Métricas en Tiempo Real" textFill="WHITE">
                      <font>
                         <Font name="Product Sans" size="18.0" />
                      </font>

@@ -28,6 +28,9 @@ public class BaseLayoutController {
     private Button BotonUsuarios;
 
     @FXML
+    private Button BotonTiempoReal;
+
+    @FXML
     private StackPane ContentArea;
 
     @FXML
@@ -92,6 +95,12 @@ public class BaseLayoutController {
     void GoUsuarios(ActionEvent event) {
         loadView("/views/ViewUsuarios.fxml");
         setActiveButton(BotonUsuarios);
+    }
+
+    @FXML
+    void GoTiempoReal(ActionEvent event) {
+        loadView("/views/ViewTiempoReal.fxml");
+        setActiveButton(BotonTiempoReal);
     }
 
 }
