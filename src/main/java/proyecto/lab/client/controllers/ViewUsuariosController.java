@@ -3,6 +3,8 @@ package proyecto.lab.client.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -113,6 +115,7 @@ public class ViewUsuariosController {
         RUTTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("rut"));
         ApellidosTablaEstudiantes.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
         configurarColumnaAccion();
+        configurarColumnaEstado();
         ActualizarTablaEstudiantes();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
 
@@ -121,8 +124,6 @@ public class ViewUsuariosController {
             BotonCrearUsuario.setVisible(false);
             BotonCrearUsuario.setManaged(false); // colapsa el espacio
         }
-
-
 
         for (MenuItem item : Buscar.getItems()) {
             item.addEventHandler(ActionEvent.ACTION, e -> {
@@ -149,6 +150,38 @@ public class ViewUsuariosController {
     }
 
 
+
+    private void configurarColumnaEstado() {
+        EstadoTablaEstudiantes.setCellFactory(col -> new TableCell<UsuarioDTO, String>() {
+            private final Label label = new Label();{
+                label.getStyleClass().add("texto");
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+
+                label.setText(item);
+                label.getStyleClass().remove("habilitado");
+                label.getStyleClass().remove("deshabilitado");
+
+                if ("habilitado".equalsIgnoreCase(item)) {
+                    label.getStyleClass().add("habilitado");
+                } else {
+                    label.getStyleClass().add("deshabilitado");
+                }
+                setAlignment(Pos.CENTER);
+                setGraphic(label);
+                setText(null);
+            }
+        });
+    }
+
     void AbrirFormularioEditarUsuario(UsuarioDTO usuarioSeleccionado) {
         try {
             UsuarioDTO completo = AppContext.admin()
@@ -173,27 +206,33 @@ public class ViewUsuariosController {
 
     private void configurarColumnaAccion() {
         AccionTablaEstudiantes.setCellFactory(col -> new TableCell<>() {
-            private final Button btnVer = new Button("Ver");
-            private final Button btnEditar = new Button("Editar");
-            private final Button btnDeshabilitar = new Button("Deshabilitar");
-            private final Button btnHabilitar = new Button("Habilitar");
-            private final HBox box = new HBox(6);
+            private final Button btnVer        = crearBotonAccion("Ver");
+            private final Button btnEditar     = crearBotonAccion("Editar");
+            private final Button btnDeshabilitar = crearBotonAccion("Deshabilitar");
+            private final Button btnHabilitar  = crearBotonAccion("Habilitar");
+            private final HBox box             = new HBox(6);
 
             {
+                box.setAlignment(Pos.CENTER_LEFT);
+                box.setPadding(new Insets(0, 5, 0, 0));
+
                 btnVer.setOnAction(e -> {
                     UsuarioDTO u = getTableView().getItems().get(getIndex());
                     AbrirVistaDetalladaUsuario(u);
                 });
+
                 btnEditar.setOnAction(e -> {
                     UsuarioDTO u = getTableView().getItems().get(getIndex());
                     AbrirFormularioEditarUsuario(u);
                 });
+
                 btnDeshabilitar.setOnAction(e -> {
                     UsuarioDTO u = getTableView().getItems().get(getIndex());
                     UsuarioUpdateDTO dto = crearUpdateDTO(u);
                     AppContext.admin().deshabilitarUsuario(dto, AppContext.getUsuarioActual());
                     getTableView().refresh();
                 });
+
                 btnHabilitar.setOnAction(e -> {
                     UsuarioDTO u = getTableView().getItems().get(getIndex());
                     UsuarioUpdateDTO dto = crearUpdateDTO(u);
@@ -205,6 +244,7 @@ public class ViewUsuariosController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+
                 if (empty || getIndex() < 0) {
                     setGraphic(null);
                     return;
@@ -214,10 +254,8 @@ public class ViewUsuariosController {
                 UsuarioDTO usuario = getTableView().getItems().get(getIndex());
 
                 if (!esAdmin) {
-                    // MONITOR: solo puede ver
                     box.getChildren().setAll(btnVer);
                 } else {
-                    // ADMIN: ver + editar + habilitar/deshabilitar
                     if ("habilitado".equalsIgnoreCase(usuario.getEstado())) {
                         box.getChildren().setAll(btnVer, btnEditar, btnDeshabilitar);
                     } else {
@@ -228,6 +266,14 @@ public class ViewUsuariosController {
             }
         });
     }
+
+    // helper para que todos los botones compartan estilo
+    private Button crearBotonAccion(String texto) {
+        Button b = new Button(texto);
+        b.getStyleClass().add("botonAccion");
+        return b;
+    }
+
 
     private UsuarioUpdateDTO crearUpdateDTO(UsuarioDTO usuario) {
         int id = usuario.getID();

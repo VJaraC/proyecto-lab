@@ -197,7 +197,19 @@
                </children>
             </AnchorPane>
             <Separator layoutX="182.0" layoutY="119.0" prefHeight="2.0" prefWidth="784.0" style="-fx-background-color: #0068df;" />
-            <AnchorPane layoutX="24.0" layoutY="529.0" prefHeight="94.0" prefWidth="947.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css" />
+            <AnchorPane layoutX="28.0" layoutY="527.0" prefHeight="94.0" prefWidth="947.0" styleClass="panelAlertas" stylesheets="@../css/ViewInicio.css">
+               <children>
+                  <Label fx:id="txtUltimaAlerta" alignment="CENTER" layoutX="101.0" layoutY="25.0" prefHeight="44.0" prefWidth="746.0" text="Alerta" textFill="WHITE">
+                     <font>
+                        <Font name="Product Sans Bold" size="20.0" />
+                     </font>
+                  </Label>
+               </children></AnchorPane>
+            <Label alignment="CENTER" layoutX="47.0" layoutY="512.0" prefHeight="30.0" prefWidth="174.0" styleClass="panelAlertaTitulo" stylesheets="@../css/ViewInicio.css" text="ÚLTIMA ALERTA" textFill="#002b76">
+               <font>
+                  <Font name="Product Sans Bold" size="18.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
     </children>

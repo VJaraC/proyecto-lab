@@ -39,6 +39,25 @@
 }
 
 
+
+
 .fondo-banner{
+    /*-fx-background-color: linear-gradient(to left, #026ab1, #037fad, #018ea9,#009aa6);*/
+    -fx-background-color: #009aa6;
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
+}
+
+
+.panelAlertas{
     -fx-background-color: linear-gradient(to left, #026ab1, #037fad, #018ea9,#009aa6);
+    -fx-border-color: rgba(171, 172, 183, 0.49);
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 10, 0.1, 2, 2);
+
+}
+
+.panelAlertaTitulo{
+    -fx-background-color: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 10, 0.1, 2, 2);
 }
