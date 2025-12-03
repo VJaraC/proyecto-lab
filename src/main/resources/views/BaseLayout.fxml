@@ -11,12 +11,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox stylesheets="@../css/BaseLayout.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.BaseLayoutController">
+<HBox minHeight="650.0" stylesheets="@../css/BaseLayout.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.BaseLayoutController">
 
    <children>
       <VBox prefWidth="270.0" HBox.hgrow="ALWAYS">
          <children>
-            <AnchorPane fx:id="anchorLateral" minHeight="650.0" prefWidth="273.0" styleClass="anchorLateral" VBox.vgrow="ALWAYS" stylesheets="@../css/BaseLayout.css">
+            <AnchorPane fx:id="anchorLateral" minHeight="650.0" prefWidth="273.0" styleClass="anchorLateral" stylesheets="@../css/BaseLayout.css" VBox.vgrow="ALWAYS">
                <children>
                   <Pane id="FondoLogoUnap" layoutX="24.0" layoutY="23.0" prefHeight="164.0" prefWidth="222.0" styleClass="FondoLogoUnap" stylesheets="@../css/BaseLayout.css">
                      <children>

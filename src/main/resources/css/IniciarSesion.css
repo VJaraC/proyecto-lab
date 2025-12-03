@@ -51,6 +51,7 @@
 
     -fx-text-fill: white;
     -fx-border-radius: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
 }
 
 .IniciarSesionBtn:hover{
@@ -58,3 +59,4 @@
     -fx-text-fill: white;
     -fx-cursor: hand;
 }
+

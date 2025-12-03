@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -13,30 +14,35 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1004.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewUsuariosController">
+
+    <stylesheets>
+        <URL value="@../css/BaseLayout.css" />
+        <URL value="@../css/ViewUsuarios.css" />
+    </stylesheets>
    <children>
       <AnchorPane prefHeight="637.0" prefWidth="858.0">
          <children>
-            <TableView id="Tabla" fx:id="TablaEstudiantes" layoutX="35.0" layoutY="198.0" prefHeight="419.0" prefWidth="934.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
+            <TableView id="Tabla" fx:id="TablaEstudiantes" layoutX="35.0" layoutY="198.0" prefHeight="419.0" prefWidth="934.0" styleClass="tabla" stylesheets="@../css/TiempoReal.css">
               <columns>
                 <TableColumn fx:id="IdTablaEstudiantes" editable="false" prefWidth="53.0" styleClass="ColumnaTabla" text="ID" />
                   <TableColumn fx:id="RUTTablaEstudiantes" editable="false" prefWidth="155.0" styleClass="ColumnaTabla" text="RUT" />
-                <TableColumn fx:id="NombreTablaEstudiantes" editable="false" prefWidth="204.0" styleClass="ColumnaTabla" text="Nombres" />
-                  <TableColumn fx:id="ApellidosTablaEstudiantes" editable="false" minWidth="0.0" prefWidth="226.0" styleClass="ColumnaTabla" text="Apellidos" />
-                  <TableColumn fx:id="EstadoTablaEstudiantes" editable="false" prefWidth="131.0" sortable="false" styleClass="ColumnaTabla" text="Estado" />
-                  <TableColumn fx:id="AccionTablaEstudiantes" editable="false" prefWidth="186.0" styleClass="ColumnaTabla" text="Acción" />
+                <TableColumn fx:id="NombreTablaEstudiantes" editable="false" prefWidth="163.20001220703125" styleClass="ColumnaTabla" text="Nombres" />
+                  <TableColumn fx:id="ApellidosTablaEstudiantes" editable="false" minWidth="0.0" prefWidth="181.0" styleClass="ColumnaTabla" text="Apellidos" />
+                  <TableColumn fx:id="EstadoTablaEstudiantes" editable="false" prefWidth="146.0" sortable="false" styleClass="ColumnaTabla" text="Estado" />
+                  <TableColumn fx:id="AccionTablaEstudiantes" editable="false" prefWidth="234.0" styleClass="ColumnaTabla" text="Acción" />
               </columns>
             </TableView>
-            <TextField fx:id="txtBuscar" layoutX="35.0" layoutY="86.0" onAction="#txtBuscar" prefHeight="30.0" prefWidth="276.0" promptText="Buscar..." styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
+            <TextField fx:id="txtBuscar" layoutX="35.0" layoutY="86.0" onAction="#txtBuscar" prefHeight="30.0" prefWidth="276.0" promptText="Buscar" styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">
                <padding>
-                  <Insets left="30.0" />
+                  <Insets left="40.0" />
                </padding>
                <font>
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button id="BotonCrearUsuario" fx:id="BotonCrearUsuario" layoutX="35.0" layoutY="139.0" mnemonicParsing="false" onAction="#AbrirFormularioCrearUsuario" prefHeight="36.0" prefWidth="126.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Crear Usuario">
+            <Button id="BotonCrearUsuario" fx:id="BotonCrearUsuario" layoutX="35.0" layoutY="139.0" mnemonicParsing="false" onAction="#AbrirFormularioCrearUsuario" prefHeight="39.0" prefWidth="162.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Registrar Usuario">
                <font>
-                  <Font name="Product Sans Bold" size="18.0" />
+                  <Font name="Product Sans Bold" size="20.0" />
                </font>
             </Button>
             <SplitMenuButton fx:id="Buscar" layoutX="328.0" layoutY="86.0" mnemonicParsing="false" onAction="#Buscar" prefHeight="26.0" prefWidth="190.0" styleClass="btnFiltro" stylesheets="@../css/ViewUsuarios.css" text="Escoge un filtro" textAlignment="CENTER">
@@ -50,7 +56,7 @@
                   <Font size="14.0" />
                </font>
             </SplitMenuButton>
-            <AnchorPane prefHeight="73.0" prefWidth="1004.0" styleClass="fondo-banner" stylesheets="@../css/ViewInicio.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane prefHeight="73.0" prefWidth="1004.0" style="-fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);" styleClass="fondo-banner" stylesheets="@../css/ViewInicio.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <AnchorPane id="PanelCredencial" layoutX="680.0" layoutY="17.0" prefHeight="38.0" prefWidth="294.0" style="-fx-background-radius: 10;" styleClass="PanelCredencial" stylesheets="@../css/BaseLayout.css">
                      <children>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1004.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewTiempoRealController">
+    <children>
+        <AnchorPane>
+            <children>
+                <AnchorPane prefHeight="73.0" prefWidth="832.0" styleClass="fondo-banner" stylesheets="@../css/ViewInicio.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <AnchorPane id="PanelCredencial" layoutX="680.0" layoutY="17.0" prefHeight="38.0" prefWidth="294.0" style="-fx-background-radius: 10;" styleClass="PanelCredencial" stylesheets="@../css/BaseLayout.css">
+                            <children>
+                                <Button id="BotonCerrarSesion" fx:id="btnCerrarSesion" layoutX="172.0" layoutY="5.0" mnemonicParsing="false" onAction="#btnCerrarSesion" prefHeight="28.0" prefWidth="114.0" styleClass="BotonCerrarSesion" stylesheets="@../css/BaseLayout.css" text="Cerrar Sesión">
+                                    <font>
+                                        <Font name="Product Sans" size="14.0" />
+                                    </font>
+                                </Button>
+                                <Label fx:id="txtUsuarioSesion" layoutX="14.0" layoutY="10.0" prefHeight="18.0" prefWidth="146.0" text="Usuario" textFill="WHITE">
+                                    <font>
+                                        <Font name="Product Sans Bold" size="14.0" />
+                                    </font>
+                                </Label>
+                            </children>
+                        </AnchorPane>
+                        <Label layoutX="23.0" layoutY="15.0" text="Métricas en Tiempo Real" textFill="WHITE">
+                            <font>
+                                <Font name="CoreMellow-Bold" size="36.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            <TableView fx:id="tablaSesiones" layoutX="96.0" layoutY="141.0" prefHeight="367.0" prefWidth="750.0" styleClass="tabla" stylesheets="@../css/TiempoReal.css">
+              <columns>
+                <TableColumn prefWidth="118.39999389648438" text="C1" />
+                <TableColumn minWidth="1.5999755859375" prefWidth="182.3999786376953" text="C2" />
+                  <TableColumn fx:id="TablaSesiones" minWidth="0.0" prefWidth="163.20001220703125" text="C3" />
+                  <TableColumn minWidth="0.0" prefWidth="284.8000244140625" text="C4" />
+              </columns>
+            </TableView>
+            </children>
+        </AnchorPane>
+    </children>
+</StackPane>

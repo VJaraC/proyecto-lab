@@ -22,7 +22,7 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class ViewInicioController{
+public class ViewInicioController {
 
 
     @FXML
@@ -65,6 +65,9 @@ public class ViewInicioController{
     private Label txtSesionesTotales;
 
     @FXML
+    private Label txtUltimaAlerta;
+
+    @FXML
     private AnchorPane panel1;
 
     @FXML
@@ -83,26 +86,26 @@ public class ViewInicioController{
     private AnchorPane panel6;
 
 
-@FXML
-void btnCerrarSesion(ActionEvent event) {
-    AppContext.LimpiarSesion();
+    @FXML
+    void btnCerrarSesion(ActionEvent event) {
+        AppContext.LimpiarSesion();
 
-    try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IniciarSesion.fxml"));
-        Parent root = loader.load();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IniciarSesion.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        stage.setScene(new Scene(root));
-        stage.setTitle("Sistema de Monitoreo - UNAP");
-        stage.show();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Sistema de Monitoreo - UNAP");
+            stage.show();
 
-    } catch (IOException e) {
-        e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-}
 
     @FXML
-    void initialize(){
+    void initialize() {
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
         txtFecha.setText(LocalDate.now().toString());
         setearEstadoServidor();
@@ -114,10 +117,11 @@ void btnCerrarSesion(ActionEvent event) {
         animacionTraslacion(panel4);
         animacionTraslacion(panel5);
         animacionTraslacion(panel6);
-        }
+    }
 
 
-        public void setearEstadoServidor(){
+public void setearEstadoServidor(){
+
         }
 
 

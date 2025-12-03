@@ -30,29 +30,33 @@
 }
 
 .BarraBusqueda{
-    -fx-effect: none;
     -fx-background-color: white;
     -fx-border-width: 1px;
-    -fx-border-color: #d0d7de;
-    -fx-border-radius: 6;
+    -fx-border-color: #e8e8e8;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
     -fx-prompt-text-fill: #9ea7b3;
     -fx-text-fill: #1b1f23;
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
 }
 
 .BarraBusqueda:hover{
     -fx-border-color: #00bcd4;
+
+
 }
 
 .BarraBusqueda:focused{
         -fx-border-color: #00999e;
         -fx-background-color: white;
-        -fx-effect: dropshadow(gaussian, rgba(0,153,158,0.15), 8, 0.2, 0, 1);
 }
 
 .BotonCrearUsuario{
     -fx-background-color: #018ea9;
-    -fx-font: 14px "Product Sans Bold";
+    -fx-font: 16px "Product Sans Bold";
     -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(44, 44, 44, 0.35), 8, 0.2, 0, 1);
 
 }
 
@@ -60,69 +64,24 @@
     -fx-background-color: #017a91;
     -fx-text-fill: white;
     -fx-cursor: hand;
-}
-
-.Tabla {
-    -fx-background-color: white;
-    -fx-border-color: transparent;
-    -fx-background-radius: 12 12 0 0;  /* bordes superiores redondeados */
-    -fx-border-radius: 12 12 0 0;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0.2, 0, 3);
-    -fx-padding: 0;
-}
-
-/* 🔹 Header redondeado */
-.Tabla > .column-header-background {
-    -fx-background-color:#018ea9;
-    -fx-background-radius: 12 12 0 0;  /* redondea arriba */
-    -fx-background-insets: 0;
-    -fx-border-radius: 12 12 0 0;
-}
-
-.Tabla .column-header.ColumnaTabla .label {
-    -fx-text-fill: white;
-    -fx-border-radius: 5px;
-}
-
-
-.Tabla .column-header.ColumnaTabla  {
-    -fx-background-color: #018ea9;
-
-    -fx-font: 13px "Montserrat";
-    -fx-border-color:white;
-    -fx-font-weight: bold;
-    -fx-padding: 5px;
-    -fx-border-radius: 1px;
-
-
 
 }
 
-.Tabla .table-row-cell{
-    -fx-background-color: rgb(225, 243, 250);
-}
-
-.Tabla .table-row-cell:odd{
-    -fx-background-color: rgb(255, 255, 255);
-}
-
-.Tabla .table-row-cell:selected {
-    -fx-background-color: #018ea9;
-    -fx-text-fill: black;
-}
 
 .btnFiltro{
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
+    -fx-border-style: none;
 }
 .btnFiltro .label{
     -fx-background-color: #ffffff;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 0, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
+    -fx-border-style: none;
 }
 
 
 .btnFiltro .arrow-button{
     -fx-background-color: linear-gradient(to bottom,#018ea9, #018ea9);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 0, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
 }
 
 .btnFiltro .arrow {
@@ -157,30 +116,37 @@
 }
 
 
-/* Quita las líneas y espacios internos entre las columnas */
-.Tabla .table-view,
-.Tabla .table-row-cell,
-.Tabla .column-header,
-.Tabla .filler {
-    -fx-border-color: transparent;
-    -fx-table-cell-border-color: transparent;
+
+.habilitado{
+    -fx-background-color: #c8ffb5;
+    -fx-text-fill: #5fc20d;
+    -fx-text-alignment: center;
+    -fx-text-origin: center;
+    -fx-font-weight: bold;
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
 }
 
-/* Quita el margen entre header y tabla */
-.Tabla .column-header-background {
-    -fx-background-insets: 0;
-    -fx-padding: 0;
+.deshabilitado{
+    -fx-background-color: #ff9d9d;
+    -fx-text-fill: #ff3f3d;
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+    -fx-text-origin: center;
+    -fx-padding: 5px;
+    -fx-background-radius: 5px;
 }
 
-/* Opcional: deja una línea delgada blanca entre columnas */
-.Tabla .table-cell {
-    -fx-border-color: white transparent transparent transparent;
-    -fx-border-width: 0.5px;
+.botonAccion{
+    -fx-background-color: #ffffff;
+    -fx-border-style: #c9c9c9;
+    -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
+    -fx-font-weight: 600;
+    -fx-text-fill: #424242;
 }
 
-/* Ajusta el relleno general para que quede bien pegado */
-.Tabla {
-    -fx-padding: 0;
-    -fx-border-insets: 0;
-    -fx-background-insets: 0;
+.botonAccion:hover{
+    -fx-cursor: hand;
+    -fx-background-color: rgba(0, 156, 185, 0.52);
+    -fx-text-fill:white;
 }

@@ -5,6 +5,8 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.LaboratorioDTO;
 import proyecto.lab.server.dto.LaboratorioUpdateDTO;
+import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.models.Rol;
 
 import java.io.IOException;
@@ -52,8 +55,6 @@ public class ViewLaboratoriosController {
     @FXML
     private TableColumn<LaboratorioDTO, Void> AccionTablaLaboratorio;
 
-    @FXML
-    private TableColumn<LaboratorioDTO, Integer> CapacidadEquiposTablaLaboratorio;
 
     @FXML
     private TableColumn<LaboratorioDTO, String> EstadoTablaLaboratorio;
@@ -120,12 +121,11 @@ public class ViewLaboratoriosController {
                 new ReadOnlyStringWrapper(cd.getValue().nombre_lab()));
         UbicacionTablaLaboratorio.setCellValueFactory(cd ->
                 new ReadOnlyStringWrapper(cd.getValue().ubicacion()));
-        CapacidadEquiposTablaLaboratorio.setCellValueFactory(cd ->
-                new ReadOnlyObjectWrapper<>(cd.getValue().capacidad_equipo()));
         EstadoTablaLaboratorio.setCellValueFactory(cd ->
                 new ReadOnlyStringWrapper(cd.getValue().estado_lab()));
 
         configurarColumnaAccion();
+        configurarColumnaEstado();
         ActualizarTablaLaboratorio();
         txtUsuarioSesion.setText(AppContext.getUsuarioActual().getNombres());
 
@@ -198,13 +198,16 @@ public class ViewLaboratoriosController {
 
     private void configurarColumnaAccion() {
         AccionTablaLaboratorio.setCellFactory(col -> new TableCell<>() {
-            private final Button btnVer = new Button("Ver");
-            private final Button btnEditar = new Button("Editar");
-            private final Button btnDeshabilitar = new Button("Deshabilitar");
-            private final Button btnHabilitar = new Button("Habilitar");
+            private final Button btnVer = crearBotonAccion("Ver");
+            private final Button btnEditar = crearBotonAccion("Editar");
+            private final Button btnDeshabilitar = crearBotonAccion("Deshabilitar");
+            private final Button btnHabilitar = crearBotonAccion("Habilitar");
             private final HBox box = new HBox(6);
 
             {
+                box.setAlignment(Pos.CENTER_LEFT);
+                box.setPadding(new Insets(0, 5, 0, 0));
+
                 btnVer.setOnAction(e -> {
                     LaboratorioDTO lab = getTableView().getItems().get(getIndex());
                     AbrirVistaDetalladaLaboratorio(lab);
@@ -257,6 +260,48 @@ public class ViewLaboratoriosController {
             }
         });
     }
+
+    // helper para que todos los botones compartan estilo
+    private Button crearBotonAccion(String texto) {
+        Button b = new Button(texto);
+        b.getStyleClass().add("botonAccion");
+        return b;
+    }
+
+
+    private void configurarColumnaEstado() {
+        EstadoTablaLaboratorio.setCellFactory(col -> new TableCell<LaboratorioDTO, String>() {
+            private final Label label = new Label();{
+                label.getStyleClass().add("texto");
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+
+                label.setText(item);
+                label.getStyleClass().remove("habilitado");
+                label.getStyleClass().remove("deshabilitado");
+
+                if ("habilitado".equalsIgnoreCase(item)) {
+                    label.getStyleClass().add("habilitado");
+                    label.setText("habilitado");
+                } else {
+                    label.getStyleClass().add("deshabilitado");
+                    label.setText("deshabilitado");
+                }
+                setAlignment(Pos.CENTER);
+                setGraphic(label);
+                setText(null);
+            }
+        });
+    }
+
 
     @FXML
     void Buscar(ActionEvent event) {

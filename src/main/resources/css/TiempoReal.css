@@ -1,0 +1,155 @@
+/* language=JavaFX CSS */
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Montserrat Bold";
+    src: url("../fonts/Montserrat-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Core Mellow";
+    src: url("../fonts/Core-Mellow-Regular.otf");
+}
+
+@font-face {
+    font-family: "Core Mellow Bold";
+    src: url("../fonts/Core-Mellow-Bold.otf");
+}
+
+@font-face {
+    font-family: "Product Sans";
+    src: url("../fonts/Product-Sans-Regular.ttf");
+}
+
+@font-face {
+    font-family: "Product Sans Bold";
+    src: url("../fonts/Product-Sans-Bold.ttf");
+}
+
+
+
+
+/* ========= CARD ========= */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 24;
+    -fx-padding: 16;
+}
+
+
+/* ========= TABLEVIEW BASE ========= */
+
+/* ======== REDONDEAR TODAS LAS ESQUINAS ======== */
+
+.tabla {
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(44, 44, 44, 0.17), 8, 0.2, 0, 1);
+
+}
+
+/* Fondo interno detrás de las filas */
+.tabla .virtual-flow {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+}
+
+/* Donde se dibujan las filas */
+.tabla .sheet {
+    -fx-background-color: white;
+    -fx-background-radius: 16;
+}
+
+/* La esquina superior-derecha (cuando hay scrollbar vertical) */
+.tabla .corner {
+    -fx-background-color: white;
+    -fx-background-radius: 0 16 0 0;
+}
+
+/* ========= HEADER ========= */
+
+
+.tabla .column-header-background {
+    -fx-background-color: white;
+    -fx-background-radius: 12 12 0 0; /* redondeado arriba */
+    -fx-border-color: transparent;
+}
+
+.tabla .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 40px;
+}
+
+.tabla .column-header .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #6b7280;
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 5px 0 16px;
+    -fx-font-family: Montserrat;
+}
+
+
+.tabla .filler {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+
+/* ========= FILAS ========= */
+
+.tabla .table-row-cell {
+    -fx-cell-size: 46px;
+    -fx-background-color: white;
+    -fx-border-color: #eeeeee;
+
+}
+
+.tabla .table-row-cell:hover {
+    -fx-background-color: #eef3ff;
+}
+
+.tabla .table-row-cell:selected {
+    -fx-background-color: #e0edff;
+}
+
+/* ========= CELDAS ========= */
+
+.tabla .table-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0 5px 0 16px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #464652;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* ========= SCROLLBAR ========= */
+
+.tabla .scroll-bar:vertical {
+    -fx-pref-width: 12;
+}
+
+.tabla .scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.tabla .scroll-bar .thumb {
+    -fx-background-color: #d4d4dd;
+    -fx-background-radius: 5;
+}
+
+.tabla .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+}
+
+.tabla .corner {
+    -fx-background-color: transparent;
+}

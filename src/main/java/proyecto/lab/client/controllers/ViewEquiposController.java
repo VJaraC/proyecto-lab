@@ -5,6 +5,7 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import proyecto.lab.client.application.AppContext;
 import proyecto.lab.server.dto.EquipoDTO;
 import proyecto.lab.server.dto.EquipoUpdateDTO;
+import proyecto.lab.server.dto.UsuarioDTO;
 import proyecto.lab.server.models.Rol;
 import java.io.IOException;
 import java.util.Optional;
@@ -146,6 +148,7 @@ public class ViewEquiposController {
         }
 
         configurarColumnaAccion();
+        configurarColumnaEstado();
         ActualizarTablaEquipo();
         txtUsuarioSesion.setText((AppContext.getUsuarioActual().getNombres()));
 
@@ -187,6 +190,39 @@ public class ViewEquiposController {
         }
     }
 
+    private void configurarColumnaEstado() {
+        EstadoTablaEquipo.setCellFactory(col -> new TableCell<EquipoDTO, String>() {
+            private final Label label = new Label();{
+                label.getStyleClass().add("texto");
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+
+                label.setText(item);
+                label.getStyleClass().remove("disponible");
+                label.getStyleClass().remove("deshabilitado");
+
+                if ("disponible".equalsIgnoreCase(item)) {
+                    label.getStyleClass().add("habilitado");
+                } else if("fuera de servicio".equalsIgnoreCase(item)) {
+                    label.getStyleClass().add("deshabilitado");
+                }else if("operativo".equalsIgnoreCase(item)) {
+                    label.getStyleClass().add("habilitado");
+                }
+                setAlignment(Pos.CENTER);
+                setGraphic(label);
+                setText(null);
+            }
+        });
+    }
+
 
     void AbrirFormularioEditarEquipo(EquipoDTO equipoSeleccionado) {
         try {
@@ -211,8 +247,8 @@ public class ViewEquiposController {
 
     private void configurarColumnaAccion() {
         AccionTablaEquipo.setCellFactory(col -> new TableCell<>() {
-            private final Button btnVer = new Button("Ver");
-            private final Button btnEditar = new Button("Editar");
+            private final Button btnVer = crearBotonAccion("Ver");
+            private final Button btnEditar = crearBotonAccion("Editar");
             private final HBox box = new HBox(6);
 
             {
@@ -248,6 +284,12 @@ public class ViewEquiposController {
                 setGraphic(box);
             }
         });
+    }
+
+    public Button crearBotonAccion(String texto){
+        Button button = new Button(texto);
+        button.getStyleClass().add("botonAccion");
+        return button;
     }
 
     private EquipoUpdateDTO crearUpdateDTO(EquipoDTO equipo) {

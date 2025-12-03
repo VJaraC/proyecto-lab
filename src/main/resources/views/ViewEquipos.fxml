@@ -12,11 +12,16 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <StackPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1004.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewEquiposController">
+    <stylesheets>
+        <URL value="@../css/BaseLayout.css" />
+        <URL value="@../css/ViewUsuarios.css" />
+    </stylesheets>
    <children>
       <AnchorPane prefHeight="637.0" prefWidth="858.0">
          <children>
-            <TableView id="Tabla" fx:id="TablaEquipo" layoutX="35.0" layoutY="198.0" prefHeight="419.0" prefWidth="934.0" styleClass="Tabla" stylesheets="@../css/ViewUsuarios.css">
+            <TableView id="Tabla" fx:id="TablaEquipo" layoutX="35.0" layoutY="198.0" prefHeight="419.0" prefWidth="934.0" styleClass="tabla" stylesheets="@../css/TiempoReal.css">
               <columns>
                 <TableColumn fx:id="IdTablaEquipo" editable="false" prefWidth="53.0" styleClass="ColumnaTabla" text="ID" />
                   <TableColumn fx:id="NumSerieTablaEquipo" editable="false" prefWidth="136.8000259399414" styleClass="ColumnaTabla" text="Numero de Serie" />
