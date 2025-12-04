@@ -38,11 +38,12 @@
     -fx-border-width: 1px;
     -fx-border-color: rgb(217, 217, 217);
     -fx-border-radius: 5;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 10, 0.1, 2, 2);
 }
 
 .campo-seleccion{
     -fx-background-color: rgb(255, 255, 255);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.14), 10, 0.1, 2, 2);
 }
 
 .tarjeta{
@@ -100,18 +101,19 @@
 .datepicker .text-field{
     -fx-background-color: rgb(255, 255, 255);
     -fx-text-fill: black;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.09), 10, 0.1, 2, 2);
     -fx-border-color: white;
 }
 
 .datepicker .arrow-button{
     -fx-background-color: rgb(255, 255, 255);
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 5, 0, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0.1, 2, 2);
     -fx-border-color: white;
 }
 
 .datepicker{
     -fx-background-color: rgb(255, 255, 255);
+
 
 }
 

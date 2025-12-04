@@ -3,86 +3,131 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewDetalladaUsuarioSeleccionadoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="646.0" prefWidth="616.0" styleClass="fondo" stylesheets="@../css/Formularios.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewDetalladaUsuarioSeleccionadoController">
     <children>
-        <Label layoutX="228.0" layoutY="23.0" text="Vista Detallada" textFill="#062040">
-            <font>
-                <Font name="CoreMellow-Bold" size="24.0" />
-            </font>
-        </Label>
-        <Label layoutX="39.0" layoutY="85.0" text="ID">
-            <font>
-                <Font name="Product Sans" size="16.0" />
-            </font>
-        </Label>
-        <Button id="BotonGuardarUsuario" fx:id="BotonVolver" layoutX="246.0" layoutY="581.0" mnemonicParsing="false" onAction="#Volver" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Volver">
+        <Button id="BotonGuardarUsuario" fx:id="BotonVolver" layoutX="244.0" layoutY="567.0" mnemonicParsing="false" onAction="#Volver" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Volver">
             <font>
                 <Font name="Product Sans Bold" size="18.0" />
             </font>
         </Button>
-        <Label layoutX="339.0" layoutY="85.0" text="RUT">
-            <font>
-                <Font name="Product Sans" size="16.0" />
-            </font>
-        </Label>
-      <TextField fx:id="txtID" editable="false" layoutX="39.0" layoutY="108.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="39.0" layoutY="158.0" text="Nombres">
+      <TextField fx:id="txtEstado" alignment="CENTER" editable="false" layoutX="277.0" layoutY="184.0" prefHeight="27.0" prefWidth="77.0" styleClass="campo" stylesheets="@../css/Formularios.css" text="Estado" />
+      <TextField fx:id="txtRol" alignment="CENTER" editable="false" layoutX="189.0" layoutY="184.0" prefHeight="27.0" prefWidth="71.0" styleClass="campo" stylesheets="@../css/Formularios.css" text="Rol" />
+      <AnchorPane prefHeight="91.0" prefWidth="616.0" styleClass="fondo_titulo" stylesheets="@../css/Formularios.css">
+         <children>
+            <Label alignment="CENTER" layoutX="181.0" layoutY="20.0" prefHeight="52.0" prefWidth="238.0" text="Vista Detallada" textFill="WHITE">
+               <font>
+                  <Font name="CoreMellow-Bold" size="32.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="31.0" layoutY="261.0" prefHeight="141.0" prefWidth="555.0" styleClass="tarjeta" stylesheets="@../css/Formularios.css">
+         <children>
+              <Label layoutX="27.0" layoutY="27.0" text="RUT">
+                  <font>
+                      <Font name="Product Sans" size="16.0" />
+                  </font>
+              </Label>
+            <Label fx:id="txtRUT" layoutX="103.0" layoutY="27.0" prefHeight="20.0" prefWidth="135.0" text="RUT">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="261.0" layoutY="27.0" text="Fecha de Nacimiento">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="txtFechaNac" layoutX="426.0" layoutY="27.0" prefHeight="20.0" prefWidth="114.0" text="Fecha de Nacimiento">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="24.0" layoutY="90.0" text="Género">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="txtGenero" layoutX="103.0" layoutY="91.0" prefHeight="20.0" prefWidth="135.0" text="Género">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER_RIGHT" layoutX="355.0" layoutY="88.0" prefHeight="20.0" prefWidth="54.0" text="Cargo">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="txtCargo" layoutX="426.0" layoutY="88.0" text="Cargo">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="22.0" layoutY="-8.0" prefHeight="20.0" prefWidth="135.0" style="-fx-background-color: WHITE;" text="INFORMACIÓN " textFill="#797979">
+               <font>
+                  <Font name="Product Sans Bold" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Label fx:id="txtNombres" layoutX="186.0" layoutY="143.0" prefHeight="27.0" prefWidth="364.0" text="NOMBRES Y APELLIDOS" textFill="#000f39">
          <font>
-            <Font name="Product Sans" size="16.0" />
+            <Font name="Product Sans Bold" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtNombres" editable="false" layoutX="39.0" layoutY="182.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="339.0" layoutY="158.0" text="Apellidos">
+      <ImageView fitHeight="100.0" fitWidth="124.0" layoutX="50.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/usuario.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="txtID" layoutX="229.0" layoutY="116.0" prefHeight="27.0" prefWidth="159.0" text="ID" textFill="#000f39">
          <font>
-            <Font name="Product Sans" size="16.0" />
+            <Font name="Product Sans Bold" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtRUT" editable="false" layoutX="339.0" layoutY="108.0" prefHeight="26.0" prefWidth="240.0" />
-      <TextField fx:id="txtApellidos" editable="false" layoutX="339.0" layoutY="182.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="39.0" layoutY="234.0" text="Email">
+      <Label layoutX="189.0" layoutY="116.0" prefHeight="27.0" prefWidth="38.0" text="ID:" textFill="#000f39">
          <font>
-            <Font name="Product Sans" size="16.0" />
+            <Font name="Product Sans Bold" size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="txtEmail" editable="false" layoutX="39.0" layoutY="259.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="339.0" layoutY="234.0" text="Estado">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtEstado" editable="false" layoutX="339.0" layoutY="259.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="39.0" layoutY="316.0" text="Género">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtGenero" editable="false" layoutX="39.0" layoutY="342.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="341.0" layoutY="316.0" text="Cargo">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtCargo" editable="false" layoutX="339.0" layoutY="342.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="41.0" layoutY="396.0" text="Rol">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtRol" editable="false" layoutX="40.0" layoutY="426.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="341.0" layoutY="396.0" text="Fecha de Nacimiento">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtFechaNac" editable="false" layoutX="341.0" layoutY="426.0" prefHeight="26.0" prefWidth="240.0" />
-      <TextField fx:id="txtTelefono" editable="false" layoutX="188.0" layoutY="504.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="277.0" layoutY="474.0" text="Teléfono">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
+      <AnchorPane layoutX="31.0" layoutY="430.0" prefHeight="107.0" prefWidth="555.0" styleClass="tarjeta" stylesheets="@../css/Formularios.css">
+         <children>
+            <Label layoutX="22.0" layoutY="44.0" text="Correo">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="txtEmail" layoutX="103.0" layoutY="44.0" prefHeight="20.0" prefWidth="135.0" text="Correo">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="261.0" layoutY="27.0">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="261.0" layoutY="44.0" prefHeight="20.0" prefWidth="114.0" text="Teléfono">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="22.0" layoutY="-8.0" prefHeight="20.0" prefWidth="114.0" style="-fx-background-color: WHITE;" text="CONTACTO" textFill="#797979">
+               <font>
+                  <Font name="Product Sans Bold" size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="txtTelefono" layoutX="426.0" layoutY="44.0" prefHeight="20.0" prefWidth="114.0" text="Teléfono">
+               <font>
+                  <Font name="Product Sans" size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>
