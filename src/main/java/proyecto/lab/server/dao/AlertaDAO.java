@@ -23,12 +23,12 @@ public class AlertaDAO {
             if (rs.next()) {
                 return rs.getInt(1);
             }
+            return 0;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error al contar alertas recientes", e);
         }
-        return 0;
     }
 
     // Función 2: Obtener la última alerta con detalles (JOINs)
