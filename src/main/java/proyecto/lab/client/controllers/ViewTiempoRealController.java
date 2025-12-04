@@ -10,9 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -28,11 +26,26 @@ public class ViewTiempoRealController {
     private Button btnCerrarSesion;
 
     @FXML
-    private Label txtUsuarioSesion;
-
+    private TableView<?> tablaSesiones;
 
     @FXML
-    private TableView<?> tablaSesiones;
+    private TextField txtBuscar;
+
+    @FXML
+    private TableColumn<?, ?> txtCpuMetrica;
+
+    @FXML
+    private TableColumn<?, ?> txtEquipoMetrica;
+
+    @FXML
+    private Label txtIdEquipo;
+
+    @FXML
+    private TableColumn<?, ?> txtIdSesionMetrica;
+
+    @FXML
+    private Label txtUsuarioSesion;
+
 
 
 
@@ -72,5 +85,10 @@ void btnCerrarSesion(ActionEvent event) {
 
         node.setOnMouseEntered(e -> stIn.playFromStart());
         node.setOnMouseExited(e -> stOut.playFromStart());
+    }
+
+    @FXML
+    void txtBuscar(ActionEvent event) {
+
     }
 }

@@ -51,17 +51,17 @@
                         <Font name="Product Sans Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txtEquiposActivos" layoutX="84.0" layoutY="44.0" prefHeight="30.0" prefWidth="48.0" text="00" textFill="#062040">
+                  <Label fx:id="txtEquiposActivos" alignment="CENTER" layoutX="87.0" layoutY="44.0" prefHeight="30.0" prefWidth="48.0" text="00" textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txtEquiposTotales" layoutX="157.0" layoutY="44.0" prefHeight="30.0" prefWidth="51.0" text="00" textFill="#062040">
+                  <Label fx:id="txtEquiposTotales" alignment="CENTER" contentDisplay="CENTER" layoutX="156.0" layoutY="44.0" prefHeight="30.0" prefWidth="51.0" text="00" textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label layoutX="132.0" layoutY="44.0" prefHeight="30.0" prefWidth="15.0" text="/" textFill="#062040">
+                  <Label layoutX="141.0" layoutY="44.0" prefHeight="30.0" prefWidth="15.0" text="/" textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
@@ -97,17 +97,7 @@
                         <Font name="Product Sans Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txtSesionesActivas" layoutX="77.0" layoutY="44.0" prefHeight="30.0" prefWidth="48.0" text="00" textFill="#062040">
-                     <font>
-                        <Font name="Product Sans Bold" size="24.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="txtSesionesTotales" layoutX="155.0" layoutY="44.0" prefHeight="30.0" prefWidth="51.0" text="00" textFill="#062040">
-                     <font>
-                        <Font name="Product Sans Bold" size="24.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="130.0" layoutY="44.0" prefHeight="30.0" prefWidth="15.0" text="/" textFill="#062040">
+                  <Label fx:id="txtSesionesActivas" alignment="CENTER" layoutX="128.0" layoutY="44.0" prefHeight="30.0" prefWidth="48.0" text="00" textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
@@ -145,19 +135,24 @@
             </Label>
             <AnchorPane fx:id="panel5" layoutX="741.0" layoutY="397.0" prefHeight="94.0" prefWidth="230.0" styleClass="panelGrid" stylesheets="@../css/ViewInicio.css">
                <children>
-                  <ImageView fitHeight="53.0" fitWidth="59.0" layoutX="22.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="64.0" fitWidth="67.0" layoutX="14.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icono_alerta.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="89.0" layoutY="8.0" prefHeight="30.0" prefWidth="133.0" text="Alertas activas" textFill="#062040">
+                  <Label alignment="CENTER" layoutX="89.0" layoutY="3.0" prefHeight="30.0" prefWidth="133.0" text="Alertas en la " textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txtAlertas" layoutX="122.0" layoutY="44.0" prefHeight="30.0" prefWidth="67.0" text="00 " textFill="#062040">
+                  <Label fx:id="txtAlertas" alignment="CENTER" layoutX="122.0" layoutY="50.0" prefHeight="30.0" prefWidth="67.0" text="00 " textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label alignment="TOP_CENTER" layoutX="106.0" layoutY="25.0" prefHeight="23.0" prefWidth="99.0" text="última hora" textFill="#062040">
+                     <font>
+                        <Font name="Product Sans Bold" size="18.0" />
                      </font>
                   </Label>
                </children>
@@ -169,12 +164,12 @@
                         <Image url="@../images/icono_lab.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="txtLabsActivos" layoutX="83.0" layoutY="52.0" prefHeight="30.0" prefWidth="48.0" text="00" textFill="#062040">
+                  <Label fx:id="txtLabsActivos" layoutX="91.0" layoutY="52.0" prefHeight="30.0" prefWidth="48.0" text="00" textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Label fx:id="txtLabsTotales" layoutX="160.0" layoutY="51.0" prefHeight="30.0" prefWidth="51.0" text="00" textFill="#062040">
+                  <Label fx:id="txtLabsTotales" layoutX="160.0" layoutY="52.0" prefHeight="30.0" prefWidth="51.0" text="00" textFill="#062040">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
@@ -199,9 +194,9 @@
             <Separator layoutX="182.0" layoutY="119.0" prefHeight="2.0" prefWidth="784.0" style="-fx-background-color: #0068df;" />
             <AnchorPane layoutX="28.0" layoutY="527.0" prefHeight="94.0" prefWidth="947.0" styleClass="panelAlertas" stylesheets="@../css/ViewInicio.css">
                <children>
-                  <Label fx:id="txtUltimaAlerta" alignment="CENTER" layoutX="101.0" layoutY="25.0" prefHeight="44.0" prefWidth="746.0" text="Alerta" textFill="WHITE">
+                  <Label fx:id="txtUltimaAlerta" alignment="CENTER" layoutX="101.0" layoutY="25.0" prefHeight="53.0" prefWidth="784.0" text="Alerta" textFill="WHITE">
                      <font>
-                        <Font name="Product Sans Bold" size="20.0" />
+                        <Font name="Product Sans Bold" size="18.0" />
                      </font>
                   </Label>
                </children></AnchorPane>

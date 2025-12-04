@@ -139,7 +139,7 @@
 
 .botonAccion{
     -fx-background-color: #ffffff;
-    -fx-border-style: #c9c9c9;
+    -fx-border-color: #c9c9c9;
     -fx-effect: dropshadow(gaussian, rgba(100, 100, 100, 0.15), 8, 0.2, 0, 1);
     -fx-font-weight: 600;
     -fx-text-fill: #424242;

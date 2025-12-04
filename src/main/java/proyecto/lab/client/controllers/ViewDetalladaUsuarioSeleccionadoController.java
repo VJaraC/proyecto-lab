@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import proyecto.lab.server.dto.UsuarioDTO;
@@ -19,37 +20,35 @@ public class ViewDetalladaUsuarioSeleccionadoController {
     private Button BotonVolver;
 
     @FXML
-    private TextField txtApellidos;
+    private Label txtCargo;
 
     @FXML
-    private TextField txtCargo;
-
-    @FXML
-    private TextField txtEmail;
+    private Label txtEmail;
 
     @FXML
     private TextField txtEstado;
 
     @FXML
-    private TextField txtFechaNac;
+    private Label txtFechaNac;
 
     @FXML
-    private TextField txtGenero;
+    private Label txtGenero;
 
     @FXML
-    private TextField txtID;
+    private Label txtID;
 
     @FXML
-    private TextField txtNombres;
+    private Label txtNombres;
 
     @FXML
-    private TextField txtRUT;
+    private Label txtRUT;
 
     @FXML
     private TextField txtRol;
 
     @FXML
-    private TextField txtTelefono;
+    private Label txtTelefono;
+
 
     @FXML
     void Volver(ActionEvent event) {
@@ -60,8 +59,7 @@ public class ViewDetalladaUsuarioSeleccionadoController {
     private void cargarCampos() {
         txtID.setText(String.valueOf(usuario.getID()));
         txtRUT.setText(usuario.getRut());
-        txtNombres.setText(usuario.getNombres());
-        txtApellidos.setText(usuario.getApellidos());
+        txtNombres.setText(usuario.getNombres() + usuario.getApellidos());
         txtEmail.setText(usuario.getEmail());
         txtEstado.setText(usuario.getEstado());
         txtGenero.setText(usuario.getGenero());

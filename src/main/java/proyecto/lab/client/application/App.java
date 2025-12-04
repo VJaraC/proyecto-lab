@@ -1,15 +1,9 @@
 package proyecto.lab.client.application;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import proyecto.lab.server.controller.EquipoController;
-import proyecto.lab.server.controller.LaboratorioController;
-import proyecto.lab.server.controller.UsuarioController;
-import proyecto.lab.server.dao.EquipoDAO;
-import proyecto.lab.server.dao.LaboratorioDAO;
-import proyecto.lab.server.dao.UsuarioDAO;
-import proyecto.lab.server.service.EquipoService;
-import proyecto.lab.server.service.LaboratorioService;
-import proyecto.lab.server.service.UsuarioService;
+import proyecto.lab.server.controller.*;
+import proyecto.lab.server.dao.*;
+import proyecto.lab.server.service.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
@@ -38,6 +32,19 @@ public class App extends Application {
         LaboratorioController laboratorioController = new LaboratorioController(laboratorioService);
         AppContext.setLaboratorioController(laboratorioController);
 
+        // Controladores de Sesiones
+
+        SesionDAO sesionDao = new SesionDAO();
+        SesionService sesionService = new SesionService(sesionDao);
+        SesionController sesionController = new SesionController(sesionService);
+        AppContext.setSesionController(sesionController);
+
+        // Controladores de Alertas
+
+        AlertaDAO alertaDao = new AlertaDAO();
+        AlertaService alertaService = new AlertaService(alertaDao);
+        AlertaController alertaController = new AlertaController(alertaService);
+        AppContext.setAlertaController(alertaController);
 
         // Se lanza la vista
         Parent root = FXMLLoader.load(getClass().getResource("/views/IniciarSesion.fxml"));
