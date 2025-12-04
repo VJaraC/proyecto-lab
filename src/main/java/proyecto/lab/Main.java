@@ -27,7 +27,7 @@ public class Main {
         MetricasDAO metricasDAO = new MetricasDAO();
         MetricasService metricasService = new MetricasService(metricasDAO);
         MetricasController metricasController = new MetricasController(metricasService);
-        System.out.println(metricasController.obtenerResumenEquipo());
+        System.out.println(metricasController.obtenerCpu("Vito"));
 
 
         /*SesionDAO sesionDAO = new SesionDAO();

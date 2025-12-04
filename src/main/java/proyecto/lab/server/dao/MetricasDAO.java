@@ -1,9 +1,11 @@
 package proyecto.lab.server.dao;
 
 import proyecto.lab.server.config.Conexion;
+import proyecto.lab.server.dto.PuntoGraficoDTO;
 import proyecto.lab.server.dto.ResumenEquipoDTO;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.sql.*;
 
@@ -70,5 +72,50 @@ public class MetricasDAO {
             e.printStackTrace();
         }
         return lista;
+    }
+
+
+    public List<PuntoGraficoDTO> obtenerHistorialGrafico(String hostname, String claveMetrica, int limite) {
+        List<PuntoGraficoDTO> historial = new ArrayList<>();
+
+        String sql = """
+        SELECT 
+            to_char(m.FECHA_REGISTRO, 'HH24:MI:SS') as hora_fmt, -- Eje X
+            m.VALOR                                              -- Eje Y
+        FROM METRICAS_RAW m
+        JOIN EQUIPO e ON m.ID_EQ = e.ID_EQ
+        JOIN TIPO_METRICAS tm ON m.ID_TIPO = tm.ID_TIPO
+        WHERE e.HOSTNAME = ? 
+          AND tm.CLAVE = ?
+        ORDER BY m.FECHA_REGISTRO DESC -- Traer los más recientes primero
+        LIMIT ?
+    """;
+
+        try (Connection conn = conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, hostname);
+            ps.setString(2, claveMetrica);
+            ps.setInt(3, limite);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    historial.add(new PuntoGraficoDTO(
+                            rs.getString("hora_fmt"),
+                            rs.getDouble("VALOR")
+                    ));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 💡 TRUCO VITAL:
+        // La BD nos dio [10:05, 10:04, 10:03...] (Descendente)
+        // El gráfico necesita [10:03, 10:04, 10:05...] (Ascendente/Cronológico)
+        Collections.reverse(historial);
+
+        return historial;
     }
 }
