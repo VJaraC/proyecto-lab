@@ -61,3 +61,34 @@
     -fx-background-color: white;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.07), 10, 0.1, 2, 2);
 }
+
+.pantallaCarga{
+    -fx-background-color: linear-gradient(to left, #026ab1, #037fad, #018ea9,#009aa6);
+}
+
+.progress-indicator {
+    -fx-min-width: 60;
+    -fx-min-height: 60;
+    -fx-pref-width: 60;
+    -fx-pref-height: 60;
+}
+
+.progress-indicator .indicator {
+    -fx-background-color: rgb(255, 255, 255);
+    -fx-background-radius: 50;
+    -fx-padding: 10;
+}
+
+.progress-indicator .arc {
+    -fx-stroke: #00c8ff;      /* color del borde animado */
+    -fx-stroke-width: 4;
+    -fx-stroke-cap: round;
+}
+
+.progress-indicator .spinner {
+    -fx-padding: 0;
+}
+
+.progress-indicator .percentage {
+    -fx-fill: white;
+}
