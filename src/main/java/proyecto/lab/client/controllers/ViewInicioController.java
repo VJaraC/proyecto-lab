@@ -30,9 +30,7 @@ import proyecto.lab.server.dto.SesionHoraDTO;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -110,6 +108,27 @@ public class ViewInicioController {
     @FXML
     private AnchorPane panel6;
 
+    private static final ZoneId ZONA_CHILE = ZoneId.of("America/Santiago");
+
+    private static final DateTimeFormatter FORMATO_FECHA_HORA =
+            DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+    private String formatearUtcATiempoChile(Timestamp ts) {
+        return ts.toInstant().atZone(ZONA_CHILE).format(FORMATO_FECHA_HORA);
+    }
+
+
+    private String convertirHoraUtcAChile(String horaUtcTexto) {
+        DateTimeFormatter parser = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime horaUtc = LocalTime.parse(horaUtcTexto, parser);
+        LocalDate hoy = LocalDate.now(ZoneOffset.UTC);
+        ZonedDateTime zdtUtc   = ZonedDateTime.of(hoy, horaUtc, ZoneOffset.UTC);
+        ZonedDateTime zdtChile = zdtUtc.withZoneSameInstant(ZONA_CHILE);
+
+        return zdtChile.toLocalTime().format(parser); // devuelve HH:mm en hora de Chile
+    }
+
+
     // Timeline para refresco automático
     private Timeline autoRefresco;
 
@@ -154,9 +173,6 @@ public class ViewInicioController {
         }
     }
 
-    // ======================================================
-    //     INITIALIZE
-    // ======================================================
 
     @FXML
     void initialize() {
@@ -179,9 +195,8 @@ public class ViewInicioController {
         iniciarRefrescoAutomatico();
     }
 
-    // ======================================================
+
     //     DASHBOARD LÓGICA
-    // ======================================================
 
     public void setearDashboard() {
         refrescarEnBackground();
@@ -260,9 +275,7 @@ public class ViewInicioController {
 
         if (data.ultimaAlertaDetallada != null) {
             Timestamp ts = data.ultimaAlertaDetallada.getFechaAlerta();
-            ZonedDateTime fechaChile = ts.toInstant().atZone(ZoneId.of("America/Santiago"));
-            DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            String horaFormateada = fechaChile.format(fmt);
+            String horaFormateada = formatearUtcATiempoChile(ts);
 
             String textoAlerta = "HORA: " + horaFormateada +
                     "\nEQUIPO: " + data.ultimaAlertaDetallada.getHostname() +
@@ -277,9 +290,8 @@ public class ViewInicioController {
         configurarGraficoSesiones(data.sesionesPorHora);
     }
 
-    // ======================================================
+
     //     GRÁFICO
-    // ======================================================
 
     private void configurarGraficoBase() {
         ejeX.setLabel("Hora");
@@ -304,13 +316,12 @@ public class ViewInicioController {
         series.getData().clear();
 
         for (SesionHoraDTO dto : reporte) {
-            series.getData().add(new XYChart.Data<>(dto.hora(), dto.cantidad()));
+            String horaLocal = convertirHoraUtcAChile(dto.hora());
+            series.getData().add(new XYChart.Data<>(horaLocal, dto.cantidad()));
         }
     }
 
-    // ======================================================
     //     REFRESCO AUTOMÁTICO
-    // ======================================================
 
     private void iniciarRefrescoAutomatico() {
         autoRefresco = new Timeline(
@@ -323,9 +334,7 @@ public class ViewInicioController {
         autoRefresco.play();
     }
 
-    // ======================================================
     //     LOADING ANIMATION
-    // ======================================================
 
     private void mostrarLoading(boolean mostrar) {
 
