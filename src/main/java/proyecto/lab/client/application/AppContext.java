@@ -9,6 +9,7 @@ public final class AppContext {
     private static LaboratorioController laboratorioController;
     private static SesionController sesionController;
     private static AlertaController alertaController;
+    private static MetricasController metricasController;
 
     private AppContext() {
     }
@@ -56,6 +57,10 @@ public final class AppContext {
     public static void setAlertaController(AlertaController c) { alertaController = c; }
 
     public static AlertaController alerta() { return alertaController; }
+
+    public static void setMetricasController(MetricasController c) { metricasController = c; }
+
+    public static MetricasController metricas() { return metricasController; }
 
 
 }

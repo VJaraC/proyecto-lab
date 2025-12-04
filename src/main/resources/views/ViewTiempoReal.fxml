@@ -100,13 +100,12 @@
                         </Label>
                     </children>
                 </AnchorPane>
-            <TableView fx:id="tablaSesiones" layoutX="23.0" layoutY="162.0" prefHeight="465.0" prefWidth="394.0" styleClass="tabla" stylesheets="@../css/TiempoReal.css">
+            <TableView fx:id="tablaMetricas" layoutX="23.0" layoutY="162.0" prefHeight="465.0" prefWidth="394.0" styleClass="tabla" stylesheets="@../css/TiempoReal.css">
               <columns>
-                <TableColumn fx:id="txtIdSesionMetrica" prefWidth="88.0" resizable="false" text="Sesión" />
                 <TableColumn fx:id="txtEquipoMetrica" minWidth="1.5999755859375" prefWidth="128.0" resizable="false" text="Equipo" />
                   <TableColumn fx:id="txtCpuMetrica" minWidth="0.0" prefWidth="83.0" resizable="false" text="CPU" />
-                  <TableColumn minWidth="0.0" prefWidth="77.0" resizable="false" text="RAM" />
-                  <TableColumn minWidth="0.0" prefWidth="144.0" resizable="false" text="Disco" />
+                  <TableColumn fx:id="txtRamMetrica" minWidth="0.0" prefWidth="77.0" resizable="false" text="RAM" />
+                  <TableColumn fx:id="txtDiscoMetrica" minWidth="0.0" prefWidth="144.0" resizable="false" text="Disco" />
               </columns>
             </TableView>
             <TextField fx:id="txtBuscar" layoutX="268.0" layoutY="89.0" onAction="#txtBuscar" prefHeight="30.0" prefWidth="276.0" promptText="Busca una sesión" styleClass="BarraBusqueda" stylesheets="@../css/ViewUsuarios.css">

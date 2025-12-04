@@ -46,6 +46,13 @@ public class App extends Application {
         AlertaController alertaController = new AlertaController(alertaService);
         AppContext.setAlertaController(alertaController);
 
+        // Controladores de Metricas
+
+        MetricasDAO metricasDao = new MetricasDAO();
+        MetricasService metricasService = new MetricasService(metricasDao);
+        MetricasController metricasController = new MetricasController(metricasService);
+        AppContext.setMetricasController(metricasController);
+
         // Se lanza la vista
         Parent root = FXMLLoader.load(getClass().getResource("/views/IniciarSesion.fxml"));
         stage.setTitle("Sistema de Monitoreo - UNAP");
