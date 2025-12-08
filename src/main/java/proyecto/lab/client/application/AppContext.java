@@ -10,6 +10,7 @@ public final class AppContext {
     private static SesionController sesionController;
     private static AlertaController alertaController;
     private static MetricasController metricasController;
+    private static StatusController statusController;
 
     private AppContext() {
     }
@@ -61,6 +62,10 @@ public final class AppContext {
     public static void setMetricasController(MetricasController c) { metricasController = c; }
 
     public static MetricasController metricas() { return metricasController; }
+
+    public static void setStatusController(StatusController c) { statusController = c; }
+
+    public static StatusController status() { return statusController; }
 
 
 }

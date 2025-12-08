@@ -53,6 +53,13 @@ public class App extends Application {
         MetricasController metricasController = new MetricasController(metricasService);
         AppContext.setMetricasController(metricasController);
 
+        // Controladores StatusController
+
+        ServerStatusDAO serverStatusDao = new ServerStatusDAO();
+        StatusService statusService = new StatusService(serverStatusDao);
+        StatusController statusController = new StatusController(statusService);
+        AppContext.setStatusController (statusController);
+
         // Se lanza la vista
         Parent root = FXMLLoader.load(getClass().getResource("/views/IniciarSesion.fxml"));
         stage.setTitle("Sistema de Monitoreo - UNAP");

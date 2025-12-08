@@ -47,17 +47,12 @@
                         <Font name="Product Sans" size="18.0" />
                      </font>
                   </Button>
-                  <Button id="BotonReportes" fx:id="BotonReportes" layoutX="1.0" layoutY="539.0" mnemonicParsing="false" onAction="#GoReportes" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Reportes" textFill="WHITE">
-                     <font>
-                        <Font name="Product Sans" size="18.0" />
-                     </font>
-                  </Button>
                   <Label layoutX="104.0" layoutY="237.0" text="Menú" textFill="WHITE">
                      <font>
                         <Font name="Product Sans Bold" size="24.0" />
                      </font>
                   </Label>
-                  <Button id="BotonLab" fx:id="BotonTiempoReal" layoutX="6.0" layoutY="340.0" mnemonicParsing="false" onAction="#GoTiempoReal" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Métricas en Tiempo Real" textFill="WHITE">
+                  <Button id="BotonLab" fx:id="BotonTiempoReal" layoutX="1.0" layoutY="340.0" mnemonicParsing="false" onAction="#GoTiempoReal" prefHeight="42.0" prefWidth="266.0" styleClass="BotonPanelLateral" stylesheets="@../css/BaseLayout.css" text="Métricas en Tiempo Real" textFill="WHITE">
                      <font>
                         <Font name="Product Sans" size="18.0" />
                      </font>
