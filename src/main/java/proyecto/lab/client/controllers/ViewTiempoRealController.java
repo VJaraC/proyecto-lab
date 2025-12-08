@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -48,7 +49,11 @@ public class ViewTiempoRealController {
     @FXML
     private Label txtIdEquipo;
 
+    @FXML
+    private Label textoDisco;
+
     private Timeline autoRefresco;
+
     private Timeline timelineGraficos;
 
     @FXML
@@ -77,6 +82,9 @@ public class ViewTiempoRealController {
 
     @FXML
     private LineChart<Number, Number> graficoRam;
+
+    @FXML
+    private PieChart graficoDisco;
 
     private final XYChart.Series<Number, Number> serieRam = new XYChart.Series<>();
     private final XYChart.Series<Number, Number> serieCpu = new XYChart.Series<>();

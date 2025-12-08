@@ -22,9 +22,6 @@ public class BaseLayoutController {
     private Button BotonLaboratorios;
 
     @FXML
-    private Button BotonReportes;
-
-    @FXML
     private Button BotonUsuarios;
 
     @FXML
@@ -85,11 +82,6 @@ public class BaseLayoutController {
         setActiveButton(BotonLaboratorios);
     }
 
-    @FXML
-    void GoReportes(ActionEvent event) {
-        loadView("/views/ViewReportes.fxml");
-        setActiveButton(BotonReportes);
-    }
 
     @FXML
     void GoUsuarios(ActionEvent event) {

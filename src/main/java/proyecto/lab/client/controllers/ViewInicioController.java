@@ -20,6 +20,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -108,6 +109,9 @@ public class ViewInicioController {
     @FXML
     private AnchorPane panel6;
 
+    @FXML
+    private ImageView iconoServidor;
+
     private static final ZoneId ZONA_CHILE = ZoneId.of("America/Santiago");
 
     private static final DateTimeFormatter FORMATO_FECHA_HORA =
@@ -147,10 +151,6 @@ public class ViewInicioController {
         List<SesionHoraDTO> sesionesPorHora;
     }
 
-    // ======================================================
-    //     EVENTO BOTÓN CERRAR SESIÓN
-    // ======================================================
-
     @FXML
     void btnCerrarSesion(ActionEvent event) {
         if (autoRefresco != null) {
@@ -181,6 +181,8 @@ public class ViewInicioController {
 
         txtUsuarioSesion.setText(AppContext.getUsuarioActual().getNombres());
         txtFecha.setText(LocalDate.now().toString());
+        comprobarEstadoServidor();
+
 
         configurarGraficoBase();
         setearDashboard();
@@ -195,6 +197,16 @@ public class ViewInicioController {
         iniciarRefrescoAutomatico();
     }
 
+
+    public void comprobarEstadoServidor(){
+        if (AppContext.status().getStatus()){
+            txtEstadoServidor.setText("Operativo");
+            iconoServidor.setVisible(true);
+        }else{
+            txtEstadoServidor.setText("Sin conexión");
+            iconoServidor.setVisible(false);
+        }
+    }
 
     //     DASHBOARD LÓGICA
 
@@ -353,9 +365,7 @@ public class ViewInicioController {
         ft.play();
     }
 
-    // ======================================================
     //     HOVER ANIMATION
-    // ======================================================
 
     public static void animacionTraslacion(Node node) {
         ScaleTransition stIn = new ScaleTransition(Duration.millis(160), node);
