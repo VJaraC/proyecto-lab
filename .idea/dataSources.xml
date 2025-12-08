@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@localhost" uuid="13dfd8d5-3a31-4457-b1b6-28ff13e66001">
+    <data-source source="LOCAL" name="proyecto_lab@politics-yemen.gl.at.ply.gg" uuid="4f638c64-5e2c-4532-9ce0-89bdf124a6c7">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/postgres</jdbc-url>
+      <jdbc-url>jdbc:postgresql://politics-yemen.gl.at.ply.gg:64824/proyecto_lab</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
@@ -13,11 +13,11 @@
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="proyecto_lab@politics-yemen.gl.at.ply.gg" uuid="4f638c64-5e2c-4532-9ce0-89bdf124a6c7">
+    <data-source source="LOCAL" name="proyecto_lab@localhost [2]" uuid="27129156-b0d8-4a81-a7eb-387431a3e735">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://politics-yemen.gl.at.ply.gg:64824/proyecto_lab</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:15432/proyecto_lab</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
