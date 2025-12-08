@@ -1,5 +1,7 @@
 package proyecto.lab.client.application;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import proyecto.lab.server.controller.*;
 import proyecto.lab.server.dao.*;
@@ -11,6 +13,17 @@ import javafx.scene.Parent;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+
+        try {
+            CloudflaredManager.startTunnel();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Si falla el túnel, no tiene sentido seguir,
+            // porque la app no podrá hablar con la BD
+            // Aquí podrías mostrar un Alert más bonito si quieres
+            System.err.println("No se pudo iniciar el túnel Cloudflared: " + e.getMessage());
+            System.exit(1);
+        }
 
         //Se inicializan dependencias del backend disponibles globalmente
 
@@ -68,7 +81,25 @@ public class App extends Application {
         stage.show();
     }
 
+    @Override
+    public void stop() throws Exception {
+        // cerrar túnel al cerrar la app
+        CloudflaredManager.stopTunnel();
+        super.stop();
+    }
+
+    private void mostrarErrorFatal(String mensaje) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de conexión");
+            alert.setHeaderText("No se pudo iniciar la aplicación");
+            alert.setContentText(mensaje);
+            alert.showAndWait();
+            Platform.exit();
+        });
+    }
     public static void main(String[] args) {
         launch(args);
     }
+
 }
