@@ -59,7 +59,7 @@ public class ViewDetalladaUsuarioSeleccionadoController {
     private void cargarCampos() {
         txtID.setText(String.valueOf(usuario.getID()));
         txtRUT.setText(usuario.getRut());
-        txtNombres.setText(usuario.getNombres() + usuario.getApellidos());
+        txtNombres.setText(usuario.getNombres() + " " + usuario.getApellidos());
         txtEmail.setText(usuario.getEmail());
         txtEstado.setText(usuario.getEstado());
         txtGenero.setText(usuario.getGenero());
