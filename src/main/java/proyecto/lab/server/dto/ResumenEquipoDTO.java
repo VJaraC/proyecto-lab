@@ -6,6 +6,7 @@ public record ResumenEquipoDTO(
         String hostname,
         double cpuActual,
         double ramActual,
+        double tempActual,
         double diskActual
 
 ) {
@@ -19,6 +20,10 @@ public record ResumenEquipoDTO(
     // Getter para 'cpuActual'
     public double getCpuActual() {
         return cpuActual;
+    }
+
+    public double getTempActual() {
+        return tempActual;
     }
 
     // Getter para 'ramActual'

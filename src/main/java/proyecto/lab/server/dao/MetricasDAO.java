@@ -24,7 +24,8 @@ public class MetricasDAO {
             E.HOSTNAME,
             COALESCE(cpu.VALOR, 0) as cpu_val,
             COALESCE(ram.VALOR, 0) as ram_val,
-            COALESCE(disk.VALOR, 0) as disk_val
+            COALESCE(disk.VALOR, 0) as disk_val,
+            COALESCE(cpu_temp.VALOR, 0) as cpu_temp
         FROM EQUIPO E
         JOIN SESION S ON E.ID_EQ = S.ID_EQ
         
@@ -48,10 +49,18 @@ public class MetricasDAO {
         LEFT JOIN LATERAL (
             SELECT VALOR FROM METRICAS_RAW m 
             JOIN TIPO_METRICAS tm ON m.ID_TIPO = tm.ID_TIPO 
-            WHERE m.ID_EQ = E.ID_EQ AND tm.CLAVE = 'disk_usage' 
+            WHERE m.ID_EQ = E.ID_EQ AND tm.CLAVE = 'disk_activity' 
             ORDER BY m.FECHA_REGISTRO DESC LIMIT 1
         ) disk ON true
-        
+              
+        -- ultimo disco
+        LEFT JOIN LATERAL (
+            SELECT VALOR FROM METRICAS_RAW m 
+            JOIN TIPO_METRICAS tm ON m.ID_TIPO = tm.ID_TIPO 
+            WHERE m.ID_EQ = E.ID_EQ AND tm.CLAVE = 'cpu_temp' 
+            ORDER BY m.FECHA_REGISTRO DESC LIMIT 1
+        ) cpu_temp ON true
+              
         WHERE S.ESTADO_SESION = 'ACTIVA' 
         ORDER BY E.HOSTNAME ASC
     """;
@@ -65,6 +74,7 @@ public class MetricasDAO {
                         rs.getString("HOSTNAME"),
                         rs.getDouble("cpu_val"),
                         rs.getDouble("ram_val"),
+                        rs.getDouble("cpu_temp"),
                         rs.getDouble("disk_val") // Leemos la nueva columna
                 ));
             }
