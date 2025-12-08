@@ -26,7 +26,11 @@ public class MetricasService {
         return metricasDAO.obtenerHistorialGrafico(hostname, "ram_usage", 20);
     }
 
+    public List<PuntoGraficoDTO> obtenerCpuTemp(String hostname){
+        return metricasDAO.obtenerHistorialGrafico(hostname, "cpu_temp", 20);
+    }
+
     public List<PuntoGraficoDTO> obtenerDisco(String hostname){
-        return metricasDAO.obtenerHistorialGrafico(hostname, "disk_usage", 20);
+        return metricasDAO.obtenerHistorialGrafico(hostname, "disk_activity", 20);
     }
 }
