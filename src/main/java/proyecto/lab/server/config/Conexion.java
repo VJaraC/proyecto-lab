@@ -37,7 +37,7 @@ public class Conexion {
             finalPass = envPass;
         } else {
             // Datos Hardcoded (Respaldo)
-            finalUrl = "jdbc:postgresql://politics-yemen.gl.at.ply.gg:64824/proyecto_lab";
+            finalUrl = "jdbc:postgresql://localhost:15432/proyecto_lab";
             finalUser = "proyecto_lab";
             finalPass = "proyectolab124";
         }
