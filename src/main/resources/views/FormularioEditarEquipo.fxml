@@ -46,8 +46,8 @@
          </font>
       </Label>
       <TextField fx:id="txtRam" layoutX="52.0" layoutY="529.0" prefHeight="26.0" prefWidth="259.0" />
-      <TextField fx:id="txtIp" layoutX="414.0" layoutY="578.0" prefHeight="26.0" prefWidth="259.0" />
-      <Label layoutX="421.0" layoutY="555.0" text="IP">
+      <TextField fx:id="txtIp" layoutX="369.0" layoutY="529.0" prefHeight="26.0" prefWidth="259.0" />
+      <Label layoutX="371.0" layoutY="509.0" text="IP">
          <font>
             <Font name="Product Sans" size="16.0" />
          </font>
