@@ -91,33 +91,18 @@ public class ViewTiempoRealController {
         graficoRam.getData().add(serieRam);
         graficoCPU.getData().add(serieCpu);
 
-        // LISTENER: Al hacer clic, cargamos datos en segundo plano
         tablaMetricas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 txtIdEquipo.setText(newVal.getHostname());
+                // Carga inicial al hacer clic
                 cargarDatosEnSegundoPlano(newVal.getHostname());
             }
         });
 
         iniciarRefrescoAutomatico(); // Tabla
-        iniciarGraficosTiempoReal(); // Gráficos
     }
 
-    // --- OPTIMIZACIÓN CON TASK (Adiós al LAG) ---
-
-    private void iniciarGraficosTiempoReal() {
-        // Refresco cada 30 segundos
-        timelineGraficos = new Timeline(
-                new KeyFrame(Duration.seconds(30), e -> {
-                    ResumenEquipoDTO seleccionado = tablaMetricas.getSelectionModel().getSelectedItem();
-                    if (seleccionado != null) {
-                        cargarDatosEnSegundoPlano(seleccionado.getHostname());
-                    }
-                })
-        );
-        timelineGraficos.setCycleCount(Timeline.INDEFINITE);
-        timelineGraficos.play();
-    }
+    // OPTIMIZACIÓN CON TASK
 
     private void cargarDatosEnSegundoPlano(String hostname) {
         if (hostname == null || hostname.isEmpty()) return;
@@ -176,9 +161,7 @@ public class ViewTiempoRealController {
             return;
         }
 
-        // Suponemos que la lista viene ordenada por fecha desc (el DAO lo hacía así antes de invertir)
-        // o tomamos el último de la lista.
-        // Si usas mi código anterior que hacía Collections.reverse, el ÚLTIMO elemento es el más reciente.
+        // Suponemos que la lista viene ordenada por fecha desc o tomamos el último de la lista.
         PuntoGraficoDTO ultimoDato = historialDisco.get(historialDisco.size() - 1);
 
         double porcentajeOcupado = ultimoDato.valor(); // ej: 75.0
@@ -192,14 +175,6 @@ public class ViewTiempoRealController {
         );
 
         graficoDisco.setData(pieData);
-
-        // Colorear las porciones (Opcional, para asegurar consistencia visual)
-        // Nota: Esto debe hacerse después de añadir los datos al gráfico
-        /*
-        pieData.get(0).getNode().setStyle("-fx-pie-color: #ff6b6b;"); // Ocupado (Rojo)
-        pieData.get(1).getNode().setStyle("-fx-pie-color: #51cf66;"); // Libre (Verde)
-        */
-
         textoDisco.setText("Uso: " + String.format("%.1f", porcentajeOcupado) + "%");
     }
 
@@ -246,7 +221,12 @@ public class ViewTiempoRealController {
     private void iniciarRefrescoAutomatico() {
         autoRefresco = new Timeline(
                 new KeyFrame(Duration.seconds(5), event -> {
-                    // Refresh de la tabla también en background para evitar micro-cortes
+
+                    // CAPTURAR EL ESTADO ANTES DE ACTUALIZAR
+                    // Guardamos el objeto que está seleccionado actualmente
+                    ResumenEquipoDTO seleccionPrevia = tablaMetricas.getSelectionModel().getSelectedItem();
+                    String hostnameSeleccionado = (seleccionPrevia != null) ? seleccionPrevia.getHostname() : null;
+
                     Task<List<ResumenEquipoDTO>> task = new Task<>() {
                         @Override protected List<ResumenEquipoDTO> call() {
                             return AppContext.metricas().obtenerResumenEquipo();
@@ -254,26 +234,47 @@ public class ViewTiempoRealController {
                     };
 
                     task.setOnSucceeded(ev -> {
-                        ResumenEquipoDTO seleccion = tablaMetricas.getSelectionModel().getSelectedItem();
-                        String host = (seleccion != null) ? seleccion.getHostname() : null;
+                        List<ResumenEquipoDTO> nuevos = task.getValue();
 
-                        tablaMetricas.getItems().setAll(task.getValue());
+                        // Protección contra listas vacías (tu fix anterior)
+                        if (nuevos.isEmpty() && !tablaMetricas.getItems().isEmpty()) return;
 
-                        if (host != null) {
-                            for (ResumenEquipoDTO r : tablaMetricas.getItems()) {
-                                if (r.getHostname().equals(host)) {
-                                    tablaMetricas.getSelectionModel().select(r);
+                        tablaMetricas.getItems().setAll(nuevos);
+
+                        // LOGICA DE SINCRONIZACIÓN REACTIVA
+                        if (hostnameSeleccionado != null) {
+                            // Buscamos el 'nuevo' objeto que corresponde al equipo seleccionado
+                            ResumenEquipoDTO nuevoEstado = null;
+                            for (ResumenEquipoDTO item : tablaMetricas.getItems()) {
+                                if (item.getHostname().equals(hostnameSeleccionado)) {
+                                    tablaMetricas.getSelectionModel().select(item); // Reseleccionar visualmente
+                                    nuevoEstado = item;
                                     break;
+                                }
+                            }
+
+                            // COMPARAR Y DISPARAR GRÁFICO SI ES NECESARIO
+                            // Si encontramos el equipo y sus valores han cambiado respecto a lo que veíamos antes...
+                            if (nuevoEstado != null && seleccionPrevia != null) {
+                                boolean huboCambio = nuevoEstado.getCpuActual() != seleccionPrevia.getCpuActual() ||
+                                        nuevoEstado.getRamActual() != seleccionPrevia.getRamActual();
+
+                                if (huboCambio) {
+                                    System.out.println("🔄 Cambio detectado en " + hostnameSeleccionado + ". Actualizando gráficos...");
+                                    // Llamamos a la carga en segundo plano (Tasks)
+                                    cargarDatosEnSegundoPlano(hostnameSeleccionado);
                                 }
                             }
                         }
                     });
+
                     new Thread(task).start();
                 })
         );
         autoRefresco.setCycleCount(Timeline.INDEFINITE);
         autoRefresco.play();
     }
+
 
     @FXML
     void btnCerrarSesion(ActionEvent event) {
@@ -292,12 +293,4 @@ public class ViewTiempoRealController {
 
     @FXML void txtBuscar(ActionEvent event) {}
 
-    public static void animacionTraslacion(Node node) {
-        ScaleTransition stIn = new ScaleTransition(Duration.millis(160), node);
-        stIn.setToX(1.04); stIn.setToY(1.04);
-        ScaleTransition stOut = new ScaleTransition(Duration.millis(160), node);
-        stOut.setToX(1); stOut.setToY(1);
-        node.setOnMouseEntered(e -> stIn.playFromStart());
-        node.setOnMouseExited(e -> stOut.playFromStart());
-    }
 }

@@ -230,14 +230,14 @@ public class ViewUsuariosController {
                     UsuarioDTO u = getTableView().getItems().get(getIndex());
                     UsuarioUpdateDTO dto = crearUpdateDTO(u);
                     AppContext.admin().deshabilitarUsuario(dto, AppContext.getUsuarioActual());
-                    getTableView().refresh();
+                    ActualizarTablaEstudiantes();
                 });
 
                 btnHabilitar.setOnAction(e -> {
                     UsuarioDTO u = getTableView().getItems().get(getIndex());
                     UsuarioUpdateDTO dto = crearUpdateDTO(u);
                     AppContext.admin().habilitarUsuario(dto, AppContext.getUsuarioActual());
-                    getTableView().refresh();
+                    ActualizarTablaEstudiantes();
                 });
             }
 
