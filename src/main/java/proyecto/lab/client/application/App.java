@@ -9,7 +9,7 @@ import proyecto.lab.server.service.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-
+import javafx.scene.text.Font;
 public class App extends Application {
     @Override
     public void start(Stage stage) throws Exception {
@@ -23,6 +23,21 @@ public class App extends Application {
             // Aquí podrías mostrar un Alert más bonito si quieres
             System.err.println("No se pudo iniciar el túnel Cloudflared: " + e.getMessage());
             System.exit(1);
+        }
+
+        // --- 1. CARGA DE FUENTES (Solución al problema) ---
+        // Cargamos las fuentes en memoria para que el CSS las reconozca.
+        // El tamaño '12' no importa, solo queremos registrar la familia.
+        try {
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Montserrat-Regular.ttf"), 12);
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Montserrat-Bold.ttf"), 12);
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Product-Sans-Regular.ttf"), 12);
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Product-Sans-Bold.ttf"), 12);
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Core-Mellow-Regular.otf"), 12);
+            Font.loadFont(getClass().getResourceAsStream("/fonts/Core-Mellow-Bold.otf"), 12);
+            System.out.println("Fuentes cargadas correctamente en memoria.");
+        } catch (Exception e) {
+            System.err.println("Advertencia: No se pudieron cargar algunas fuentes. " + e.getMessage());
         }
 
         //Se inicializan dependencias del backend disponibles globalmente
