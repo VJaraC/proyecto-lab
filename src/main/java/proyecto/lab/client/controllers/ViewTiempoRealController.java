@@ -35,7 +35,6 @@ public class ViewTiempoRealController {
 
     @FXML private Button btnCerrarSesion;
     @FXML private TableView<ResumenEquipoDTO> tablaMetricas;
-    @FXML private TextField txtBuscar;
     @FXML private TableColumn<ResumenEquipoDTO, Double> txtCpuMetrica;
     @FXML private TableColumn<ResumenEquipoDTO, String> txtEquipoMetrica;
     @FXML private TableColumn<ResumenEquipoDTO, Double> txtRamMetrica;
@@ -45,9 +44,10 @@ public class ViewTiempoRealController {
     @FXML private Label txtUsuarioSesion;
 
     // Ejes y Gráficos
-    @FXML private NumberAxis ejeXCPU, ejeXRAM, ejeYCPU, ejeYRAM;
+    @FXML private NumberAxis ejeXCPU, ejeXRAM, ejeYCPU, ejeYRAM, ejeXTemperatura, ejeYTemperatura;
     @FXML private LineChart<Number, Number> graficoCPU;
     @FXML private LineChart<Number, Number> graficoRam;
+    @FXML private LineChart<Number, Number> graficoTemperatura;
     @FXML private PieChart graficoDisco;
 
     private Timeline autoRefresco;
@@ -222,7 +222,6 @@ public class ViewTiempoRealController {
         autoRefresco = new Timeline(
                 new KeyFrame(Duration.seconds(5), event -> {
 
-                    // CAPTURAR EL ESTADO ANTES DE ACTUALIZAR
                     // Guardamos el objeto que está seleccionado actualmente
                     ResumenEquipoDTO seleccionPrevia = tablaMetricas.getSelectionModel().getSelectedItem();
                     String hostnameSeleccionado = (seleccionPrevia != null) ? seleccionPrevia.getHostname() : null;
@@ -236,14 +235,14 @@ public class ViewTiempoRealController {
                     task.setOnSucceeded(ev -> {
                         List<ResumenEquipoDTO> nuevos = task.getValue();
 
-                        // Protección contra listas vacías (tu fix anterior)
+                        // Protección contra listas vacías
                         if (nuevos.isEmpty() && !tablaMetricas.getItems().isEmpty()) return;
 
                         tablaMetricas.getItems().setAll(nuevos);
 
                         // LOGICA DE SINCRONIZACIÓN REACTIVA
                         if (hostnameSeleccionado != null) {
-                            // Buscamos el 'nuevo' objeto que corresponde al equipo seleccionado
+                            // Buscamos el objeto que corresponde al equipo seleccionado
                             ResumenEquipoDTO nuevoEstado = null;
                             for (ResumenEquipoDTO item : tablaMetricas.getItems()) {
                                 if (item.getHostname().equals(hostnameSeleccionado)) {
@@ -253,7 +252,6 @@ public class ViewTiempoRealController {
                                 }
                             }
 
-                            // COMPARAR Y DISPARAR GRÁFICO SI ES NECESARIO
                             // Si encontramos el equipo y sus valores han cambiado respecto a lo que veíamos antes...
                             if (nuevoEstado != null && seleccionPrevia != null) {
                                 boolean huboCambio = nuevoEstado.getCpuActual() != seleccionPrevia.getCpuActual() ||
