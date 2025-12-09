@@ -15,15 +15,32 @@ public class CloudflaredManager {
             return;
         }
 
-        // Buscar cloudflared.exe en el directorio actual (donde está el .jar/.bat)
-        String exeName = "cloudflared.exe";
-        Path exePath = Paths.get(exeName).toAbsolutePath();
+        // Detectar sistema operativo
+        String os = System.getProperty("os.name").toLowerCase();
+        Path exePath;
+
+        if (os.contains("win")) {
+            // Windows
+            exePath = Paths.get("cloudflared.exe").toAbsolutePath();
+        } else {
+            // Mac o Linux: buscar variable de entorno primero
+            String envPath = System.getenv("CLOUDFLARED_PATH");
+            if (envPath != null && !envPath.isEmpty()) {
+                exePath = Paths.get(envPath);
+            } else {
+                exePath = Paths.get("cloudflared").toAbsolutePath();
+            }
+        }
 
         if (!Files.exists(exePath)) {
             throw new IOException("No se encontró el ejecutable de Cloudflared en: " + exePath);
         }
 
-        // Comando: cloudflared access tcp --hostname pg.proyecto-lab.sbs --url localhost:15432
+        // En Mac/Linux, asegurar permisos de ejecución
+        if (!os.contains("win")) {
+            exePath.toFile().setExecutable(true);
+        }
+
         ProcessBuilder pb = new ProcessBuilder(
                 exePath.toString(),
                 "access", "tcp",
@@ -31,13 +48,10 @@ public class CloudflaredManager {
                 "--url", "localhost:15432"
         );
 
-        // Ver logs en la consola de la app
         pb.redirectErrorStream(true);
         pb.inheritIO();
 
         cloudflaredProcess = pb.start();
-
-        // Esperar un poco a que levante el túnel
         Thread.sleep(2000);
     }
 
