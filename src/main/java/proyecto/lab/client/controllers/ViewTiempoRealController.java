@@ -1,7 +1,6 @@
 package proyecto.lab.client.controllers;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,39 +37,43 @@ public class ViewTiempoRealController {
     @FXML private TableColumn<ResumenEquipoDTO, Double> txtCpuMetrica;
     @FXML private TableColumn<ResumenEquipoDTO, String> txtEquipoMetrica;
     @FXML private TableColumn<ResumenEquipoDTO, Double> txtRamMetrica;
-    @FXML private TableColumn<ResumenEquipoDTO, Double> txtDiscoMetrica;
+    @FXML private TableColumn<ResumenEquipoDTO, Double> txtDiscoMetrica; // Mostrará % Actividad
     @FXML private Label txtIdEquipo;
     @FXML private Label textoDisco;
     @FXML private Label txtUsuarioSesion;
 
     // Ejes y Gráficos
-    @FXML private NumberAxis ejeXCPU, ejeXRAM, ejeYCPU, ejeYRAM, ejeXTemperatura, ejeYTemperatura;
+    @FXML private NumberAxis ejeXCPU, ejeXRAM, ejeYCPU, ejeYRAM;
+    @FXML private NumberAxis ejeXTemperatura, ejeYTemperatura;
+
     @FXML private LineChart<Number, Number> graficoCPU;
     @FXML private LineChart<Number, Number> graficoRam;
     @FXML private LineChart<Number, Number> graficoTemperatura;
+
     @FXML private PieChart graficoDisco;
 
     private Timeline autoRefresco;
-    private Timeline timelineGraficos;
 
     // Series
     private final XYChart.Series<Number, Number> serieRam = new XYChart.Series<>();
     private final XYChart.Series<Number, Number> serieCpu = new XYChart.Series<>();
+    private final XYChart.Series<Number, Number> serieTemperatura = new XYChart.Series<>();
 
     // Constantes
     private static final int MAX_X = 15;
-    private static final int STEP = 1;
 
-    // Clase auxiliar para transportar datos desde el hilo de fondo a la UI
+    // Clase auxiliar para transportar datos
     private static class DatosGraficos {
         List<PuntoGraficoDTO> historialRam;
         List<PuntoGraficoDTO> historialCpu;
-        List<PuntoGraficoDTO> historialDisco; // Usaremos el último valor de esta lista
+        List<PuntoGraficoDTO> historialDisco;
+        List<PuntoGraficoDTO> historialTemperatura;
 
-        public DatosGraficos(List<PuntoGraficoDTO> r, List<PuntoGraficoDTO> c, List<PuntoGraficoDTO> d) {
+        public DatosGraficos(List<PuntoGraficoDTO> r, List<PuntoGraficoDTO> c, List<PuntoGraficoDTO> d, List<PuntoGraficoDTO> t) {
             this.historialRam = r;
             this.historialCpu = c;
             this.historialDisco = d;
+            this.historialTemperatura = t;
         }
     }
 
@@ -80,139 +83,151 @@ public class ViewTiempoRealController {
             txtUsuarioSesion.setText(AppContext.getUsuarioActual().getNombres());
         }
 
+        // Configuración de columnas
         txtEquipoMetrica.setCellValueFactory(new PropertyValueFactory<>("hostname"));
-        txtDiscoMetrica.setCellValueFactory(new PropertyValueFactory<>("diskActual"));
         txtRamMetrica.setCellValueFactory(new PropertyValueFactory<>("ramActual"));
         txtCpuMetrica.setCellValueFactory(new PropertyValueFactory<>("cpuActual"));
+        // diskActual ahora trae el % de Actividad
+        txtDiscoMetrica.setCellValueFactory(new PropertyValueFactory<>("diskActual"));
 
         ActualizarTablaMetricas();
         configurarGraficoBase();
 
+        // Agregar series
         graficoRam.getData().add(serieRam);
         graficoCPU.getData().add(serieCpu);
+        graficoTemperatura.getData().add(serieTemperatura);
 
+        // Listener de selección
         tablaMetricas.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
                 txtIdEquipo.setText(newVal.getHostname());
-                // Carga inicial al hacer clic
                 cargarDatosEnSegundoPlano(newVal.getHostname());
             }
         });
 
-        iniciarRefrescoAutomatico(); // Tabla
+        iniciarRefrescoAutomatico();
     }
-
-    // OPTIMIZACIÓN CON TASK
 
     private void cargarDatosEnSegundoPlano(String hostname) {
         if (hostname == null || hostname.isEmpty()) return;
 
-        // 1. Creamos la Tarea (Se ejecuta en un hilo separado)
         Task<DatosGraficos> tareaCarga = new Task<>() {
             @Override
             protected DatosGraficos call() throws Exception {
-                // AQUÍ van las consultas lentas a la BD. No bloquean la UI.
+                // Consultas usando tus servicios (que ahora llaman a disk_activity)
                 List<PuntoGraficoDTO> ram = AppContext.metricas().obtenerRam(hostname);
                 List<PuntoGraficoDTO> cpu = AppContext.metricas().obtenerCpu(hostname);
                 List<PuntoGraficoDTO> disco = AppContext.metricas().obtenerDisco(hostname);
-                return new DatosGraficos(ram, cpu, disco);
+                List<PuntoGraficoDTO> temp = AppContext.metricas().obtenerCpuTemp(hostname);
+
+                return new DatosGraficos(ram, cpu, disco, temp);
             }
         };
 
-        // 2. Cuando la tarea termina con éxito (Volvemos al hilo de la UI)
         tareaCarga.setOnSucceeded(event -> {
             DatosGraficos datos = tareaCarga.getValue();
-
-            // Actualizar Gráficos Lineales
-            actualizarSeriesLineales(datos.historialRam, datos.historialCpu);
-
-            // Actualizar Gráfico de Pastel (Ocupado vs Libre)
+            actualizarSeriesLineales(datos.historialRam, datos.historialCpu, datos.historialTemperatura);
             actualizarGraficoDisco(datos.historialDisco);
         });
 
         tareaCarga.setOnFailed(event -> {
             Throwable error = tareaCarga.getException();
-            error.printStackTrace(); // O mostrar un mensaje de error en log
+            error.printStackTrace();
         });
 
-        // 3. Iniciamos el hilo
         new Thread(tareaCarga).start();
     }
 
-    // --- LÓGICA VISUAL ---
-
-    private void actualizarSeriesLineales(List<PuntoGraficoDTO> ram, List<PuntoGraficoDTO> cpu) {
+    private void actualizarSeriesLineales(List<PuntoGraficoDTO> ram, List<PuntoGraficoDTO> cpu, List<PuntoGraficoDTO> temperatura) {
+        // RAM
         serieRam.getData().clear();
-        for (int i = 0; i < ram.size(); i++) {
-            serieRam.getData().add(new XYChart.Data<>(i, ram.get(i).valor()));
+        if (ram != null) {
+            for (int i = 0; i < ram.size(); i++) {
+                serieRam.getData().add(new XYChart.Data<>(i, ram.get(i).valor()));
+            }
         }
 
+        // CPU
         serieCpu.getData().clear();
-        for (int i = 0; i < cpu.size(); i++) {
-            serieCpu.getData().add(new XYChart.Data<>(i, cpu.get(i).valor()));
+        if (cpu != null) {
+            for (int i = 0; i < cpu.size(); i++) {
+                serieCpu.getData().add(new XYChart.Data<>(i, cpu.get(i).valor()));
+            }
+        }
+
+        // Temperatura
+        serieTemperatura.getData().clear();
+        if (temperatura != null) {
+            for (int i = 0; i < temperatura.size(); i++) {
+                serieTemperatura.getData().add(new XYChart.Data<>(i, temperatura.get(i).valor()));
+            }
         }
     }
 
+    // --- AQUÍ ESTÁ EL CAMBIO CLAVE PARA DISK ACTIVITY ---
     private void actualizarGraficoDisco(List<PuntoGraficoDTO> historialDisco) {
-        // Obtenemos el dato más reciente
         if (historialDisco == null || historialDisco.isEmpty()) {
             graficoDisco.setData(FXCollections.emptyObservableList());
             textoDisco.setText("Sin datos");
             return;
         }
 
-        // Suponemos que la lista viene ordenada por fecha desc o tomamos el último de la lista.
+        // Obtenemos el último valor de actividad (0-100%)
         PuntoGraficoDTO ultimoDato = historialDisco.get(historialDisco.size() - 1);
+        double actividad = ultimoDato.valor();
 
-        double porcentajeOcupado = ultimoDato.valor(); // ej: 75.0
-        double porcentajeLibre = 100.0 - porcentajeOcupado; // ej: 25.0
+        // Calculamos el tiempo inactivo (Idle)
+        double inactividad = 100.0 - actividad;
+        if (inactividad < 0) inactividad = 0;
 
-        if (porcentajeLibre < 0) porcentajeLibre = 0; // Protección por si viene > 100%
-
+        // CAMBIO DE ETIQUETAS: "Activo" vs "Inactivo" (Conceptualmente correcto)
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList(
-                new PieChart.Data("Ocupado", porcentajeOcupado),
-                new PieChart.Data("Libre", porcentajeLibre)
+                new PieChart.Data("Activo (I/O)", actividad),
+                new PieChart.Data("Inactivo", inactividad)
         );
 
         graficoDisco.setData(pieData);
-        textoDisco.setText("Uso: " + String.format("%.1f", porcentajeOcupado) + "%");
+
+        // Texto descriptivo actualizado
+        textoDisco.setText("Actividad de Disco: " + String.format("%.1f", actividad) + "%");
     }
 
     private void configurarGraficoBase() {
-        // RAM
-        ejeXRAM.setAutoRanging(false);
-        ejeXRAM.setUpperBound(MAX_X);
-        ejeXRAM.setTickLabelsVisible(false);
-        ejeXRAM.setTickMarkVisible(false);
-        ejeXRAM.setMinorTickVisible(false);
-        ejeYRAM.setAutoRanging(false);
-        ejeYRAM.setUpperBound(100);
-        ejeYRAM.setTickUnit(20);
+        // Configuración visual de ejes (Ocultar etiquetas X para limpieza)
+        configurarEjes(ejeXRAM, ejeYRAM, 100);
         graficoRam.setAnimated(false);
         graficoRam.setLegendVisible(false);
 
-        // CPU
-        ejeXCPU.setAutoRanging(false);
-        ejeXCPU.setUpperBound(MAX_X);
-        ejeXCPU.setTickLabelsVisible(false);
-        ejeXCPU.setTickMarkVisible(false);
-        ejeXCPU.setMinorTickVisible(false);
-        ejeYCPU.setAutoRanging(false);
-        ejeYCPU.setUpperBound(100);
-        ejeYCPU.setTickUnit(20);
+        configurarEjes(ejeXCPU, ejeYCPU, 100);
         graficoCPU.setAnimated(false);
         graficoCPU.setLegendVisible(false);
 
+        configurarEjes(ejeXTemperatura, ejeYTemperatura, 100);
+        graficoTemperatura.setAnimated(false);
+        graficoTemperatura.setLegendVisible(false);
+
         // Disco
         graficoDisco.setAnimated(false);
-        graficoDisco.setLabelsVisible(false); // Ocultar etiquetas flotantes si se ven feas
+        graficoDisco.setLabelsVisible(false);
         graficoDisco.setLegendVisible(true);
+        graficoDisco.setTitle("Carga I/O"); // Título más apropiado
     }
 
-    // --- TABLA Y UTILIDADES ---
+    private void configurarEjes(NumberAxis xAxis, NumberAxis yAxis, int yUpperBound) {
+        xAxis.setAutoRanging(false);
+        xAxis.setUpperBound(MAX_X);
+        xAxis.setTickLabelsVisible(false);
+        xAxis.setTickMarkVisible(false);
+        xAxis.setMinorTickVisible(false);
+
+        yAxis.setAutoRanging(false);
+        yAxis.setUpperBound(yUpperBound);
+        yAxis.setLowerBound(0);
+        yAxis.setTickUnit(20);
+    }
 
     private void ActualizarTablaMetricas() {
-        // También podríamos usar Task aquí si la carga inicial es lenta
         tablaMetricas.getItems().clear();
         tablaMetricas.getItems().addAll(AppContext.metricas().obtenerResumenEquipo());
         tablaMetricas.refresh();
@@ -221,8 +236,6 @@ public class ViewTiempoRealController {
     private void iniciarRefrescoAutomatico() {
         autoRefresco = new Timeline(
                 new KeyFrame(Duration.seconds(5), event -> {
-
-                    // Guardamos el objeto que está seleccionado actualmente
                     ResumenEquipoDTO seleccionPrevia = tablaMetricas.getSelectionModel().getSelectedItem();
                     String hostnameSeleccionado = (seleccionPrevia != null) ? seleccionPrevia.getHostname() : null;
 
@@ -234,38 +247,31 @@ public class ViewTiempoRealController {
 
                     task.setOnSucceeded(ev -> {
                         List<ResumenEquipoDTO> nuevos = task.getValue();
-
-                        // Protección contra listas vacías
                         if (nuevos.isEmpty() && !tablaMetricas.getItems().isEmpty()) return;
 
                         tablaMetricas.getItems().setAll(nuevos);
 
-                        // LOGICA DE SINCRONIZACIÓN REACTIVA
                         if (hostnameSeleccionado != null) {
-                            // Buscamos el objeto que corresponde al equipo seleccionado
                             ResumenEquipoDTO nuevoEstado = null;
                             for (ResumenEquipoDTO item : tablaMetricas.getItems()) {
                                 if (item.getHostname().equals(hostnameSeleccionado)) {
-                                    tablaMetricas.getSelectionModel().select(item); // Reseleccionar visualmente
+                                    tablaMetricas.getSelectionModel().select(item);
                                     nuevoEstado = item;
                                     break;
                                 }
                             }
-
-                            // Si encontramos el equipo y sus valores han cambiado respecto a lo que veíamos antes...
+                            // Detectar cambios en métricas clave para refrescar gráficos
                             if (nuevoEstado != null && seleccionPrevia != null) {
                                 boolean huboCambio = nuevoEstado.getCpuActual() != seleccionPrevia.getCpuActual() ||
-                                        nuevoEstado.getRamActual() != seleccionPrevia.getRamActual();
+                                        nuevoEstado.getRamActual() != seleccionPrevia.getRamActual() ||
+                                        nuevoEstado.getDiskActual() != seleccionPrevia.getDiskActual(); // Agregamos disco al trigger
 
                                 if (huboCambio) {
-                                    System.out.println("🔄 Cambio detectado en " + hostnameSeleccionado + ". Actualizando gráficos...");
-                                    // Llamamos a la carga en segundo plano (Tasks)
                                     cargarDatosEnSegundoPlano(hostnameSeleccionado);
                                 }
                             }
                         }
                     });
-
                     new Thread(task).start();
                 })
         );
@@ -273,22 +279,30 @@ public class ViewTiempoRealController {
         autoRefresco.play();
     }
 
-
     @FXML
     void btnCerrarSesion(ActionEvent event) {
-        AppContext.LimpiarSesion();
+        AppContext.LimpiarSesion(); // Limpiamos datos del usuario
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IniciarSesion.fxml"));
             Parent root = loader.load();
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            stage.setMinWidth(0);
+            stage.setMinHeight(0);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+
+            stage.sizeToScene();
+
+            stage.centerOnScreen();
             stage.setTitle("Sistema de Monitoreo - UNAP");
+            stage.setResizable(false);
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
     @FXML void txtBuscar(ActionEvent event) {}
-
 }

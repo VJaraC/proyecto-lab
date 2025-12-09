@@ -25,9 +25,7 @@ public class MetricasController {
         return metricasService.obtenerRam(hostname);
     }
 
-    public List<PuntoGraficoDTO> obtenerCpuTemp(String hostname) {
-        return metricasService.obtenerCpuTemp(hostname);
-    }
+    public List<PuntoGraficoDTO> obtenerCpuTemp(String hostname) {return metricasService.obtenerCpuTemp(hostname);}
 
     public List<PuntoGraficoDTO> obtenerDisco(String hostname) {
         return metricasService.obtenerDisco(hostname);
