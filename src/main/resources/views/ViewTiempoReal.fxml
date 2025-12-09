@@ -130,8 +130,8 @@
             <TableView fx:id="tablaMetricas" layoutX="23.0" layoutY="113.0" prefHeight="515.0" prefWidth="396.0" styleClass="tabla" stylesheets="@../css/TiempoReal.css">
               <columns>
                 <TableColumn fx:id="txtEquipoMetrica" minWidth="1.5999755859375" prefWidth="128.0" resizable="false" text="Equipo" />
-                  <TableColumn fx:id="txtCpuMetrica" minWidth="0.0" prefWidth="83.0" resizable="false" text="CPU" />
                   <TableColumn fx:id="txtRamMetrica" minWidth="0.0" prefWidth="77.0" resizable="false" text="RAM" />
+                  <TableColumn fx:id="txtCpuMetrica" minWidth="0.0" prefWidth="83.0" resizable="false" text="CPU" />
                   <TableColumn fx:id="txtDiscoMetrica" minWidth="0.0" prefWidth="144.0" resizable="false" text="Disco" />
               </columns>
             </TableView>

@@ -158,21 +158,25 @@ public class ViewInicioController {
         }
 
         AppContext.LimpiarSesion();
-
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/IniciarSesion.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setMinWidth(0);
+            stage.setMinHeight(0);
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
 
-            stage.setScene(new Scene(root));
+            stage.sizeToScene();
+
+            stage.centerOnScreen();
             stage.setTitle("Sistema de Monitoreo - UNAP");
+            stage.setResizable(false);
             stage.show();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     @FXML
     void initialize() {
