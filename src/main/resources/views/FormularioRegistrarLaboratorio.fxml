@@ -6,46 +6,50 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="676.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioRegistrarLaboratorioController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0" prefWidth="676.0" styleClass="fondo" stylesheets="@../css/Formularios.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.FormularioRegistrarLaboratorioController">
     <children>
-        <Label layoutX="231.0" layoutY="29.0" text="Registrar Laboratorio" textFill="#062040">
-            <font>
-                <Font name="CoreMellow-Bold" size="24.0" />
-            </font>
-        </Label>
-        <Label layoutX="55.0" layoutY="85.0" text="Nombre de Laboratorio">
+        <TextField fx:id="txtNombre" layoutX="58.0" layoutY="169.0" prefHeight="26.0" prefWidth="259.0" styleClass="campo" stylesheets="@../css/Formularios.css" />
+        <TextField fx:id="txtUbicacion" layoutX="372.0" layoutY="169.0" prefHeight="26.0" prefWidth="259.0" styleClass="campo" stylesheets="@../css/Formularios.css" />
+        <TextField fx:id="txtCapacidadPersonas" layoutX="58.0" layoutY="248.0" prefHeight="26.0" prefWidth="259.0" styleClass="campo" stylesheets="@../css/Formularios.css" />
+        <TextField fx:id="txtCapacidadEquipos" layoutX="372.0" layoutY="248.0" prefHeight="26.0" prefWidth="259.0" styleClass="campo" stylesheets="@../css/Formularios.css" />
+        <Label layoutX="58.0" layoutY="132.0" text="Nombre de Laboratorio">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <Button id="BotonGuardarUsuario" fx:id="BotonGuardarLaboratorio" layoutX="283.0" layoutY="280.0" mnemonicParsing="false" onAction="#GuardarLaboratorio" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Guardar">
+        <Button id="BotonGuardarUsuario" fx:id="BotonGuardarLaboratorio" layoutX="232.0" layoutY="326.0" mnemonicParsing="false" onAction="#GuardarLaboratorio" prefHeight="46.0" prefWidth="211.0" styleClass="boton" stylesheets="@../css/Formularios.css" text="Registrar Laboratorio">
             <font>
                 <Font name="Product Sans Bold" size="18.0" />
             </font>
         </Button>
-        <TextField fx:id="txtNombre" layoutX="55.0" layoutY="122.0" prefHeight="26.0" prefWidth="259.0" />
-        <Label layoutX="55.0" layoutY="171.0" text="Capacidad de Personas">
+        <Label layoutX="58.0" layoutY="218.0" text="Capacidad de Personas">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <Label layoutX="369.0" layoutY="85.0" text="Ubicación">
+        <Label layoutX="372.0" layoutY="132.0" text="Ubicación">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtUbicacion" layoutX="369.0" layoutY="122.0" prefHeight="26.0" prefWidth="259.0" />
-        <Label layoutX="372.0" layoutY="171.0" text="Capacidad de Equipos">
+        <Label layoutX="375.0" layoutY="218.0" text="Capacidad de Equipos">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtCapacidadEquipos" layoutX="369.0" layoutY="201.0" prefHeight="26.0" prefWidth="259.0" />
-        <TextField fx:id="txtCapacidadPersonas" layoutX="55.0" layoutY="201.0" prefHeight="26.0" prefWidth="259.0" />
-        <Label layoutX="372.0" layoutY="353.0">
+        <Label layoutX="375.0" layoutY="400.0">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
+      <AnchorPane layoutX="-4.0" layoutY="-1.0" maxWidth="1.7976931348623157E308" prefHeight="86.0" prefWidth="684.0" styleClass="fondo_titulo" stylesheets="@../css/Formularios.css">
+         <children>
+            <Label layoutX="179.0" layoutY="4.0" prefHeight="78.0" prefWidth="326.0" text="Registrar Laboratorio" textFill="WHITE">
+               <font>
+                  <Font name="CoreMellow-Bold" size="32.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>
