@@ -6,59 +6,63 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="474.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewDetalladaLabSeleccionadoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewDetalladaLabSeleccionadoController">
     <children>
-        <Label layoutX="228.0" layoutY="23.0" text="Vista Detallada" textFill="#062040">
-            <font>
-                <Font name="CoreMellow-Bold" size="24.0" />
-            </font>
-        </Label>
-        <Label layoutX="39.0" layoutY="85.0" text="ID de Laboratorio">
+        <Label layoutX="38.0" layoutY="104.0" text="ID de Laboratorio">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <Button id="BotonGuardarUsuario" fx:id="BotonVolver" layoutX="246.0" layoutY="392.0" mnemonicParsing="false" onAction="#Volver" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Volver">
+        <Button id="BotonGuardarUsuario" fx:id="BotonVolver" layoutX="245.0" layoutY="411.0" mnemonicParsing="false" onAction="#Volver" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Volver">
             <font>
                 <Font name="Product Sans Bold" size="18.0" />
             </font>
         </Button>
-        <Label layoutX="339.0" layoutY="85.0" text="Nombre">
+        <Label layoutX="338.0" layoutY="104.0" text="Nombre">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtIdLab" editable="false" layoutX="39.0" layoutY="108.0" prefHeight="26.0" prefWidth="240.0" />
-        <Label layoutX="39.0" layoutY="158.0" text="Ubicación">
+        <TextField fx:id="txtIdLab" editable="false" layoutX="38.0" layoutY="127.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+        <Label layoutX="38.0" layoutY="177.0" text="Ubicación">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtUbicacion" editable="false" layoutX="39.0" layoutY="182.0" prefHeight="26.0" prefWidth="240.0" />
-        <Label layoutX="339.0" layoutY="158.0" text="Capacidad de personas">
+        <TextField fx:id="txtUbicacion" editable="false" layoutX="38.0" layoutY="201.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+        <Label layoutX="338.0" layoutY="177.0" text="Capacidad de personas">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtNombre" editable="false" layoutX="339.0" layoutY="108.0" prefHeight="26.0" prefWidth="240.0" />
-        <TextField fx:id="txtCapacidadPersonas" editable="false" layoutX="339.0" layoutY="182.0" prefHeight="26.0" prefWidth="240.0" />
-        <Label layoutX="39.0" layoutY="234.0" text="Capacidad de Equipos">
+        <TextField fx:id="txtNombre" editable="false" layoutX="338.0" layoutY="127.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+        <TextField fx:id="txtCapacidadPersonas" editable="false" layoutX="338.0" layoutY="201.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+        <Label layoutX="38.0" layoutY="253.0" text="Capacidad de Equipos">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtCapacidadEquipos" editable="false" layoutX="39.0" layoutY="259.0" prefHeight="26.0" prefWidth="240.0" />
-        <Label layoutX="339.0" layoutY="234.0" text="Estado">
+        <TextField fx:id="txtCapacidadEquipos" editable="false" layoutX="38.0" layoutY="278.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+        <Label layoutX="338.0" layoutY="253.0" text="Estado">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtEstado" editable="false" layoutX="339.0" layoutY="259.0" prefHeight="26.0" prefWidth="240.0" />
-        <Label layoutX="245.0" layoutY="310.0" text="Fecha de Registro">
+        <TextField fx:id="txtEstado" editable="false" layoutX="338.0" layoutY="278.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+        <Label layoutX="244.0" layoutY="329.0" text="Fecha de Registro">
             <font>
                 <Font name="Product Sans" size="16.0" />
             </font>
         </Label>
-        <TextField fx:id="txtFechaRegistro" editable="false" layoutX="188.0" layoutY="336.0" prefHeight="26.0" prefWidth="240.0" />
+        <TextField fx:id="txtFechaRegistro" editable="false" layoutX="187.0" layoutY="355.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+      <AnchorPane layoutY="-7.0" prefHeight="91.0" prefWidth="616.0" styleClass="fondo_titulo" stylesheets="@../css/Formularios.css">
+         <children>
+            <Label alignment="CENTER" layoutX="181.0" layoutY="20.0" prefHeight="52.0" prefWidth="238.0" text="Vista Detallada" textFill="WHITE">
+               <font>
+                  <Font name="CoreMellow-Bold" size="32.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>

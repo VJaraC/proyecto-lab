@@ -2,111 +2,147 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="840.0" prefWidth="616.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewDetalladaEquipoSeleccionadoController">
-    <children>
-        <Label layoutX="228.0" layoutY="23.0" text="Vista Detallada" textFill="#062040">
-            <font>
-                <Font name="CoreMellow-Bold" size="24.0" />
-            </font>
-        </Label>
-        <Label layoutX="39.0" layoutY="85.0" text="ID">
-            <font>
-                <Font name="Product Sans" size="16.0" />
-            </font>
-        </Label>
-        <Button id="BotonGuardarUsuario" fx:id="BotonVolver" layoutX="246.0" layoutY="771.0" mnemonicParsing="false" onAction="#Volver" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Volver">
-            <font>
-                <Font name="Product Sans Bold" size="18.0" />
-            </font>
-        </Button>
-        <Label layoutX="339.0" layoutY="85.0" text="Laboratorio asignado">
-            <font>
-                <Font name="Product Sans" size="16.0" />
-            </font>
-        </Label>
-      <TextField fx:id="txtIdEquipo" editable="false" layoutX="39.0" layoutY="108.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="39.0" layoutY="158.0" text="Hostname">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtHostname" editable="false" layoutX="39.0" layoutY="182.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="339.0" layoutY="158.0" text="Numero de Serie">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtNombreLab" editable="false" layoutX="339.0" layoutY="108.0" prefHeight="26.0" prefWidth="240.0" />
-      <TextField fx:id="txtNumSerie" editable="false" layoutX="339.0" layoutY="182.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="39.0" layoutY="234.0" text="Fabricante">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtFabricante" editable="false" layoutX="39.0" layoutY="259.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="339.0" layoutY="234.0" text="Estado">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtEstado" editable="false" layoutX="339.0" layoutY="259.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="39.0" layoutY="316.0" text="Modelo">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtModelo" editable="false" layoutX="39.0" layoutY="342.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="341.0" layoutY="316.0" text="MAC">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtMAC" editable="false" layoutX="339.0" layoutY="342.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="41.0" layoutY="396.0" text="IP">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtIP" editable="false" layoutX="40.0" layoutY="426.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="341.0" layoutY="396.0" text="Modelo de CPU">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtModeloCPU" editable="false" layoutX="341.0" layoutY="426.0" prefHeight="26.0" prefWidth="240.0" />
-      <TextField fx:id="txtNucleosCPU" editable="false" layoutX="40.0" layoutY="507.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="44.0" layoutY="481.0" text="Nucleos de CPU">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtRAM" editable="false" layoutX="339.0" layoutY="507.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="341.0" layoutY="481.0" text="RAM total">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <Label layoutX="44.0" layoutY="571.0" text="Almacenamiento">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtAlmacenamiento" editable="false" layoutX="40.0" layoutY="602.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="248.0" layoutY="664.0" text="Fecha de Ingreso">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtFechaIngreso" editable="false" layoutX="188.0" layoutY="695.0" prefHeight="26.0" prefWidth="240.0" />
-      <TextField fx:id="txtModeloGPU" editable="false" layoutX="339.0" layoutY="602.0" prefHeight="26.0" prefWidth="240.0" />
-      <Label layoutX="341.0" layoutY="571.0" text="Modelo de GPU">
-         <font>
-            <Font name="Product Sans" size="16.0" />
-         </font>
-      </Label>
-    </children>
-</AnchorPane>
+<ScrollPane prefViewportHeight="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyecto.lab.client.controllers.ViewDetalladaEquipoSeleccionadoController">
+   <content>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="934.0" prefWidth="710.0" styleClass="fondo" stylesheets="@../css/Formularios.css">
+          <children>
+              <Button id="BotonGuardarUsuario" fx:id="BotonVolver" layoutX="278.0" layoutY="864.0" mnemonicParsing="false" onAction="#Volver" prefHeight="46.0" prefWidth="124.0" styleClass="BotonCrearUsuario" stylesheets="@../css/ViewUsuarios.css" text="Volver">
+                  <font>
+                      <Font name="Product Sans Bold" size="18.0" />
+                  </font>
+              </Button>
+            <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="95.0" prefWidth="712.0" styleClass="fondo_titulo" stylesheets="@../css/Formularios.css">
+               <children>
+                  <Label alignment="CENTER" layoutX="230.0" layoutY="19.0" prefHeight="52.0" prefWidth="238.0" text="Vista Detallada" textFill="WHITE">
+                     <font>
+                        <Font name="CoreMellow-Bold" size="32.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="47.0" layoutY="119.0" prefHeight="299.0" prefWidth="603.0" styleClass="tarjeta" stylesheets="@../css/Formularios.css">
+               <children>
+                  <Label alignment="CENTER" layoutX="12.0" layoutY="-11.0" prefHeight="23.0" prefWidth="206.0" style="-fx-background-color: white;" text="Datos Administrativos" textFill="#404040">
+                     <font>
+                        <Font name="Product Sans Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="22.0" layoutY="91.0" text="Hostname">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="302.0" layoutY="85.0" text="Laboratorio">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtHostname" editable="false" layoutX="22.0" layoutY="115.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <TextField fx:id="txtNombreLab" editable="false" layoutX="302.0" layoutY="114.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <TextField fx:id="txtIdEquipo" editable="false" layoutX="22.0" layoutY="49.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                    <Label layoutX="24.0" layoutY="27.0" text="ID">
+                        <font>
+                            <Font name="Product Sans" size="16.0" />
+                        </font>
+                    </Label>
+                  <TextField fx:id="txtNumSerie" editable="false" layoutX="302.0" layoutY="49.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="302.0" layoutY="27.0" text="Numero de Serie">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtFabricante" editable="false" layoutX="22.0" layoutY="187.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <TextField fx:id="txtEstado" editable="false" layoutX="302.0" layoutY="187.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="21.0" layoutY="162.0" text="Fabricante">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="302.0" layoutY="162.0" text="Estado">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="24.0" layoutY="229.0" text="Modelo">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtModelo" editable="false" layoutX="22.0" layoutY="253.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <TextField fx:id="txtFechaIngreso" editable="false" layoutX="302.0" layoutY="253.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="301.0" layoutY="229.0" text="Fecha de Ingreso">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="47.0" layoutY="444.0" prefHeight="245.0" prefWidth="603.0" styleClass="tarjeta" stylesheets="@../css/Formularios.css">
+               <children>
+                  <Label alignment="CENTER" layoutX="12.0" layoutY="-11.0" prefHeight="23.0" prefWidth="256.0" style="-fx-background-color: white;" text="Especificaciones de Hardware" textFill="#404040">
+                     <font>
+                        <Font name="Product Sans Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtNucleosCPU" editable="false" layoutX="20.0" layoutY="60.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="20.0" layoutY="34.0" text="Nucleos de CPU">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtModeloCPU" editable="false" layoutX="314.0" layoutY="60.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="314.0" layoutY="34.0" text="Modelo de CPU">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="26.0" layoutY="104.0" text="RAM total">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtRAM" editable="false" layoutX="20.0" layoutY="132.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <TextField fx:id="txtAlmacenamiento" editable="false" layoutX="314.0" layoutY="132.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="314.0" layoutY="104.0" text="Almacenamiento">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="247.0" layoutY="178.0" text="Modelo de GPU">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtModeloGPU" editable="false" layoutX="182.0" layoutY="205.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="47.0" layoutY="707.0" prefHeight="121.0" prefWidth="603.0" styleClass="tarjeta" stylesheets="@../css/Formularios.css">
+               <children>
+                  <Label alignment="CENTER" layoutX="12.0" layoutY="-11.0" prefHeight="23.0" prefWidth="183.0" style="-fx-background-color: white;" text="Internet y Red" textFill="#404040">
+                     <font>
+                        <Font name="Product Sans Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtIP" editable="false" layoutX="33.0" layoutY="54.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+                  <Label layoutX="33.0" layoutY="31.0" text="IP">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="308.0" layoutY="31.0" text="MAC">
+                     <font>
+                        <Font name="Product Sans" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtMAC" editable="false" layoutX="308.0" layoutY="54.0" prefHeight="26.0" prefWidth="240.0" styleClass="campo-seleccion" stylesheets="@../css/Formularios.css" />
+               </children>
+            </AnchorPane>
+          </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>
